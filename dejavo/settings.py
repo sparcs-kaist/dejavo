@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'dejavo',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -65,9 +66,9 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-KR'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -80,3 +81,34 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = BASE_DIR + '/zabo/static/'
+
+STATICFILES_DIRS = (
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR + '/zabo/media/'
+
+TEMPLATE_DIRS = (
+    BASE_DIR + '/zabo/templates/',
+)
+
+TEMPLATE_LOADERS = (
+    'django.templates.loaders.filesytstem.Loader',
+    'django.templates.loaders.app_directories.Loader',
+)
+
+LOGIN_URL = '/login/'
+
+# custom server settings
+try:
+    from settings_local import *
+except ImportError:
+    pass
