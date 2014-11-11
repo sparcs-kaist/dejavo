@@ -37,6 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dejavo',
+    'dejavo.apps.account',
+    'dejavo.apps.post',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -59,7 +61,7 @@ WSGI_APPLICATION = 'dejavo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'test.db'),
     }
 }
 
@@ -101,8 +103,8 @@ TEMPLATE_DIRS = (
 )
 
 TEMPLATE_LOADERS = (
-    'django.templates.loaders.filesytstem.Loader',
-    'django.templates.loaders.app_directories.Loader',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 )
 
 LOGIN_URL = '/login/'
