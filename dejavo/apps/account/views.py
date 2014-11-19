@@ -1,73 +1,88 @@
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 from django.shortcuts import redirect, render_to_response, render
 from django.template import RequestContext
 
-import json
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_jwt.serializers import JSONWebTokenSerializer, jwt_decode_handler
+
+from dejavo.apps.account.serializers import UserSerializer, UpdateUserSerializer, \
+                                            UserSessionSerializer
+
+from datetime import datetime
 
 
 def main(request):
     return HttpResponse("<p>apps.account.views.main</p><p>/account/</p>")
 
-def login(request):
+class SessionLoginHandler(APIView):
 
-    if request.is_ajax() and request.method == "POST":
+    # Permission classe should be empty because nobody can be authenticated
+    # before login.
+    permission_classes = ()
+
+    def post(self, request, format=None):
         # handle login process
-        userid = request.POST.get("id", None)
-        passwd = request.POST.get("passwd", None)
+        serializer = UserSessionSerializer(data=request.DATA)
 
-        if userid == None or passwd == None:
-            return HttpResponse(json.dump({
-                "error" : 400, "msg" : "Invalid id or password"
-                }),
-                status = 400)
+        if serializer.is_valid():
+            user = serializer.object
+            user_serializer = UserSerializer(user)
+            login(request, user)
+            return Response(user_serializer.data, status=status.HTTP_200_OK)
 
-        user = authenticate(username = userid, password = passwd)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return HttpResponse(json.dump({
-                    "error" : None,
-                    "msg" : "ok",
-                    }))
-
-    else:
-        # login page
-        return render_to_response("login.html")
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_401_UNAUTHORIZED)
 
 
-@login_required
-def logout(request):
+class SessionLogoutHandler(APIView):
 
-    logout(request)
-    return redirect("/")
+    def get(self, request, format=None):
+        serializer = UserSerializer(request.user)
+        logout(request)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-@login_required
-def ch_passwd(request):
 
-    if request.is_ajax() and request.method == "POST":
+class JWTLoginHandler(APIView):
 
-        new_password = request.POST.get("new_password", None)
-        if new_password == None:
-            return HttpResponse(json.dump({
-                "error" : 400, "msg" : "Invalid password parameter"
-                }),
-                status = 400)
+    # Permission classe should be empty because nobody can be authenticated
+    # before login.
+    permission_classes = ()
 
-        user = request.user
-        user.set_password(new_password)
-        user.save()
+    def get(self, request, format=None):
+        return self.post(request, format)
 
-        return HttpResponse(json.dump({
-            "error" : None,
-            "msg" : "ok",
-            }))
+    def post(self, request, format=None):
 
-    else:
-        # invalid request
-        return HttpResponse(json.dump({
-            "error" : 400, "msg" : "Invalid request"
-            }),
-            status = 400)
+        serializer = JSONWebTokenSerializer(data=request.DATA)
+
+        if serializer.is_valid():
+            token = serializer.object['token']
+            pay_load = jwt_decode_handler(token)
+
+            return Response({
+                'token' : token,
+                'expire' : datetime.fromtimestamp(pay_load['exp'])
+                }, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+class PasswordHandler(APIView):
+
+    def post(self, request, format=None):
+
+        serializer = UpdateUserSerializer(request.user, data=request.DATA, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

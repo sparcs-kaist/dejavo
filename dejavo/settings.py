@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'dejavo',
     'dejavo.apps.account',
     'dejavo.apps.post',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -68,7 +69,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'ko-KR'
+LANGUAGE_CODE = 'en-US'
 
 TIME_ZONE = 'Asia/Seoul'
 
@@ -84,7 +85,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = BASE_DIR + '/zabo/static/'
+STATIC_ROOT = BASE_DIR + '/dejavo/static/'
 
 STATICFILES_DIRS = (
 )
@@ -96,10 +97,10 @@ STATICFILES_FINDERS = (
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = BASE_DIR + '/zabo/media/'
+MEDIA_ROOT = BASE_DIR + '/dejavo/media/'
 
 TEMPLATE_DIRS = (
-    BASE_DIR + '/zabo/templates/',
+    BASE_DIR + '/dejavo/templates/',
 )
 
 TEMPLATE_LOADERS = (
@@ -108,6 +109,16 @@ TEMPLATE_LOADERS = (
 )
 
 LOGIN_URL = '/login/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES' : (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES' : (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    )
+}
 
 # custom server settings
 try:
