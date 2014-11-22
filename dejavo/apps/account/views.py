@@ -2,7 +2,6 @@ from django.http import HttpResponse
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-
 from django.shortcuts import redirect, render_to_response, render
 from django.template import RequestContext
 
@@ -20,14 +19,46 @@ from datetime import datetime
 def main(request):
     return HttpResponse("<p>apps.account.views.main</p><p>/account/</p>")
 
+
 class SessionLoginHandler(APIView):
+    """**SessionLoginHandler** class create sessions for users who try to login with
+    common browsers.
+
+    ## Note ##
+    + Only **POST** method is allowed for login process.
+
+    ## Request ##
+        :::bash
+        $ curl -X POST "http://exmaple.com/account/login.json"
+                -d '{"username" : "elaborate", "password" : "1234"}'
+                -H "Content-type: application/json"
+
+    ## Response ##
+        :::javascript
+        /* On success - 200 */
+        {
+            "id" : 1,
+            "username" : "elaborate",
+            "email": "a@c.com",
+            "last_name" : "Ahn",
+            "first_name" : "Beunguk"
+        }
+        /* Invalid ID or password - 401 */
+        {
+            "non_field_errors": ["Unable to login with provided credentials."]
+        }
+        /* Bad request - 400 */
+        {
+            "username": ["This field is required."],
+            "password": ["This field is required."]
+        }
+    """
 
     # Permission classe should be empty because nobody can be authenticated
     # before login.
     permission_classes = ()
 
     def post(self, request, format=None):
-        # handle login process
         serializer = UserSessionSerializer(data=request.DATA)
 
         if serializer.is_valid():
@@ -42,6 +73,30 @@ class SessionLoginHandler(APIView):
 
 
 class SessionLogoutHandler(APIView):
+    """**SessionLogoutHandler** class destroy sessions for users who request.
+
+    ## Note ##
+    + Only **GET** method is allowed for logout process.
+
+    ## Request ##
+        :::bash
+        $ curl -X POST "http://exmaple.com/account/logout.json"
+
+    ## Response ##
+        :::javascript
+        /* On success - 200 */
+        {
+            "id" : 1,
+            "username" : "elaborate",
+            "email": "a@c.com",
+            "last_name" : "Ahn",
+            "first_name" : "Beunguk"
+        }
+        /* User is not logged in - 403 */
+        {
+            "detail" : "Authentication credentials were not provided."
+        }
+    """
 
     def get(self, request, format=None):
         serializer = UserSerializer(request.user)
@@ -50,13 +105,34 @@ class SessionLogoutHandler(APIView):
 
 
 class JWTLoginHandler(APIView):
+    """**JWTLoginHandler** class auth token (Javascript Web Token) for user
+    login.
+
+    ## Note ##
+    + Only **POST** method is allowed for logout process.
+
+    ## Request ##
+        :::bash
+        $ curl -X POST "http://exmaple.com/account/auth_token.json"
+                -d '{"username" : "elaborate", "password" : "1234"}'
+                -H "Content-type: application/json"
+
+    ## Response ##
+        :::javascript
+        /* On Success - 200 */
+        {
+            "token" : "{token_string}",
+            "expire" : "2014-11-20T19:16:52"
+        }
+        /* Invalid ID or Password - 401 */
+        {
+            "non_field_errors": ["Unable to login with provided credentials."]
+        }
+    """
 
     # Permission classe should be empty because nobody can be authenticated
     # before login.
     permission_classes = ()
-
-    def get(self, request, format=None):
-        return self.post(request, format)
 
     def post(self, request, format=None):
 
@@ -76,6 +152,33 @@ class JWTLoginHandler(APIView):
 
 
 class PasswordHandler(APIView):
+    """**PasswordHandler** class handles password change request
+    login.
+
+    ## Note ##
+    + Only **POST** method is allowed for changing password.
+
+    ## Request ##
+        :::bash
+        $ curl -X POST "http://exmaple.com/account/change_password.json"
+                -d '{"password" : "{new_password}"',
+                -H "Content-type: application/json"
+
+    ## Response ##
+        :::javascript
+        /* On success - 200 */
+        {
+            "id" : 1,
+            "username" : "elaborate",
+            "email": "a@c.com",
+            "last_name" : "Ahn",
+            "first_name" : "Beunguk"
+        }
+        /* User is not logged in - 403 */
+        {
+            "detail" : "Authentication credentials were not provided."
+        }
+    """
 
     def post(self, request, format=None):
 
