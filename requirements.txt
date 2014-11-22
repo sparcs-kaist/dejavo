@@ -2,6 +2,7 @@ Django==1.7.1
 Markdown==2.5.1
 Pillow==2.6.1
 PyJWT==0.3.0
+Pygments==2.0.1
 argparse==1.2.1
 django-filter==0.8
 djangorestframework==2.4.4

@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 
@@ -21,9 +22,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
     def restore_object(self, attrs, instance=None):
 
-        print attrs
         if instance is not None:
-            print "AAA"
             instance.username = attrs.get('username', instance.username)
             instance.email = attrs.get('email', instance.email)
             instance.first_name = attrs.get('first_name', instance.first_name)
