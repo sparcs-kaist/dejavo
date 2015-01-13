@@ -36,6 +36,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'dejavo.apps.account',
+    'dejavo.apps.manage',
+    'dejavo.apps.zabo',
 )
 
 MIDDLEWARE_CLASSES = (

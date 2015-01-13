@@ -7,6 +7,13 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'dejavo.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^/$', 'dejavo.apps.zabo.views.main'),
+    url(r'^login/$', 'dejavo.apps.account.views.login'),
+    url(r'^logout/$', 'dejavo.apps.account.views.logout'),
+
+    url(r'^account/', include('dejavo.apps.account.urls')),
+    url(r'^article/', include('dejavo.apps.zabo.urls')),
+    url(r'^manage/', include('dejavo.apps.manage.urls')),
 )
