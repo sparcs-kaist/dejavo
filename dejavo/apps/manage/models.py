@@ -16,6 +16,7 @@ class Complain(models.Model):
                             related_name = 'complain_report')
    meta = models.TextField() # json
    content = models.TextField()
+   created_date = models.DateTimeField(auto_now_add = True)
 
 class Log(models.Model):
 
