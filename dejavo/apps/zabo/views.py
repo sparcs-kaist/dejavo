@@ -15,7 +15,7 @@ def edit_article(request, article_id):
 def view_qna(request, article_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
-def create_qna(request, article_id):
+def create_question(request, article_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
 def delete_question(request, article_id, question_id):
