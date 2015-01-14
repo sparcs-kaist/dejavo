@@ -1,9 +1,14 @@
 from django.contrib import admin
 from dejavo.apps.zabo.models import Article, Poster, Announcement, \
-        Question, Answer, Attachment, Timeslot
+        Question, Answer, Attachment, Timeslot, Contact
+
+class ContactInline(admin.TabularInline):
+    model = Contact
+    extra = 1
 
 class PosterInline(admin.TabularInline):
     model = Poster
+    extra = 1
 
 class TimeslotInline(admin.StackedInline):
     model = Timeslot
@@ -15,7 +20,7 @@ class AttachmentInline(admin.StackedInline):
 
 class ArticleAdmin(admin.ModelAdmin):
     model = Article
-    inlines = [PosterInline, AttachmentInline, TimeslotInline]
+    inlines = [ContactInline, PosterInline, AttachmentInline, TimeslotInline]
 
 class AnnouncementAdmin(admin.ModelAdmin):
     model = Announcement
