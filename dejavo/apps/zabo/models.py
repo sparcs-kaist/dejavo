@@ -44,7 +44,7 @@ class Timeslot(models.Model):
     article = models.ForeignKey(Article, related_name = 'timeslot')
     timeslot_type = models.CharField(max_length = 20, choices = TIMESLOT_TYPE)
     start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    end_time = models.DateTimeField(null = True)
     label = models.CharField(max_length = 50)
 
 
