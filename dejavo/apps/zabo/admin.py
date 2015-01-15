@@ -16,7 +16,6 @@ class PosterInline(admin.TabularInline):
     readonly_fields = ('render_image',)
 
     def render_image(self, poster):
-        print self.fields
         return '<img style="height:auto; width:auto; ' + \
                 'max-width:60px; max-height:80px;" src="%s"/>' % poster.image.url
 
