@@ -136,7 +136,6 @@ class Question(models.Model):
     content = models.TextField()
     writer = models.ForeignKey(settings.AUTH_USER_MODEL)
     created_date = models.DateTimeField(auto_now_add = True)
-    updated_date = models.DateTimeField(auto_now = True, auto_now_add = True)
 
     def as_json(self):
 
@@ -164,4 +163,3 @@ class Answer(models.Model):
     content = models.TextField()
     writer = models.ForeignKey(settings.AUTH_USER_MODEL)
     created_date = models.DateTimeField(auto_now_add = True)
-    updated_date = models.DateTimeField(auto_now = True, auto_now_add = True)
