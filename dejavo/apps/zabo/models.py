@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.contrib.sites.models import Site
 
+import os
+
 class Article(models.Model):
 
     CATEGORY_TYPE = (
@@ -51,7 +53,7 @@ class Article(models.Model):
         for attach in list(Attachment.objects.filter(article = self)):
             attach_list.append({
                 'file_url' : attach.filepath.url,
-                'filename' : 'Fake name',
+                'filename' : os.path.basename(attach.filepath.file.name),
                 })
 
         return {
