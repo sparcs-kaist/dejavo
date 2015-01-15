@@ -20,7 +20,6 @@ testdata_dir = './testdata'
 
 gen_user = True
 gen_article = True
-gen_qna = False
 
 def generate_user(user_info):
 
@@ -83,17 +82,16 @@ def generate_article(info, user_pool):
     # Add Attachment
     attach_dir = testdata_dir + '/attachment/' + unique
     try:
-        file_names = [f for f in listdir(attach_dir) if isfile(join(poster_dir,f))]
+        file_names = [f for f in listdir(attach_dir) if isfile(join(attach_dir,f))]
         attach_files = map(lambda x : os.path.join(attach_dir, x), file_names)
 
         for i in range(len(file_names)):
-            attach = Attachement(article = article)
+            attach = Attachment(article = article)
             with open(attach_files[i], 'rb') as attach_file:
-                poster.image.save(file_names[i], File(attach_file), save = True)
+                attach.filepath.save(file_names[i], File(attach_file), save = True)
             attach.save()
 
     except:
-        # if no such directory exists
         pass
 
     for o in owner:
@@ -133,6 +131,36 @@ def set_contact(info, article_id):
             contact_type+ ', ' + _info + ')'
     return contact
 
+def set_question(info, article_id):
+    
+    article = Article.objects.get(id=article_id)
+    content = info[2]
+    writer = User.objects.get(username=info[3])
+    created_date = parse_datetime(info[4])
+
+    q = Question(article = article, content = content, writer = writer)
+    q.save()
+
+    q.created_date = created_date
+    q.save()
+    print 'Set question for article(' + article.title + ') question(' + info[0] + ')'
+    return q
+
+def set_answer(info, q_id):
+
+    question = Question.objects.get(id=q_id)
+    content = info[1]
+    writer = User.objects.get(username=info[2])
+    created_date = parse_datetime(info[3])
+
+    ans = Answer(question = question, content = content, writer = writer)
+    ans.save()
+
+    ans.created_date = created_date
+    ans.save()
+    print 'Set answer for question(' + info[0] + ') answer(' + str(created_date) + ')'
+    return ans
+
 def load_csv_file(filepath):
     content = []
     with open(filepath, 'rb') as afile:
@@ -146,7 +174,7 @@ def load_csv_file(filepath):
 
 if __name__ == '__main__':
 
-    if len(sys.argv) >= 1:
+    if len(sys.argv) >= 2:
         testdata_dir = sys.argv[1]
 
     if gen_user:
@@ -184,7 +212,17 @@ if __name__ == '__main__':
             unique_id = contact_arr[0]
             set_contact(contact_arr, article_unique_pk_map[unique_id])
 
-        '''
-        # Set question
-        # Set answer
-        '''
+        question_unique_pk_map = {}
+        # Set question and answer
+        q_csv_file = testdata_dir + '/question.csv'
+        q_info = load_csv_file(q_csv_file)
+        for q_arr in q_info:
+            unique_id = q_arr[1]
+            q = set_question(q_arr, article_unique_pk_map[unique_id])
+            question_unique_pk_map[q_arr[0]] = q.id
+
+        ans_csv_file = testdata_dir + '/answer.csv'
+        ans_info = load_csv_file(ans_csv_file)
+        for ans_arr in ans_info:
+            unique_id = ans_arr[0]
+            set_answer(ans_arr, question_unique_pk_map[unique_id])
