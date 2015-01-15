@@ -69,6 +69,9 @@ class Article(models.Model):
                 'attachment' : attach_list,
                 }
 
+    def __unicode__(self):
+        return self.title + ' ::' + str(self.id)
+
 
 class Contact(models.Model):
 
@@ -156,6 +159,9 @@ class Question(models.Model):
                 'created_date' : self.created_date,
                 'answer' : answer_list,
                 }
+
+    def __unicode__(self):
+        return self.article.title + ' ::' + str(self.id) + ' ::' + self.writer.username
 
 
 class Answer(models.Model):
