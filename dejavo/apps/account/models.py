@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from dejavo.apps.zabo.models import Article
+from django.db.models.signals import post_save
 
 class UserProfile(models.Model):
     
@@ -10,6 +11,14 @@ class UserProfile(models.Model):
     phone = models.CharField(max_length = 50)
     bio = models.TextField()
     bookmark = models.ManyToManyField(Article)
+
+def post_save_user(signal, sender, instance, **kwargs):
+    created = kwargs['created']
+
+    if created:
+        profile = UserProfile.objects.create(user=instance)
+
+post_save.connect(post_save_user, sender=settings.AUTH_USER_MODEL)
 
 def user_to_json(self):
     return {
@@ -20,7 +29,7 @@ def user_to_json(self):
             }
 
 # Add profile property to User model to create and read UserProfile easily
-User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
+User.profile = property(lambda u: UserProfile.objects.get(user = u))
 # Add class bound method 'as_json'
 setattr(User, 'as_json', user_to_json)
 
@@ -31,6 +40,7 @@ class Notification(models.Model):
     title = models.CharField(max_length = 100) # title not for user, but system
     content = models.TextField(null = False)
     receive_date = models.DateTimeField(auto_now_add = True)
+    is_read = models.BooleanField(default = False)
 
     def as_json(self):
         return {

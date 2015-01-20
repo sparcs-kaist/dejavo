@@ -36,15 +36,18 @@ def generate_user(user_info):
     user = User.objects.create_user(username, email, password)
     user.last_name = last_name
     user.first_name = first_name
+    user.save()
 
+    profile = User.objects.get(username = username).profile
     profile_image = testdata_dir + '/profile/' + image
     with open(profile_image, 'rb') as image_file:
-        user.profile.profile_image.save(image, File(image_file), save = True)
-    user.profile.phone = phone
-    user.profile.bio = bio
-
+        profile.profile_image.save(image, File(image_file), save = True)
+    profile.phone = phone
+    profile.bio = bio
+    profile.save()
     user.save()
-    print 'Generate user ' + last_name + ' ' + first_name + '(' + username + ')'
+
+    print 'Generate user ' + last_name + ' ' + first_name + '(' + username + '), ' + phone
     return user
 
 def generate_article(info, user_pool):
