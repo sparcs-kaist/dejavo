@@ -24,16 +24,10 @@ def create_question(request, article_id):
 def delete_question(request, article_id, question_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
-def edit_question(request, article_id, question_id):
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
-
 def create_answer(request, article_id, question_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
 def delete_answer(request, article_id, question_id, answer_id):
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
-
-def edit_answer(request, article_id, question_id, answer_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
 def create_announcement(request, article_id):
