@@ -4,7 +4,8 @@ from django.shortcuts import render
 import sys
 
 def main(request):
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
+    return render(request, 'manage/main.html', {'content':__name__ + '.' + sys._getframe().f_code.co_name})
+    #return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
 def list_claim(request):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)

@@ -87,3 +87,7 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'
+
+TEMPLATE_DIRS = (
+    BASE_DIR + '/template/',
+)
