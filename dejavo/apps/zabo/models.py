@@ -13,9 +13,12 @@ class Article(models.Model):
 
     owner = models.ManyToManyField(settings.AUTH_USER_MODEL)
     title = models.CharField(max_length = 150)
-    location = models.CharField(max_length = 200)
+    location = models.CharField(max_length = 200, blank = True)
     content = models.TextField()
     category = models.CharField(max_length = 20, choices = CATEGORY_TYPE)
+    is_blocked = models.BooleanField(default = False)
+    is_deleted = models.BooleanField(default = False)
+    is_published = models.BooleanField(default = False)
     # Article creation timestamp
     created_date = models.DateTimeField(auto_now_add = True)
     updated_date = models.DateTimeField(auto_now = True, auto_now_add = True)
@@ -99,13 +102,13 @@ class Timeslot(models.Model):
     article = models.ForeignKey(Article, related_name = 'timeslot')
     timeslot_type = models.CharField(max_length = 20, choices = TIMESLOT_TYPE)
     start_time = models.DateTimeField()
-    end_time = models.DateTimeField(null = True)
-    label = models.CharField(max_length = 50)
+    end_time = models.DateTimeField(blank = True, null = True)
+    label = models.CharField(max_length = 50, blank = True)
 
 
 class Poster(models.Model):
     image = models.ImageField(upload_to = 'poster')
-    alert = models.CharField(max_length = 150)
+    alert = models.CharField(max_length = 150, blank = True)
     article = models.ForeignKey(Article, related_name = 'images')
 
 
@@ -138,6 +141,9 @@ class Question(models.Model):
     article = models.ForeignKey(Article)
     content = models.TextField()
     writer = models.ForeignKey(settings.AUTH_USER_MODEL)
+    is_blocked = models.BooleanField(default = False)
+    is_private = models.BooleanField(default = False)
+    is_deleted = models.BooleanField(default = False)
     created_date = models.DateTimeField(auto_now_add = True)
 
     def as_json(self):
@@ -169,3 +175,5 @@ class Answer(models.Model):
     content = models.TextField()
     writer = models.ForeignKey(settings.AUTH_USER_MODEL)
     created_date = models.DateTimeField(auto_now_add = True)
+    is_blocked = models.BooleanField(default = False)
+    is_deleted = models.BooleanField(default = False)
