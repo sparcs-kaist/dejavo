@@ -1,0 +1,17 @@
+a:hover
+{
+    text-decoration:none;
+}
+
+.head_bar
+{
+    height:50px;
+    background-color:#000000;
+}
+
+.head_bar *
+{
+    line-height:50px;
+    color:#ffffff;
+    font-weight:bold;
+}
