@@ -146,6 +146,11 @@ class Question(models.Model):
     is_deleted = models.BooleanField(default = False)
     created_date = models.DateTimeField(auto_now_add = True)
 
+    def clean(self):
+        if self.content.strip() == '':
+            raise ValidationError({'content': 
+                'Content should not be empty string'})
+
     def as_json(self):
 
         answer_list = []
