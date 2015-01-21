@@ -49,6 +49,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'dejavo.middleware.negotiation.ContentNegotiator',
 )
 
 ROOT_URLCONF = 'dejavo.urls'
@@ -101,4 +103,9 @@ MEDIA_URL = '/media/'
 
 TEMPLATE_DIRS = (
     BASE_DIR + '/template/',
+)
+
+ACCEPT_FORMAT = (
+    ('application/json', 'json'),
+    ('text/html', 'html'),
 )
