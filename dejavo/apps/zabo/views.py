@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.core.exceptions import ValidationError
 
 from accept_checker.decorators import require_accept_format
-from dejavo.apps.zabo.models import Article, Question
+from dejavo.apps.zabo.models import Article, Question, Answer
 
 import sys
 
@@ -49,11 +49,10 @@ def create_question(request, article_id):
 
     try:
         article = Article.objects.get(id = article_id)
-        is_private = True if request.GET.get('is_private', False) == 'true' else False
+        is_private = True if request.POST.get('is_private', False) == 'true' else False
         question = Question(article = article, writer = request.user,
-                content = request.GET.get('content', ''),
-                is_private = is_private,
-                )
+                content = request.POST.get('content', ''),
+                is_private = is_private)
         question.full_clean()
         question.save()
 
@@ -93,13 +92,62 @@ def load_question(request, article_id):
                     data={'error':'Not Found: article_id : ' + article_id}
                     )
     else:
-        return HttpResponse(statue=406)
+        return HttpResponse(status=406)
 
 def delete_question(request, article_id, question_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
+
+@require_accept_format('application/json')
+@require_http_methods(['POST', 'PUT'])
 def create_answer(request, article_id, question_id):
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
+
+    if not request.user.is_authenticated():
+        return JsonResponse(
+                status = 401,
+                data = {
+                    'error' : 'User dose not authorized'
+                    },
+                )
+    
+    try:
+        question = Question.objects.get(id=question_id)
+        if question.article.id != int(article_id):
+            return JsonResponse(
+                    status = 400,
+                    data = {
+                        'error' : 'Question(' + str(question_id) + \
+                                ') does not belong to Article(' + \
+                                str(article_id) + ')'
+                        },
+                    )
+
+        answer = Answer(question = question, writer = request.user,
+                content = request.POST.get('content', ''))
+        answer.full_clean()
+        answer.save()
+
+        return JsonResponse(
+                status = 200,
+                data = answer.as_json(),
+                )
+
+    except Question.DoesNotExist:
+        return JsonResponse(
+                status = 404,
+                data = {
+                    'error' : 'question(' + question_id+ ') does not exist'
+                    },
+                )
+
+    except ValidationError as e:
+        return JsonResponse(
+                status = 400,
+                data = {
+                    'error' : 'Invalid format',
+                    'msg' : e.message_dict,
+                    },
+                )
 
 def delete_answer(request, article_id, question_id, answer_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)

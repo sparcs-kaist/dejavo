@@ -159,7 +159,7 @@ class Question(models.Model):
             answer_list.append({
                 'writer' : {
                     'username' : answer.writer.username,
-                    'image_url' : answer.wirter.profile.profile_image.url,
+                    'image_url' : answer.writer.profile.profile_image.url,
                     },
                 'created_date' : answer.created_date,
                 'content' : answer.content,
@@ -182,3 +182,18 @@ class Answer(models.Model):
     created_date = models.DateTimeField(auto_now_add = True)
     is_blocked = models.BooleanField(default = False)
     is_deleted = models.BooleanField(default = False)
+
+    def clean(self):
+        if self.content.strip() == '':
+            raise ValidationError({'content': 
+                'Content should not be empty string'})
+
+    def as_json(self):
+        return {
+                'writer' : {
+                    'username' : self.writer.username,
+                    'image_url' : self.writer.profile.profile_image.url,
+                    },
+                'created_date' : self.created_date,
+                'content' : self.content,
+            }
