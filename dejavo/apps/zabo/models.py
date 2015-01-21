@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.exceptions import ValidationError
 
 import os
 
@@ -165,7 +166,6 @@ class Question(models.Model):
                 })
 
         return {
-                'title' : self.title,
                 'content' : self.content,
                 'created_date' : self.created_date,
                 'answer' : answer_list,

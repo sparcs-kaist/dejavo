@@ -1,10 +1,10 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
-from dejavo.apps.zabo.models import Article
+from django.core.exceptions import ValidationError
 
 from accept_checker.decorators import require_accept_format
-from dejavo.apps.zabo.models import Article
+from dejavo.apps.zabo.models import Article, Question
 
 import sys
 
@@ -49,17 +49,35 @@ def create_question(request, article_id):
 
     try:
         article = Article.objects.get(id = article_id)
-        #question = Question(article = article, content = request.POST.['
+        is_private = True if request.GET.get('is_private', False) == 'true' else False
+        question = Question(article = article, writer = request.user,
+                content = request.GET.get('content', ''),
+                is_private = is_private,
+                )
+        question.full_clean()
+        question.save()
+
+        return JsonResponse(
+                status = 200,
+                data = question.as_json()
+                )
 
     except Article.DoesNotExist:
         return JsonResponse(
-                status = 400,
+                status = 404,
                 data = {
                     'error' : 'article(' + article_id + ') does not exist'
                     },
                 )
 
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
+    except ValidationError as e:
+        return JsonResponse(
+                status = 400,
+                data = {
+                    'error' : 'Invalid format',
+                    'msg' : e.message_dict,
+                    },
+                )
 
 def load_question(request, article_id):
     if request.ACCEPT_FORMAT == 'json':
