@@ -8,6 +8,7 @@ urlpatterns = patterns('',
 
     url(r'^(?P<article_id>\d+)/qna/$', views.view_qna),
     url(r'^(?P<article_id>\d+)/qna/create/$', views.create_question),
+    url(r'^(?P<article_id>\d+)/qna/load/$', views.load_question),
     url(r'^(?P<article_id>\d+)/qna/(?P<question_id>\d+)/delete$', views.delete_question),
 
     url(r'^(?P<article_id>\d+)/qna/(?P<question_id>\d+)/create/$', views.create_answer),
