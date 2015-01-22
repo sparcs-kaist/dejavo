@@ -76,11 +76,9 @@ def generate_article(info, user_pool):
     file_names = [f for f in listdir(poster_dir) if isfile(join(poster_dir,f))]
     image_files = map(lambda x : os.path.join(poster_dir, x), file_names)
 
-    for i in range(len(file_names)):
-        poster = Poster(article = article)
-        with open(image_files[i], 'rb') as poster_image:
-            poster.image.save(file_names[i], File(poster_image), save = True)
-        poster.save()
+    with open(image_files[0], 'rb') as poster_image:
+        article.image.save(file_names[0], File(poster_image), save = True)
+    article.save()
 
     # Add Attachment
     attach_dir = testdata_dir + '/attachment/' + unique

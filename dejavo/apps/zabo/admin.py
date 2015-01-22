@@ -1,23 +1,14 @@
 from django.contrib import admin
 from django.template.defaultfilters import escape
 from django.core.urlresolvers import reverse
-from dejavo.apps.zabo.models import Article, Poster, Announcement, \
-        Question, Answer, Attachment, Timeslot, Contact
+from dejavo.apps.zabo.models import Article, Question, Answer, Attachment, \
+        Timeslot, Contact
 
 import os
 
 class ContactInline(admin.TabularInline):
     model = Contact
     extra = 0
-
-class PosterInline(admin.TabularInline):
-    model = Poster
-    extra = 0
-    readonly_fields = ('render_image',)
-
-    def render_image(self, poster):
-        return '<img style="height:auto; width:auto; ' + \
-                'max-width:60px; max-height:80px;" src="%s"/>' % poster.image.url
 
 class TimeslotInline(admin.StackedInline):
     model = Timeslot
@@ -29,20 +20,17 @@ class AttachmentInline(admin.StackedInline):
 
 class ArticleAdmin(admin.ModelAdmin):
     model = Article
-    inlines = [ContactInline, PosterInline, AttachmentInline, TimeslotInline]
-    list_display = ('id', 'title', 'category', 'get_owners', 'get_posters', 
+    inlines = [ContactInline, AttachmentInline, TimeslotInline]
+    list_display = ('id', 'title', 'category', 'get_owners', 'get_poster', 
             'get_attchments', 'created_date', 'updated_date')
     search_fields = ('title', 'owner__username')
     list_filter = ('category', 'created_date', 'updated_date')
 
-    def get_posters(self, article):
-        posters = list(Poster.objects.filter(article = article))
-        return ' '.join(
-                map(lambda x : '<img style="height:auto; width:auto; ' + \
-                            'max-width:45px; max-height:60px;" src="%s"/>' \
-                    % x.image.url, posters))
-    get_posters.allow_tags = True
-    get_posters.short_description = 'Poster'
+    def get_poster(self, article):
+        return '<img style="height:auto; width:auto; ' + \
+                'max-width:45px; max-height:60px;" src="%s"/>' % article.image.url
+    get_poster.allow_tags = True
+    get_poster.short_description = 'Poster'
 
     def get_attchments(self, article):
         attachs = list(Attachment.objects.filter(article = article))
@@ -76,9 +64,6 @@ class TimeslotAdmin(admin.ModelAdmin):
                         escape(t.article.title))
     get_article.allow_tags = True
     get_article.short_description = 'Article'
-
-class AnnouncementAdmin(admin.ModelAdmin):
-    model = Announcement
 
 class QuestionAdmin(admin.ModelAdmin):
     model = Question
@@ -146,6 +131,5 @@ class AnswerAdmin(admin.ModelAdmin):
 
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Timeslot, TimeslotAdmin)
-admin.site.register(Announcement, AnnouncementAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer, AnswerAdmin)

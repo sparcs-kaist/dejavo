@@ -14,9 +14,16 @@ class Article(models.Model):
 
     owner = models.ManyToManyField(settings.AUTH_USER_MODEL)
     title = models.CharField(max_length = 150)
+    subtitle = models.CharField(max_length = 150)
     location = models.CharField(max_length = 200, blank = True)
     content = models.TextField()
+    announcement = models.TextField()
+    image = models.ImageField(upload_to = 'poster')
     category = models.CharField(max_length = 20, choices = CATEGORY_TYPE)
+    # Article host group
+    host_name = models.CharField(max_length = 50)
+    host_image = models.ImageField(upload_to = 'host')
+    host_description = models.CharField(max_length = 150)
     is_blocked = models.BooleanField(default = False)
     is_deleted = models.BooleanField(default = False)
     is_published = models.BooleanField(default = False)
@@ -46,13 +53,6 @@ class Article(models.Model):
                 'label' : timeslot.label,
                 })
 
-        poster_list = []
-        for poster in list(Poster.objects.filter(article = self)):
-            poster_list.append({
-                'image_url' : poster.image.url,
-                'alert' : poster.alert,
-                })
-
         attach_list = []
         for attach in list(Attachment.objects.filter(article = self)):
             attach_list.append({
@@ -62,6 +62,7 @@ class Article(models.Model):
 
         return {
                 'title' : self.title,
+                'subtitle' : self.subtitle,
                 'owner' : owner_list,
                 'category' : self.category,
                 'created_date' : self.created_date,
@@ -69,7 +70,12 @@ class Article(models.Model):
                 'content' : self.content,
                 'contact' : contact_list,
                 'timeslot' : timeslot_list,
-                'poster' : poster_list,
+                'poster' : self.image.url,
+                'host' : {
+                    'name' : self.host_name,
+                    'image' : self.host_image.url,
+                    'description' : self.host_description,
+                    },
                 'attachment' : attach_list,
                 }
 
@@ -107,35 +113,9 @@ class Timeslot(models.Model):
     label = models.CharField(max_length = 50, blank = True)
 
 
-class Poster(models.Model):
-    image = models.ImageField(upload_to = 'poster')
-    alert = models.CharField(max_length = 150, blank = True)
-    article = models.ForeignKey(Article, related_name = 'images')
-
-
 class Attachment(models.Model):
     filepath = models.FileField(upload_to = 'attachment')
     article = models.ForeignKey(Article, related_name = 'attachment')
-
-
-class Announcement(models.Model):
-    article = models.ForeignKey(Article)
-    title = models.CharField(max_length = 150)
-    content = models.TextField()
-    writer = models.ForeignKey(settings.AUTH_USER_MODEL)
-    created_date = models.DateTimeField(auto_now_add = True)
-    updated_date = models.DateTimeField(auto_now = True, auto_now_add = True)
-
-    def as_json(self):
-        return {
-                'title' : self.title,
-                'writer' : {
-                    'username' : self.writer.username,
-                    'image_url' : self.writer.profile.profile_image.url,
-                    },
-                'created_date' : self.created_date,
-                'updated_date' : self.updated_date,
-                }
 
 
 class Question(models.Model):
