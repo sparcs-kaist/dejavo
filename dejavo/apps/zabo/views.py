@@ -3,7 +3,7 @@ from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
 
-from accept_checker.decorators import require_accept_format
+from accept_checker.decorators import require_accept_formats
 from dejavo.apps.zabo.models import Article, Question, Answer
 
 import sys
@@ -14,20 +14,21 @@ def main(request):
 def create(request):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
+@require_accept_formats(['text/html', 'application/json'])
+@require_http_methods(['GET'])
 def view_article(request, article_id):
+
     if request.ACCEPT_FORMAT == 'html':
         return render(request, 'zabo/article.html', {})
-    elif request.ACCEPT_FORMAT == 'json':
-        try:
-            article = Article.objects.get(id = article_id)
-            return JsonResponse(status=200, data=article.as_json())
-        except Article.DoesNotExist:
-            return JsonResponse(
-                    status=404,
-                    data={'error':'Not Found: article_id : ' + article_id}
-                    )
-    else:
-        return HttpResponse(status=406)
+
+    try:
+        article = Article.objects.get(id = article_id)
+        return JsonResponse(status=200, data=article.as_json())
+    except Article.DoesNotExist:
+        return JsonResponse(
+                status=404,
+                data={'error':'Not Found: article_id : ' + article_id}
+                )
 
 def edit_article(request, article_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
@@ -35,7 +36,7 @@ def edit_article(request, article_id):
 def view_qna(request, article_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
-@require_accept_format('application/json')
+@require_accept_formats(['application/json'])
 @require_http_methods(['POST', 'PUT'])
 def create_question(request, article_id):
 
@@ -78,27 +79,28 @@ def create_question(request, article_id):
                     },
                 )
 
+
+@require_accept_formats(['application/json'])
+@require_http_methods(['GET'])
 def load_question(request, article_id):
-    if request.ACCEPT_FORMAT == 'json':
-        try:
-            question_list = []
-            article = Article.objects.get(id = article_id)
-            for q in Question.objects.filter(article__id = article_id):
-                question_list.append(q.as_json())
-            return JsonResponse(status=200, data=question_list)
-        except Article.DoesNotExist:
-            return JsonResponse(
-                    status=404,
-                    data={'error':'Not Found: article_id : ' + article_id}
-                    )
-    else:
-        return HttpResponse(status=406)
+    try:
+        question_list = []
+        article = Article.objects.get(id = article_id)
+        for q in Question.objects.filter(article__id = article_id):
+            question_list.append(q.as_json())
+        return JsonResponse(status=200, data={'questions':question_list})
+    except Article.DoesNotExist:
+        return JsonResponse(
+                status=404,
+                data={'error':'Not Found: article_id : ' + article_id}
+                )
+
 
 def delete_question(request, article_id, question_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
 
-@require_accept_format('application/json')
+@require_accept_formats(['application/json'])
 @require_http_methods(['POST', 'PUT'])
 def create_answer(request, article_id, question_id):
 
