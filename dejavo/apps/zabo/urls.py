@@ -9,9 +9,6 @@ urlpatterns = patterns('',
     url(r'^(?P<article_id>\d+)/timeslot/create/$', views.create_timeslot),
     url(r'^(?P<article_id>\d+)/timeslot/delete/(?P<timeslot_id>\d+)/$', views.delete_timeslot),
 
-    url(r'^(?P<article_id>\d+)/poster/create/$', views.create_poster),
-    url(r'^(?P<article_id>\d+)/poster/delete/(?P<poster_id>\d+)/$', views.delete_poster),
-
     url(r'^(?P<article_id>\d+)/qna/$', views.view_qna),
     url(r'^(?P<article_id>\d+)/qna/create/$', views.create_question),
     url(r'^(?P<article_id>\d+)/qna/load/$', views.load_question),
@@ -20,5 +17,7 @@ urlpatterns = patterns('',
     url(r'^(?P<article_id>\d+)/qna/(?P<question_id>\d+)/create/$', views.create_answer),
     url(r'^(?P<article_id>\d+)/qna/(?P<question_id>\d+)/delete/(?P<answer_id>\d+)/$', views.delete_answer),
 
+    # When updating annoucement (not in editting page), changer can choose 
+    # to notify participants
     url(r'^(?P<article_id>\d+)/announcement/edit/$', views.edit_announcement),
 )

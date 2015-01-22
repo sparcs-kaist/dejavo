@@ -39,12 +39,6 @@ def create_timeslot(request, article_id):
 def delete_timeslot(request, article_id, timeslot_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
-def create_poster(request, article_id):
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
-
-def delete_poster(request, article_id, poster_id):
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
-
 def view_qna(request, article_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
