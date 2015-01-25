@@ -59,7 +59,7 @@ def view_article(request, article_id):
                 )
 
 @require_accept_formats(['text/html', 'application/json'])
-@require_http_methods(['POST'])
+@require_http_methods(['POST', 'GET'])
 def edit_article(request, article_id):
 
     if not request.user.is_authenticated():
