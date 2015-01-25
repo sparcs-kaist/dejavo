@@ -22,13 +22,15 @@ class ArticleAdmin(admin.ModelAdmin):
     model = Article
     inlines = [ContactInline, AttachmentInline, TimeslotInline]
     list_display = ('id', 'title', 'category', 'get_owners', 'get_poster', 
-            'get_attchments', 'created_date', 'updated_date')
+            'get_attchments', 'is_published', 'created_date', 'updated_date')
     search_fields = ('title', 'owner__username')
-    list_filter = ('category', 'created_date', 'updated_date')
+    list_filter = ('category', 'is_published', 'created_date', 'updated_date')
 
     def get_poster(self, article):
-        return '<img style="height:auto; width:auto; ' + \
-                'max-width:45px; max-height:60px;" src="%s"/>' % article.image.url
+        if bool(article.image):
+            return '<img style="height:auto; width:auto; ' + \
+                    'max-width:45px; max-height:60px;" src="%s"/>' % article.image.url
+        return None
     get_poster.allow_tags = True
     get_poster.short_description = 'Poster'
 

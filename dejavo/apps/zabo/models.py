@@ -15,7 +15,7 @@ class Article(models.Model):
     owner = models.ManyToManyField(settings.AUTH_USER_MODEL)
     title = models.CharField(max_length = 150)
     subtitle = models.CharField(max_length = 150)
-    location = models.CharField(max_length = 200, blank = True)
+    location = models.CharField(max_length = 200)
     content = models.TextField()
     announcement = models.TextField()
     image = models.ImageField(upload_to = 'poster')
@@ -61,6 +61,7 @@ class Article(models.Model):
                 })
 
         return {
+                'id' : self.id,
                 'title' : self.title,
                 'subtitle' : self.subtitle,
                 'owner' : owner_list,
@@ -70,17 +71,17 @@ class Article(models.Model):
                 'content' : self.content,
                 'contact' : contact_list,
                 'timeslot' : timeslot_list,
-                'poster' : self.image.url,
+                'poster' : None if not bool(self.image) else self.image.url,
                 'host' : {
                     'name' : self.host_name,
-                    'image' : self.host_image.url,
+                    'image' : None if not bool(self.host_image) else self.host_image.url,
                     'description' : self.host_description,
                     },
                 'attachment' : attach_list,
                 }
 
     def __unicode__(self):
-        return self.title + ' ::' + str(self.id)
+        return unicode(self.title) + ' ::' + str(self.id)
 
 
 class Contact(models.Model):

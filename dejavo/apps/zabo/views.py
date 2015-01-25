@@ -2,6 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
 
 from accept_checker.decorators import require_accept_formats
 from dejavo.apps.zabo.models import Article, Question, Answer
@@ -11,8 +12,35 @@ import sys
 def main(request):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
+@require_accept_formats(['text/html', 'application/json'])
+@require_http_methods(['POST'])
 def create(request):
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
+    if not request.user.is_authenticated():
+        return JsonResponse(
+                status = 401,
+                data = {
+                    'error' : 'User dose not authorized'
+                    },
+                )
+
+    owner = set(request.POST.getlist('owner', [request.user.username]))
+    new_article = Article()
+    new_article.save()
+    new_article.owner.add(*map(lambda o : get_user_model().objects.get(username = o), owner))
+    new_article.save()
+
+    if request.ACCEPT_FORMAT == 'json':
+        response = JsonResponse(
+                status = 201,
+                data = new_article.as_json()
+                )
+        response['Location'] = '/article/' + str(new_article.id) + '/edit/'
+        return response
+
+    elif request.ACCEPT_FORMAT == 'html':
+        response = HttpResponse(status = 201, content = '')
+        response['Location'] = '/article/' + str(new_article.id) + '/edit/'
+        return response
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['GET'])
