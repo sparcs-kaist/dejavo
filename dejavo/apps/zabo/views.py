@@ -19,7 +19,7 @@ def create(request):
         return JsonResponse(
                 status = 401,
                 data = {
-                    'error' : 'User dose not authorized'
+                    'error' : 'User does not authorized'
                     },
                 )
 
@@ -58,8 +58,74 @@ def view_article(request, article_id):
                 data={'error':'Not Found: article_id : ' + article_id}
                 )
 
+@require_accept_formats(['text/html', 'application/json'])
+@require_http_methods(['POST'])
 def edit_article(request, article_id):
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
+
+    if not request.user.is_authenticated():
+        if request.ACCEPT_FORMAT == 'html':
+            return HttpResponse(status = 401, content = 'User does not authorized')
+        else:
+            return JsonResponse(
+                    status = 401,
+                    data = {
+                        'error' : 'User does not authorized'
+                        },
+                    )
+
+    try:
+        article = Article.objects.get(id = article_id)
+        if request.user not in article.owner.all():
+            msg = 'User does not own the article'
+            if request.ACCEPT_FORMAT == 'html':
+                return HttpResponse(status = 403, content = msg)
+            elif request.ACCEPT_FORMAT == 'json':
+                return JsonResponse(status = 403, data = { 'error' : msg })
+
+    except Article.DoesNotExist:
+        msg = 'Article(' + str(article_id) + ') does not exist'
+        if request.ACCEPT_FORMAT == 'html':
+            return HttpResponse(status = 404, content = msg)
+        elif request.ACCEPT_FORMAT == 'json':
+            return JsonResponse(status = 404, data = { 'error' : msg })
+
+    if request.ACCEPT_FORMAT == 'html':
+        # TODO Give article editing page
+        return HttpResponse(status = 200, content = 'Article editing page')
+
+    update_fields = request.POST.getlist('fields', None)
+    if not update_fields:
+        return JsonResponse(
+                status = 400,
+                data = {
+                    'error' : 'fields parameter is required'
+                    }
+                )
+
+    model_fields = Article._meta.get_all_field_names()
+    real_update_field = set(update_fields) & set(model_fields)
+
+    try:
+        article.set_fields(real_update_field, request.POST, request.FILES)
+        article.full_clean()
+        article.save()
+
+        return JsonResponse(
+                status = 200,
+                data = {
+                    'updated_fields' : list(real_update_field), 
+                    'article' : article.as_json()
+                    }
+                )
+
+    except ValidationError as e:
+        return JsonResponse(
+                status = 400,
+                data = {
+                    'error' : 'Invalid format',
+                    'msg' : e.message_dict,
+                    },
+                )
 
 def create_timeslot(request, article_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)

@@ -14,8 +14,8 @@ class Article(models.Model):
 
     owner = models.ManyToManyField(settings.AUTH_USER_MODEL)
     title = models.CharField(max_length = 150)
-    subtitle = models.CharField(max_length = 150)
-    location = models.CharField(max_length = 200)
+    subtitle = models.CharField(max_length = 150, blank = True)
+    location = models.CharField(max_length = 200, blank = True)
     content = models.TextField()
     announcement = models.TextField()
     image = models.ImageField(upload_to = 'poster')
@@ -30,6 +30,44 @@ class Article(models.Model):
     # Article creation timestamp
     created_date = models.DateTimeField(auto_now_add = True)
     updated_date = models.DateTimeField(auto_now = True, auto_now_add = True)
+
+    def set_fields(self, fields, posts, files):
+        for field_name in fields:
+            if field_name == 'created_date' or field_name == 'updated_date':
+                continue
+
+            field = Article._meta.get_field(field_name)
+            _type = type(field)
+
+            if _type == models.ImageField:
+                if field_name not in files:
+                    raise ValidationError({field_name : 'Invalid value'})
+                setattr(self, field_name, files[field_name])
+
+            else:
+                if field_name not in posts:
+                    raise ValidationError({field_name : 'Invalid value'})
+
+                if _type == models.BooleanField:
+                    setattr(self, field_name,
+                            True if posts.get(field_name, 'false') == 'true' \
+                                    else False)
+                else:
+                    setattr(self, field_name, posts[field_name])
+
+    def clean(self):
+
+        if self.is_published:
+            unsatisfied_field = {}
+            if self.title.strip() == '':
+                unsatisfied_field['title'] = 'Unfilled field'
+            if self.content.strip() == '':
+                unsatisfied_field['content'] = 'Unfilled field'
+            if not self.category:
+                unsatisfied_field['category'] = 'Value not set'
+
+            if len(unsatisfied_field) > 0:
+                raise ValidationError(unsatisfied_field)
 
     def as_json(self):
 
