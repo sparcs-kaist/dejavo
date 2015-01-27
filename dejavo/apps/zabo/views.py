@@ -27,7 +27,7 @@ def create(request):
                 )
 
     owner = set(request.POST.getlist('owner', [request.user.username]))
-    new_article = Article()
+    new_article = Article(is_published = False)
     new_article.save()
     new_article.owner.add(*map(lambda o : get_user_model().objects.get(username = o), owner))
     new_article.save()
@@ -111,7 +111,7 @@ def edit_article(request, article_id):
 
     try:
         article.set_fields(real_update_field, request.POST, request.FILES)
-        article.full_clean()
+        article.clean()
         article.save()
 
         return JsonResponse(
