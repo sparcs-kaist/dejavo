@@ -136,9 +136,9 @@ def create(request):
                 )
 
     # create user
-    username = request.GET.get('username', None)
-    email = request.GET.get('email', None)
-    password = request.GET.get('password', None)
+    username = request.POST.get('username', None)
+    email = request.POST.get('email', None)
+    password = request.POST.get('password', None)
 
     if not username or not email or not password:
         if request.ACCEPT_FORMAT == 'html':
