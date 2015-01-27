@@ -5,5 +5,7 @@ urlpatterns = patterns('',
     url(r'^$', views.main),
     url(r'^create/$', views.create),
     url(r'^edit/$', views.edit),
-    url(r'^unsubscribe/$', views.unsubscribe),
+    url(r'^show/(?P<username>\w+)/$', views.show_user),
+    url(r'^participate/(?P<article_id>\d+)/$', views.participate),
+    url(r'^unparticipate/(?P<article_id>\d+)/$', views.unparticipate),
 )
