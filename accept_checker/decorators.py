@@ -32,3 +32,28 @@ def require_accept_formats(formats):
                     )
         return inner
     return decorator
+
+
+def check_authentication(func):
+    def checker(request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            if request.ACCEPT_FORMAT == 'html':
+                return HttpResponse(
+                        status = 401,
+                        content = 'User does not authorized'
+                        )
+            elif request.ACCEPT_FORMAT == 'json':
+                return JsonResponse(
+                        status = 401,
+                        data = {
+                            'error' : 'User does not authorized'
+                            },
+                        )
+            else:   # Set HttpResponse as default
+                return HttpResponse(
+                        status = 401,
+                        content = 'User does not authorized'
+                        )
+        else:
+            return func(request, *args, **kwargs)
+    return checker
