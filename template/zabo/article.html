@@ -5,10 +5,18 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <meta name="twitter:card" content="photo" />
+        <meta name="twitter:site" content="@zabo.kaist" />
+        <meta name="twitter:title" content="My picture" />
+        <meta name="twitter:description" content="A description" />
+        <meta name="twitter:image" content="http://143.248.234.137/media/poster/fermat_QL6BpFB.jpg" />
+        <!-- Twitter will not create a photo card unless the twitter:image is of a minimum size of 280px wide by 150px tall. Images will not be cropped unless they have an exceptional aspect ratio. Images must be less than 1MB in size. -->
+        <meta name="twitter:url" content="http://143.248.234.137/article/8/" />
+
         <meta property="og:title" content="Title for article" />
-        <meta property="og:site_name" content="zabo" /> 
+        <meta property="og:site_name" content="zabo.kaist" /> 
         <meta property="og:description" content="Description for article" />
-        <meta property="og:url" content="http://143.248.234.137:9999/article/8/">
+        <meta property="og:url" content="http://143.248.234.137/article/8/">
         <meta property="og:image:url" content="http://rigvedawiki.net/r1/pds/asahina_mikuru_anime.png" />
         <meta property="og:type" content="article" /> <!-- article? website? -->
 
@@ -73,14 +81,14 @@
                 e.preventDefault();
                 FB.ui({
                     method: 'share',
-                    href: 'http://143.248.234.137:9999/article/8/'
+                    href: 'http://143.248.234.137/article/8/'
                     }, function(response){}
                 )
             });
 
         $("#twitter-share").click(function(e){
                 e.preventDefault();
-                popupwindow('https://twitter.com/intent/tweet?text=Article!!&url=http://www.naver.com',
+                popupwindow('https://twitter.com/intent/tweet?text=Article!!&url=http://143.248.234.137/article/8/',
                     'Tweet Article', 600, 260);
             });
     });
