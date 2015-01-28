@@ -46,21 +46,27 @@ def create(request):
         return response
 
 
-@require_accept_formats(['text/html', 'application/json'])
+@require_accept_formats(['text/html', 'application/json', '*/*'])
 @require_http_methods(['GET'])
 def view_article(request, article_id):
-
-    if request.ACCEPT_FORMAT == 'html':
-        return render(request, 'zabo/article.html', {})
-
     try:
         article = Article.objects.get(id = article_id)
-        return JsonResponse(status=200, data=article.as_json())
+        if request.ACCEPT_FORMAT == 'json':
+            return JsonResponse(status = 200, data = article.as_json())
+        else:
+            return render(request, 'zabo/article.html', {})
+
     except Article.DoesNotExist:
-        return JsonResponse(
-                status=404,
-                data={'error':'Not Found: article_id : ' + article_id}
-                )
+        if request.ACCEPT_FORMAT == 'json':
+            return JsonResponse(
+                    status = 404,
+                    data = {'error' : 'Not Found: article_id : ' + article_id}
+                    )
+        else:
+            return HttpResponse(
+                    status = 404,
+                    content = 'Not Found: article_id : ' + article_id
+                    )
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST', 'GET'])

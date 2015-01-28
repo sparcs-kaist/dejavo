@@ -109,5 +109,6 @@ ACCEPT_CHECKER = {
     'ACCEPT_FORMAT' : (
         ('application/json', 'json'),
         ('text/html', 'html'),
+        ('*/*', 'wildcard'),
     )
 }
