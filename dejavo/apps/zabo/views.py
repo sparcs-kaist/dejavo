@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 
-from accept_checker.decorators import require_accept_formats
+from accept_checker.decorators import require_accept_formats, auth_required
 from dejavo.apps.zabo.models import Article, Timeslot, Question, Answer
 
 import sys
@@ -16,15 +16,8 @@ def main(request):
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST'])
+@auth_required
 def create(request):
-
-    if not request.user.is_authenticated():
-        return JsonResponse(
-                status = 401,
-                data = {
-                    'error' : 'User does not authorized'
-                    },
-                )
 
     owner = set(request.POST.getlist('owner', [request.user.username]))
     new_article = Article(is_published = False)
@@ -70,19 +63,8 @@ def view_article(request, article_id):
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST', 'GET'])
+@auth_required
 def edit_article(request, article_id):
-
-    if not request.user.is_authenticated():
-        if request.ACCEPT_FORMAT == 'html':
-            return HttpResponse(status = 401, content = 'User does not authorized')
-        else:
-            return JsonResponse(
-                    status = 401,
-                    data = {
-                        'error' : 'User does not authorized'
-                        },
-                    )
-
     try:
         article = Article.objects.get(id = article_id)
         if request.user not in article.owner.all():
@@ -140,16 +122,8 @@ def edit_article(request, article_id):
 
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST'])
+@auth_required
 def create_timeslot(request, article_id):
-
-    if not request.user.is_authenticated():
-        return JsonResponse(
-                status = 401,
-                data = {
-                    'error' : 'User does not authorized'
-                    },
-                )
-
     try:
         article = Article.objects.get(id = article_id)
         if request.user not in article.owner.all():
@@ -185,21 +159,13 @@ def create_timeslot(request, article_id):
 
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST'])
+@auth_required
 def delete_timeslot(request, article_id, timeslot_id):
-
-    if not request.user.is_authenticated():
-        return JsonResponse(
-                status = 401,
-                data = {
-                    'error' : 'User does not authorized'
-                    },
-                )
-
     try:
         timeslot = Timeslot.objects.get(id = timeslot_id)
         if request.user not in timeslot.article.owner.all():
             return JsonResponse(
-                    status = 401,
+                    status = 403,
                     data = {
                         'error' : 'User does not have the permission'
                         },
@@ -241,16 +207,8 @@ def view_qna(request, article_id):
 
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST', 'PUT'])
+@auth_required
 def create_question(request, article_id):
-
-    if not request.user.is_authenticated():
-        return JsonResponse(
-                status = 401,
-                data = {
-                    'error' : 'User dose not authorized'
-                    },
-                )
-
     try:
         article = Article.objects.get(id = article_id)
         is_private = True if request.POST.get('is_private', False) == 'true' else False
@@ -306,16 +264,8 @@ def load_question(request, article_id):
 
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST'])
+@auth_required
 def delete_question(request, article_id, question_id):
-
-    if not request.user.is_authenticated():
-        return JsonResponse(
-                status = 401,
-                data = {
-                    'error' : 'User does not authorized'
-                    },
-                )
-    
     try:
         article = Article.objects.get(id = article_id)
         question = Question.objects.get(id = question_id)
@@ -343,16 +293,8 @@ def delete_question(request, article_id, question_id):
 
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST', 'PUT'])
+@auth_required
 def create_answer(request, article_id, question_id):
-
-    if not request.user.is_authenticated():
-        return JsonResponse(
-                status = 401,
-                data = {
-                    'error' : 'User dose not authorized'
-                    },
-                )
-    
     try:
         question = Question.objects.get(id=question_id)
         if question.article.id != int(article_id):
@@ -395,16 +337,8 @@ def create_answer(request, article_id, question_id):
 
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST'])
+@auth_required
 def delete_answer(request, article_id, question_id, answer_id):
-
-    if not request.user.is_authenticated():
-        return JsonResponse(
-                status = 401,
-                data = {
-                    'error' : 'User does not authorized'
-                    },
-                )
-    
     try:
         article = Article.objects.get(id = article_id)
         question = Question.objects.get(id = question_id)

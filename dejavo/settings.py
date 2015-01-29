@@ -112,3 +112,5 @@ ACCEPT_CHECKER = {
         ('*/*', 'wildcard'),
     )
 }
+
+LOGIN_URL = '/login/'

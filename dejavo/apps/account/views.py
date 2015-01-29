@@ -4,8 +4,9 @@ from django.shortcuts import render
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import REDIRECT_FIELD_NAME
 
-from accept_checker.decorators import require_accept_formats
+from accept_checker.decorators import require_accept_formats, auth_required 
 
 import sys
 
@@ -77,7 +78,7 @@ def login_view(request):
         login(request, user)
         # login success
         if request.ACCEPT_FORMAT == 'html':
-            return HttpResponseRedirect(request.GET.get('next', '/')
+            return HttpResponseRedirect(request.GET.get(REDIRECT_FIELD_NAME, '/')
                     )
         elif request.ACCEPT_FORMAT == 'json':
             return JsonResponse(
@@ -102,11 +103,9 @@ def logout_view(request):
 
 @require_accept_formats(['text/html'])
 @require_http_methods(['GET'])
+@auth_required
 def main(request):
     # User notification, owning article, history, else else else...
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect('/login/')
-
     # TODO create user page
     return HttpResponse(
             status = 200,
@@ -185,6 +184,7 @@ def create(request):
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST', 'GET'])
+@auth_required
 def edit(request):
     # User profile editing page
     if not request.user.is_authenticated():
@@ -208,19 +208,31 @@ def edit(request):
 @require_http_methods(['GET'])
 def show_user(request, username):
 
-    if request.ACCEPT_FORMAT == 'html':
-        # TODO Create user page
-        return HttpResponse(
-                status = 200,
-                content = 'Show user page'
-                )
-    elif request.ACCEPT_FORMAT == 'json':
-        user_info = user.as_json()
-        # TODO add user's other information such as articles
-        return JsonResponse(
-                status = 200,
-                data = user_info
-                )
+    try:
+        user_info = get_user_model().objects.get(username = username).as_json()
+        if request.ACCEPT_FORMAT == 'html':
+            # TODO Create user page
+            return HttpResponse(
+                    status = 200,
+                    content = 'Show user page'
+                    )
+        else:
+            # TODO add user's other information such as articles
+            return JsonResponse(
+                    status = 200,
+                    data = user_info
+                    )
+    except get_user_model().DoesNotExist:
+        if request.ACCEPT_FORMAT == 'html':
+            return HttpResponse(
+                    status = 404,
+                    content = 'User does not exist'
+                    )
+        else:
+            return JsonResponse(
+                    status = 404,
+                    data = {'error' : 'User does not exist'}
+                    )
 
 @require_accept_formats(['application/json'])
 @require_http_methods(['GET'])
