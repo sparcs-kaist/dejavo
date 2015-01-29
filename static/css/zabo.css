@@ -1,0 +1,117 @@
+@font-face {
+    font-family: 'Noto Sans CJK KR';
+    font-style: normal;
+    font-weight: 100;
+    src: local('@'), url('fonts/NotoSansCJKkr-Thin.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans CJK KR';
+    font-style: normal;
+    font-weight: 300;
+    src: local('@'), url('fonts/NotoSansCJKkr-Light.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans CJK KR';
+    font-style: normal;
+    font-weight: 350;
+    src: local('@'), url('fonts/NotoSansCJKkr-DemiLight.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans CJK KR';
+    font-style: normal;
+    font-weight: 400;
+    src: local('@'), url('fonts/NotoSansCJKkr-Regular.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans CJK KR';
+    font-style: normal;
+    font-weight: 500;
+    src: local('@'), url('fonts/NotoSansCJKkr-Medium.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans CJK KR';
+    font-family: normal;
+    font-weight: 700;
+    src: local('@'), url('fonts/NotoSansCJKkr-Bold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans CJK KR';
+    font-style: normal;
+    font-weight: 900;
+    src: local('@'), url('fonts/NotoSansCJKkr-Black.otf') format('opentype');
+}
+
+body
+{
+    margin: 0;
+    font-family: 'Noto Sans CJK KR', sans-serif;
+}
+
+a
+{
+    text-decoration: none;
+}
+
+a:hover
+{
+    text-decoration: none;
+}
+
+.container
+{
+    width: 100%;
+}
+
+#head_bar
+{
+    max-width: 960px;
+    margin: 0 auto;
+    height: 80px;
+}
+
+#head_bar div
+{
+    line-height: 80px;
+    font-weight: 700;
+}
+
+#home
+{
+    width:245px;
+    float: left;
+    font-size: 24px;
+}
+
+.menu span
+{
+    font-size: 20px;
+    color: #9d9796;
+}
+
+.menu_left
+{
+    float: left;
+    margin-right: 70px;
+}
+
+.menu_right
+{
+    float: right;
+}
+
+.profile_img
+{
+    margin: 20px 15px 20px 0px;
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    background-color: #000000;
+}
