@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
-from accept_checker.decorators import require_accept_formats, check_authentication
+from accept_checker.decorators import require_accept_formats, auth_required
 from dejavo.apps.zabo.models import Article
 
 import sys
@@ -26,7 +26,7 @@ def list_block(request):
 
 @require_accept_formats(['application/json'])
 @require_http_methods(['GET'])
-@check_authentication
+@auth_required
 def set_article_block(request, article_id):
     try:
         article = Article.objects.get(id = article_id)
@@ -42,7 +42,7 @@ def set_article_block(request, article_id):
 
 @require_accept_formats(['application/json'])
 @require_http_methods(['GET'])
-@check_authentication
+@auth_required
 def set_account_block(request, account_id):
     try:
         user = User.objects.get(id = account_id)
