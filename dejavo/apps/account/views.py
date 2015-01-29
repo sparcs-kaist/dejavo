@@ -1,5 +1,6 @@
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
@@ -7,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import REDIRECT_FIELD_NAME
 
 from accept_checker.decorators import require_accept_formats, auth_required 
+from jwt_auth.token import generate_jwt, refresh_jwt
 
 import sys
 
@@ -100,6 +102,49 @@ def logout_view(request):
                 status = 200,
                 data = {'msg' : 'Successfully logout'}
                 )
+
+@require_accept_formats(['application/json'])
+@require_http_methods(['POST'])
+@csrf_exempt
+def jwt_login(request):
+    username = request.POST.get('username', None)
+    password = request.POST.get('password', None)
+
+    if not username or not password:
+        # invalid format
+        return JsonResponse(status = 400, data = {'error' : 'Invalid format'})
+
+    user = authenticate(username = username, password = password)
+
+    if user is None:
+        # login fail page. wrong password, username
+        return JsonResponse(status = 400, data = {'error' : 'Failed to login'})
+
+    if not user.is_active:
+        # user inactive
+        return JsonResponse(status = 403, data = {'error' : 'User is blocked'})
+    
+    try:
+        user_token = generate_jwt(user)
+        return JsonResponse(status = 200, data = user_token)
+    except:
+        return JsonReponse(status = 500, data = {'error' : 'Internal server error'})
+
+
+@require_accept_formats(['application/json'])
+@require_http_methods(['POST'])
+@csrf_exempt
+def jwt_refresh(request):
+    user_token = request.POST.get('token', None)
+
+    if user_token is None:
+        return JsonResponse(status = 400, data = {'error' : 'Invalid format'})
+
+    try:
+        new_user_token = refresh_jwt(request.user, user_token)
+        return JsonResponse(status = 200, data = new_user_token)
+    except:
+        return JsonReponse(status = 500, data = {'error' : 'Internal server error'})
 
 @require_accept_formats(['text/html'])
 @require_http_methods(['GET'])

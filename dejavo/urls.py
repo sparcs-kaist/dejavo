@@ -15,6 +15,9 @@ urlpatterns = patterns('',
     url(r'^login/$', 'dejavo.apps.account.views.login_view'),
     url(r'^logout/$', 'dejavo.apps.account.views.logout_view'),
 
+    url(r'^jwt/login/$', 'dejavo.apps.account.views.jwt_login'),
+    url(r'^jwt/refresh/$', 'dejavo.apps.account.views.jwt_refresh'),
+
     url(r'^account/', include('dejavo.apps.account.urls')),
     url(r'^article/', include('dejavo.apps.zabo.urls')),
     url(r'^manage/', include('dejavo.apps.manage.urls')),

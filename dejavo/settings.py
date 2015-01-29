@@ -51,6 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'accept_checker.middleware.ContentNegotiator',
+    'jwt_auth.middleware.JWTAuthMiddleware',
 )
 
 ROOT_URLCONF = 'dejavo.urls'
