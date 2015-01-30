@@ -2,49 +2,35 @@
     font-family: 'Noto Sans CJK KR';
     font-style: normal;
     font-weight: 100;
-    src: local('@'), url('fonts/NotoSansCJKkr-Thin.otf') format('opentype');
+    src: local('@'), url('fonts/NotoSansCJKkr-Thin.woff') format('woff');
 }
 
 @font-face {
     font-family: 'Noto Sans CJK KR';
     font-style: normal;
     font-weight: 300;
-    src: local('@'), url('fonts/NotoSansCJKkr-Light.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'Noto Sans CJK KR';
-    font-style: normal;
-    font-weight: 350;
-    src: local('@'), url('fonts/NotoSansCJKkr-DemiLight.otf') format('opentype');
+    src: local('@'), url('fonts/NotoSansCJKkr-DemiLight.woff') format('woff');
 }
 
 @font-face {
     font-family: 'Noto Sans CJK KR';
     font-style: normal;
     font-weight: 400;
-    src: local('@'), url('fonts/NotoSansCJKkr-Regular.otf') format('opentype');
+    src: local('@'), url('fonts/NotoSansCJKkr-Regular.woff') format('woff');
 }
 
 @font-face {
     font-family: 'Noto Sans CJK KR';
     font-style: normal;
     font-weight: 500;
-    src: local('@'), url('fonts/NotoSansCJKkr-Medium.otf') format('opentype');
+    src: local('@'), url('fonts/NotoSansCJKkr-Medium.woff') format('woff');
 }
 
 @font-face {
     font-family: 'Noto Sans CJK KR';
     font-family: normal;
-    font-weight: 700;
-    src: local('@'), url('fonts/NotoSansCJKkr-Bold.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'Noto Sans CJK KR';
-    font-style: normal;
-    font-weight: 900;
-    src: local('@'), url('fonts/NotoSansCJKkr-Black.otf') format('opentype');
+    font-weight: 600;
+    src: local('@'), url('fonts/NotoSansCJKkr-Bold.woff') format('woff');
 }
 
 body
@@ -82,7 +68,7 @@ a:hover
 #head_bar div
 {
     line-height: 80px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 #home
