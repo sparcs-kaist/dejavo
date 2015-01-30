@@ -54,6 +54,7 @@
 
 #article_content p
 {
+    -webkit-text-size-adjust: none;
     font-size: 19px;
     font-weight: 300;
     line-height: 30px;
@@ -62,8 +63,8 @@
 #article_content p span.content-bold
 {
     font-size: 21px;
-    line-height: 35px;
     font-weight: 500;
+    line-height: 35px;
 }
 
 #qanda_head_container
