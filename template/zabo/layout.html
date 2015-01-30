@@ -4,11 +4,13 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+		{% block meta %}{% endblock %}
         <title>{% block title %}{% endblock %}</title>
 
         <!-- Bootstrap -->
         <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"-->
         <link rel="stylesheet" href="/static/css/zabo.css">
+		{% block css %}{% endblock %}
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -19,34 +21,36 @@
     </head>
     <body>
         <div class="container">
-            <div id="head_bar">
-				<div id="home">
-					<a href="/">
-						<span style="color: #F0795B">ZABO</span><span style="color: #FDCCBF"> PROJECT</span>
-					</a>
-				</div>
-				<div class="menu menu_left">
-					<a href="#">
-						<span>게시판 둘러보기</span>
-					</a>
-				</div>
-				<div class="menu menu_left">
-					<a href="#">
-						<span>과거의 흔적</span>
-					</a>
-				</div>
-				<div class="menu menu_left">
-					<a href="#">
-						<span>자보 붙이기</span>
-					</a>
-				</div>
-				<div class="menu menu_right">
-					<a href="#">
-						<span>김정민</span>
-					</a>
-				</div>
-				<div class="menu_right profile_img">
-					<!--img src="#" alt="No Image" /-->
+			<div id="head_container">
+				<div id="head_bar">
+					<div id="home">
+						<a href="/">
+							<span style="color: #F0795B">ZABO</span><span style="color: #FDCCBF"> PROJECT</span>
+						</a>
+					</div>
+					<div class="menu menu_left">
+						<a href="#">
+							<span>게시판 둘러보기</span>
+						</a>
+					</div>
+					<div class="menu menu_left">
+						<a href="#">
+							<span>과거의 흔적</span>
+						</a>
+					</div>
+					<div class="menu menu_left">
+						<a href="#">
+							<span>자보 붙이기</span>
+						</a>
+					</div>
+					<div class="menu menu_right">
+						<a href="#">
+							<span>김정민</span>
+						</a>
+					</div>
+					<div class="menu_right profile_img">
+						<!--img src="#" alt="No Image" /-->
+					</div>
 				</div>
             </div>
             {% block content %}
@@ -55,6 +59,8 @@
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		{% block aftercontent %}
+		{% endblock %}
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script-->
     </body>

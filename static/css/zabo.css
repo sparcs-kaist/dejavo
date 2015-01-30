@@ -65,7 +65,11 @@ a:hover
 
 .container
 {
-    width: 100%;
+}
+
+#head_container
+{
+    border-bottom: 2px solid #f6f0ee;
 }
 
 #head_bar
