@@ -93,8 +93,72 @@
 				</div>
 				<div id="qanda">
 					<div id="qanda_container">
-						<div id="qanda_head_container">
-							댓글
+						<div id="qanda_head_container">댓글</div>
+						<div class="question-write">
+							<div class="question-profile-image-container">
+								<div class="question-profile-image"></div>
+							</div>
+							<div class="question-box-container">
+								<div class="question-textbox">
+									<div class="arrow-left"></div>
+									<textarea class="question-box">댓글을 입력하세요</textarea>
+								</div>
+								<button class="question-button">댓글달기</button>
+							</div>
+						</div>
+						<div class="question">
+							<div class="question-profile-image-container">
+								<div class="question-profile-image"></div>
+							</div>
+							<div class="question-content-container">
+								<div class="question-meta">
+									<div>
+										<span class="question-profile-name">김찬욱</span>
+										<span class="question-time">1 분전</span>
+									</div>
+								</div>
+								<div class="question-content">
+									오 정말 기대되는 동아리네요.<br>
+									다음에 꼭 지원해보고 싶습니다.<br>
+									그렇지 않나요 여러분?<br>
+								</div>
+							</div>
+						</div>
+						<div class="question">
+							<div class="question-profile-image-container">
+								<div class="question-profile-image"></div>
+							</div>
+							<div class="question-content-container">
+								<div class="question-meta">
+									<div>
+										<span class="question-profile-name">김찬욱</span>
+										<span class="question-time">2시간 전</span>
+									</div>
+								</div>
+								<div class="question-content">
+									ㅋㅋㅋㅋㅋㅋㅋ<br>
+									으헤헤헿으이히히흐<br>
+									안녕하십니까<br>
+									동해물과 백두산이<br>
+									마르고 닳았네요<br>
+									ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
+								</div>
+								<div class="answer">
+									<div class="answer-meta">
+										<div class="answer-profile-image"></div>
+										<span class="question-profile-name">SPARCS</span>
+										<span class="question-time">2시간 전</span>
+									</div>
+									<div class="answer-content">
+										ㅋㅋㅋㅋㅋㅋㅋ<br>
+										으헤헤헿으이히히흐<br>
+										안녕하십니까<br>
+										동해물과 백두산이<br>
+										마르고 닳았네요<br>
+										ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -103,9 +167,7 @@
 			<div id="article_sub">
 				<div id="article_sub_content">
 					<div id="timeslot_container" class="sub-container">
-						<div class="sub-head">
-							일시
-						</div>
+						<div class="sub-head">일시</div>
 						<div class="timeslot sub-content">
 							<span>1월 1일 7시 30분</span> <span class="timeslot-label">- 1차 서류 마감</span>
 						</div>
@@ -114,43 +176,63 @@
 						</div>
 					</div>
 					<div id="location_container" class="sub-container">
-						<div class="sub-head">
-							장소
-						</div>
+						<div class="sub-head">장소</div>
 						<div class="sub-content">
 							<span>교양분관 스팍스 동방</span>
 						</div>
 					</div>
 					<div id="participant_container" class="sub-container">
-						<div class="sub-head">
-							참여자	
-						</div>
+						<div class="sub-head">참여자</div>
 						<div class="sub-content">
 							<span>26명</span>
 						</div>
 					</div>
 					<div id="host_container" class="sub-container">
-						<div class="sub-head">
-							주최자	
+						<div class="sub-head">주최자</div>
+						<div id="host_head_container">
+							<div id="host_image"></div>
+							<div id="host_name">SPARCS</div>
+						</div>
+						<div id="host_content">우주 최고의 전산동아리, 스팍스입니다.<br>
+							문의 : 010-6666-1555 (회장 이창원)<br>
+							sparcs.org
 						</div>
 					</div>
 					<div id="notice_container" class="sub-container">
-						<div class="sub-head">
-							공지
-						</div>
+						<div class="sub-head">공지사항</div>
 						<div id="notice_content" class="sub-content">
 							<span>*면접시간 10시로 조정되었습니다. 댓글참고!</span>
 						</div>
 					</div>
 				</div>
 				<div id="article_sub_share">
-					<a id="fb-share" href=#>Facebook Share</a>
+					<ul>
+						<li id="participate"><div class="share">참여</div></li>
+						<li id="facebook"><div class="share"></div></li>
+						<li id="twitter"><div class="share"></div></li>
+					</ul>
 					<!-- http://graph.facebook.com/?id=http://www.naver.com -->
-					<br>
-					<a id="twitter-share" href=#>Twitter Share</a>
 					<!-- http://urls.api.twitter.com/1/urls/count.json?url=http://www.naver.com -->
 				</div>
 				<div id="article_sub_participants">
+					<ul>
+						<li>
+							<div class="participant-profile-image"></div>
+							<div class="participant-profile-text">김정민 님이 참여합니다.</div>
+						</li>
+						<li>
+							<div class="participant-profile-image"></div>
+							<div class="participant-profile-text">이창원 님이 참여합니다.</div>
+						</li>
+						<li>
+							<div class="participant-profile-image"></div>
+							<div class="participant-profile-text">김찬욱 님이 참여합니다.</div>
+						</li>
+						<li>
+							<div class="participant-profile-image"></div>
+							<div class="participant-profile-text">김찬으 님이 참여합니다.</div>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
