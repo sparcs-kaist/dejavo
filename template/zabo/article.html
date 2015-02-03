@@ -60,7 +60,7 @@
 					<img src={{ article.image.url }}></img>
 				</div>
 				<div id="article_content">
-					{{ article.content }}
+					{{ article.content|safe }}
 				</div>
 				<div id="qanda">
 					<div id="qanda_container">
@@ -84,23 +84,25 @@
 							</div>
 							<div class="question-content-container">
 								<div class="question-meta">
-									<div>
-										<span class="question-profile-name">{{ q.writer.last_name }} {{ q.writer.first_name }}</span>
-										<span class="question-time">{{ q.created_date|date:"n월 j일 G시 i분" }}</span>
-									</div>
+									<span class="question-profile-name">{{ q.writer.last_name }} {{ q.writer.first_name }}</span>
+									<span class="question-time">{{ q.created_date|date:"n월 j일 G시 i분" }}</span>
 								</div>
 								<div class="question-content">
 									{{ q.content }}
 								</div>
 								{% for a in q.answer_set.all %}
 								<div class="answer">
-									<div class="answer-meta">
+									<div class="answer-profile-image-container">
 										<img src="{{ a.writer.profile.profile_image.url }}" class="answer-profile-image"></img>
-										<span class="answer-profile-name">{{ a.writer.last_name }} {{ a.writer.first_name }}</span>
-										<span class="answer-time">{{ a.created_date|date:"n월 j일 G시 i분" }}</span>
 									</div>
-									<div class="answer-content">
-										{{ a.content }}
+									<div class="answer-content-container">
+										<div class="answer-meta">
+											<span class="answer-profile-name">{{ a.writer.last_name }} {{ a.writer.first_name }}</span>
+											<span class="answer-time">{{ a.created_date|date:"n월 j일 G시 i분" }}</span>
+										</div>
+										<div class="answer-content">
+											{{ a.content }}
+										</div>
 									</div>
 								</div>
 								{% endfor %}
@@ -115,32 +117,38 @@
 				<div id="article_sub_content">
 					<div id="timeslot_container" class="sub-container">
 						<div class="sub-head">일시</div>
-						{% for t in article.timeslot.all %}
-						<div class="timeslot sub-content">
-							<span>{{ t.start_time|date:"n월 j일 G시 i분" }}</span>
-							<button class="timeslot-label">{{ t.label }}</button>
-						</div>
-						{% endfor %}
+						<table class="sub-content">
+							<tbody>
+							{% for t in article.timeslot.all %}
+								<tr>
+									<td>
+										{{ t.start_time|date:"n월 j일 G시 i분" }}
+									</td>
+									<td><button class="timeslot-label">{{ t.label }}</button></td>
+									</tr>
+							{% endfor %}
+							</tbody>
+						</table>
 					</div>
 					<div id="location_container" class="sub-container">
 						<div class="sub-head">장소</div>
 						<div class="sub-content">
-							<span>{{ t.location }}</span>
+							<span>{{ article.location }}</span>
 						</div>
 					</div>
 					<div id="participant_container" class="sub-container">
 						<div class="sub-head">참여자</div>
 						<div class="sub-content">
-							<span>{{ participant.count }}</span>
+							<span>{{ participant.count }}명</span>
 						</div>
 					</div>
 					<div id="host_container" class="sub-container">
 						<div class="sub-head">주최자</div>
-						<div id="host_head_container">
-							<div id="host_image"></div>
-							<div id="host_name">{{ article.hostname }}</div>
+						<div id="host_head_container" class="sub-content">
+							<img id="host_image" src="{{ article.host_image.url }}"></img>
+							<div id="host_name">{{ article.host_name }}</div>
 						</div>
-						<div id="host_content">{{ article.host_description }}</div>
+						<div id="host_content" class="sub-content">{{ article.host_description }}</div>
 					</div>
 					<div id="notice_container" class="sub-container">
 						<div class="sub-head">공지사항</div>
