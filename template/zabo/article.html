@@ -3,16 +3,12 @@
 {% block meta %}
         <meta name="twitter:card" content="photo" />
         <meta name="twitter:site" content="@zabo.kaist" />
-        <meta name="twitter:title" content="My picture" />
-        <meta name="twitter:description" content="A description" />
-        <meta name="twitter:image" content="http://143.248.234.137/media/poster/fermat_QL6BpFB.jpg" />
         <!-- Twitter will not create a photo card unless the twitter:image is of a minimum size of 280px wide by 150px tall. Images will not be cropped unless they have an exceptional aspect ratio. Images must be less than 1MB in size. -->
-        <meta name="twitter:url" content="http://143.248.234.137/article/8/" />
-        <meta property="og:title" content="Title for article" />
-        <meta property="og:site_name" content="zabo.kaist" /> 
-        <meta property="og:description" content="Description for article" />
-        <meta property="og:url" content="http://143.248.234.137/article/8/">
-        <meta property="og:image:url" content="http://rigvedawiki.net/r1/pds/asahina_mikuru_anime.png" />
+		<meta property="og:title" content="{{ article.title }}" />
+		<meta property="og:site_name" content="SPARCS Zabo Project" /> 
+		<meta property="og:description" content="{{ article.subtitle }}" />
+		<meta property="og:url" content="{{ request.build_absolute_uri }}">
+		<meta property="og:image" content="//{{ request.META.HTTP_HOST }}{{ article.image.url }}" />
         <meta property="og:type" content="article" /> <!-- article? website? -->
 
         <script>
@@ -55,48 +51,23 @@
 
 {% block content %}
 		<div id="article_head_container">
-			<div id="article_title">스팍스 리쿠르팅</div>
-			<div id="article_subtitle">당신의 학교생활, 스팍스와 함께</div>
+			<div id="article_title">{{ article.title }}</div>
+			<div id="article_subtitle">{{ article.subtitle }}</div>
 		</div>
 		<div id="article_body_container">
 			<div id="article_main">
 				<div id="article_image">
-					<img src="/static/image/sparcs_logo.png"></img>
-					<!-- <img src="/media/poster/모카포스터_kor_3VBpt5z.jpg"></img> -->
+					<img src={{ article.image.url }}></img>
 				</div>
 				<div id="article_content">
-					<p>
-					<span class="content-bold">안녕하세요, 우주 최고의 전산동아리 스팍스입니다.</span><br>
-					2015년 리쿠르팅을 진행합니다.<br>
-					많은 관심 부탁드립니다.<br>
-					2015년 3월 2일 스팍스 동방에서 진행될 예정입니다.<br>
-					스팍스 화이팅!<br>
-					</p>
-					<p>
-					아래는 우리가 만든 포스터입니다.<br>
-					참고하세요~~!<br>
-					히히ㅣㅎ히히힣ㅎㅎ<br>
-					동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이보전하세 남산위에 저 소나무 철갑을 두른듯 바람서리 불변함은 우리 기상일세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세 
-					</p>
-
-					<p>
-					면접 일자는 3월 10일 오후 10시 교분 스팍스 동방<br>
-					3월 22일 오후 10시 스팍스 동방입니다. 많이 와주세요~
-					</p>
-
-					<img src="/static/image/sparcs_logo2.png"></img>
-					<p>
-					오호호호 이게 바로 우리의 두 번째 포스터랍니다. 얼마나 아름답고 깔끔한가요<br>
-					</p>
-					<br>
-					<br>
+					{{ article.content }}
 				</div>
 				<div id="qanda">
 					<div id="qanda_container">
 						<div id="qanda_head_container">댓글</div>
 						<div class="question-write">
 							<div class="question-profile-image-container">
-								<div class="question-profile-image"></div>
+								<img src="{{ request.user.profile.profile_image.url }}" class="question-profile-image"></img>
 							</div>
 							<div class="question-box-container">
 								<div class="question-textbox">
@@ -106,60 +77,36 @@
 								<button class="question-button">댓글달기</button>
 							</div>
 						</div>
+						{% for q in article.question_set.all %}
 						<div class="question">
 							<div class="question-profile-image-container">
-								<div class="question-profile-image"></div>
+								<img src="{{ q.writer.profile.profile_image.url}}" class="question-profile-image"></img>
 							</div>
 							<div class="question-content-container">
 								<div class="question-meta">
 									<div>
-										<span class="question-profile-name">김찬욱</span>
-										<span class="question-time">1 분전</span>
+										<span class="question-profile-name">{{ q.writer.last_name }} {{ q.writer.first_name }}</span>
+										<span class="question-time">{{ q.created_date|date:"n월 j일 G시 i분" }}</span>
 									</div>
 								</div>
 								<div class="question-content">
-									오 정말 기대되는 동아리네요.<br>
-									다음에 꼭 지원해보고 싶습니다.<br>
-									그렇지 않나요 여러분?<br>
+									{{ q.content }}
 								</div>
-							</div>
-						</div>
-						<div class="question">
-							<div class="question-profile-image-container">
-								<div class="question-profile-image"></div>
-							</div>
-							<div class="question-content-container">
-								<div class="question-meta">
-									<div>
-										<span class="question-profile-name">김찬욱</span>
-										<span class="question-time">2시간 전</span>
-									</div>
-								</div>
-								<div class="question-content">
-									ㅋㅋㅋㅋㅋㅋㅋ<br>
-									으헤헤헿으이히히흐<br>
-									안녕하십니까<br>
-									동해물과 백두산이<br>
-									마르고 닳았네요<br>
-									ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
-								</div>
+								{% for a in q.answer_set.all %}
 								<div class="answer">
 									<div class="answer-meta">
-										<div class="answer-profile-image"></div>
-										<span class="question-profile-name">SPARCS</span>
-										<span class="question-time">2시간 전</span>
+										<img src="{{ a.writer.profile.profile_image.url }}" class="answer-profile-image"></img>
+										<span class="answer-profile-name">{{ a.writer.last_name }} {{ a.writer.first_name }}</span>
+										<span class="answer-time">{{ a.created_date|date:"n월 j일 G시 i분" }}</span>
 									</div>
 									<div class="answer-content">
-										ㅋㅋㅋㅋㅋㅋㅋ<br>
-										으헤헤헿으이히히흐<br>
-										안녕하십니까<br>
-										동해물과 백두산이<br>
-										마르고 닳았네요<br>
-										ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
+										{{ a.content }}
 									</div>
 								</div>
+								{% endfor %}
 							</div>
 						</div>
+						{% endfor %}
 					</div>
 				</div>
 
@@ -168,40 +115,37 @@
 				<div id="article_sub_content">
 					<div id="timeslot_container" class="sub-container">
 						<div class="sub-head">일시</div>
+						{% for t in article.timeslot.all %}
 						<div class="timeslot sub-content">
-							<span>1월 1일 7시 30분</span> <span class="timeslot-label">- 1차 서류 마감</span>
+							<span>{{ t.start_time|date:"n월 j일 G시 i분" }}</span>
+							<button class="timeslot-label">{{ t.label }}</button>
 						</div>
-						<div class="timeslot sub-content">
-							<span>12월 31일 9시 30분</span> <span class="timeslot-label">- 2차 서류 마감</span>
-						</div>
+						{% endfor %}
 					</div>
 					<div id="location_container" class="sub-container">
 						<div class="sub-head">장소</div>
 						<div class="sub-content">
-							<span>교양분관 스팍스 동방</span>
+							<span>{{ t.location }}</span>
 						</div>
 					</div>
 					<div id="participant_container" class="sub-container">
 						<div class="sub-head">참여자</div>
 						<div class="sub-content">
-							<span>26명</span>
+							<span>{{ participant.count }}</span>
 						</div>
 					</div>
 					<div id="host_container" class="sub-container">
 						<div class="sub-head">주최자</div>
 						<div id="host_head_container">
 							<div id="host_image"></div>
-							<div id="host_name">SPARCS</div>
+							<div id="host_name">{{ article.hostname }}</div>
 						</div>
-						<div id="host_content">우주 최고의 전산동아리, 스팍스입니다.<br>
-							문의 : 010-6666-1555 (회장 이창원)<br>
-							sparcs.org
-						</div>
+						<div id="host_content">{{ article.host_description }}</div>
 					</div>
 					<div id="notice_container" class="sub-container">
 						<div class="sub-head">공지사항</div>
 						<div id="notice_content" class="sub-content">
-							<span>*면접시간 10시로 조정되었습니다. 댓글참고!</span>
+							<span>{{ article.announcement }}</span>
 						</div>
 					</div>
 				</div>
@@ -216,22 +160,14 @@
 				</div>
 				<div id="article_sub_participants">
 					<ul>
+						{% for p in participant %}
 						<li>
-							<div class="participant-profile-image"></div>
-							<div class="participant-profile-text">김정민 님이 참여합니다.</div>
+							<img class="participant-profile-image" src="{{ p.profile_image.url }}"></img>
+							<div class="participant-profile-text">
+								{{ p.user.last_name }}{{ p.user.first_name}} 님이 참여합니다.
+							</div>
 						</li>
-						<li>
-							<div class="participant-profile-image"></div>
-							<div class="participant-profile-text">이창원 님이 참여합니다.</div>
-						</li>
-						<li>
-							<div class="participant-profile-image"></div>
-							<div class="participant-profile-text">김찬욱 님이 참여합니다.</div>
-						</li>
-						<li>
-							<div class="participant-profile-image"></div>
-							<div class="participant-profile-text">김찬으 님이 참여합니다.</div>
-						</li>
+						{% endfor %}
 					</ul>
 				</div>
 			</div>

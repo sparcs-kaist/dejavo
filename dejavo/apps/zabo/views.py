@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 
 from accept_checker.decorators import require_accept_formats, auth_required
 from dejavo.apps.zabo.models import Article, Timeslot, Question, Answer
+from dejavo.apps.account.models import UserProfile
 
 import sys
 
@@ -47,7 +48,12 @@ def view_article(request, article_id):
         if request.ACCEPT_FORMAT == 'json':
             return JsonResponse(status = 200, data = article.as_json())
         else:
-            return render(request, 'zabo/article.html', {})
+            question = Question.objects.filter(article = article)
+            return render(request, 'zabo/article.html', {
+                'article' : article,
+                'participant' : UserProfile.objects.filter(participation = article),
+                'request' : request,
+                })
 
     except Article.DoesNotExist:
         if request.ACCEPT_FORMAT == 'json':
