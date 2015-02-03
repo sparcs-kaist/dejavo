@@ -1,42 +1,10 @@
-@font-face {
-    font-family: 'Noto Sans CJK KR';
-    font-style: normal;
-    font-weight: 100;
-    src: local('@'), url('fonts/NotoSansCJKkr-Thin.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Noto Sans CJK KR';
-    font-style: normal;
-    font-weight: 300;
-    src: local('@'), url('fonts/NotoSansCJKkr-DemiLight.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Noto Sans CJK KR';
-    font-style: normal;
-    font-weight: 400;
-    src: local('@'), url('fonts/NotoSansCJKkr-Regular.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Noto Sans CJK KR';
-    font-style: normal;
-    font-weight: 500;
-    src: local('@'), url('fonts/NotoSansCJKkr-Medium.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Noto Sans CJK KR';
-    font-family: normal;
-    font-weight: 600;
-    src: local('@'), url('fonts/NotoSansCJKkr-Bold.woff') format('woff');
-}
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url(https://cdn.rawgit.com/openhiun/hangul/14c0f6faa2941116bb53001d6a7dcd5e82300c3f/nanumbarungothic.css);
 
 body
 {
     margin: 0;
-    font-family: 'Noto Sans CJK KR', sans-serif;
+    background: #f6f0ee;
 }
 
 a
@@ -49,8 +17,9 @@ a:hover
     text-decoration: none;
 }
 
-.container
+#head_container
 {
+    background: #ffffff;
 }
 
 #head_bar
@@ -63,19 +32,21 @@ a:hover
 #head_bar div
 {
     line-height: 80px;
-    font-weight: 500;
 }
 
 #home
 {
     width:245px;
     float: left;
+    font-family: 'Nanum Barun Gothic';
     font-size: 24px;
 }
 
 .menu span
 {
-    font-size: 20px;
+    font-family: 'Nanum Gothic';
+    font-size: 19px;
+    font-weight: 700;
     color: #9d9796;
 }
 
