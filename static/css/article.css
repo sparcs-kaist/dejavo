@@ -16,6 +16,7 @@ body
 {
     font-family: 'Nanum Barun Gothic';
     font-size: 49px;
+    height: 57px;
     color: #5c514e;
     margin-bottom: 10px;
 }
@@ -24,6 +25,7 @@ body
 {
     font-family: 'Nanum Barun Gothic';
     font-size: 21px;
+    height: 24px;
     color: #6a6a6a;
 }
 
@@ -59,8 +61,8 @@ body
     font-size: 16px;
     color: #5c514e;
     border-bottom: 2px solid #f2f2f2;
-    padding-top: 12px;
-    padding-bottom: 13px;
+    margin-top : 30px;
+    margin-bottom: 30px;
     line-height: 25px;
     -webkit-text-size-adjust: none;
 }

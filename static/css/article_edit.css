@@ -1,0 +1,312 @@
+
+.editable
+{
+    font-family: 'Nanum Barun Gothic';
+    border-width: 0px;
+    outline: 0;
+}
+
+/*
+ * editable input
+ */
+
+.editable-input
+{
+    text-align: center;
+}
+
+.editable-input::-ms-clear
+{
+    display: none;
+}
+
+.editable-input::-moz-placeholder
+{ /* Mozilla Firefox 19+ */
+    color:    #909;
+    opacity:  1;
+}
+
+/*
+ * editable-img
+ */
+
+.editable-img
+{
+    border-image: url('images/dot_square.png') 12 12 round;
+    border-image-width: 12px;
+    text-align: center;
+    color: #f0795b;
+}
+
+/*
+ * Specific CSS
+ */
+
+#article_title .editable-input
+{
+    padding: 0px;
+    height: 57px;
+    font-size: 49px;
+    width: 360px;
+    color: #5c514e;
+}
+
+#article_subtitle .editable-input
+{
+    padding: 0px;
+    height: 24px;
+    font-size: 21px;
+    width: 245px;
+    color: #6a6a6a;
+}
+
+#article_title .editable-input::-webkit-input-placeholder 
+{ /* WebKit browsers */
+    border-image: url('images/dot_square.png') 12 12 round;
+    border-image-width: 12px;
+    line-height: 57px;
+    font-family: 'Nanum Barun Gothic';
+    font-size: 31px !important;
+    color: #f0795b;
+}
+
+#article_subtitle .editable-input::-webkit-input-placeholder 
+{ /* WebKit browsers */
+    border-image: url('images/dot_square.png') 12 12 round;
+    border-image-width: 12px;
+    line-height: 20px;
+    font-family: 'Nanum Gothic';
+    font-size: 14px !important;
+    color: #f0795b;
+}
+
+#article_title .editable-input:-ms-input-placeholder
+{ /* Internet Explorer 10+ */
+    border-image: url('images/dot_square.png') 12 12 round;
+    border-image-width: 12px;
+    line-height: 57px;
+    font-family: 'Nanum Barun Gothic';
+    font-size: 31px !important;
+    color: #f0795b;
+}
+
+#article_subtitle .editable-input:-ms-input-placeholder
+{ /* Internet Explorer 10+ */
+    border-image: url('images/dot_square.png') 12 12 round;
+    border-image-width: 12px;
+    line-height: 20px;
+    font-family: 'Nanum Barun Gothic';
+    font-size: 14px !important;
+    color: #f0795b;
+}
+
+#article_content .editable-textarea::-webkit-input-placeholder
+{
+    color: #beb7b7;
+}
+
+#article_content .editable-textarea:-ms-input-placeholder
+{
+    color: #beb7b7;
+}
+
+/*
+ * location
+ */
+#location_container .editable-input
+{
+    width: 300px;
+    height: 40px;
+    font-size: 25px;
+    color: #443333;
+    text-align: left;
+    padding: 0px;
+}
+
+#location_container .editable-input::-webkit-input-placeholder
+{
+    border-image: url('images/dot_square.png') 12 12 round;
+    border-image-width: 12px;
+    line-height: 25px;
+    font-family: 'Nanum Gothic';
+    font-size: 17px !important;
+    color: #f0795b;
+    text-align: center;
+}
+
+#location_container .editable-input:-ms-input-placeholder
+{ /* Internet Explorer 10+ */
+    border-image: url('images/dot_square.png') 12 12 round;
+    border-image-width: 12px;
+    line-height: 25px;
+    font-family: 'Nanum Gothic';
+    font-size: 17px !important;
+    color: #f0795b;
+    text-align: center;
+}
+
+/*
+ * host
+ */
+
+#host_head_container .editable-input
+{
+    padding: 0px;
+    color: #443333;
+    text-align: left;
+    height: 40px;
+    width: 250px;
+    font-size: 27px;
+}
+
+#host_head_container .editable-input::-webkit-input-placeholder
+{
+    border-image: url('images/dot_square.png') 12 12 round;
+    border-image-width: 12px;
+    line-height: 25px;
+    font-family: 'Nanum Gothic';
+    font-size: 17px !important;
+    color: #f0795b;
+    text-align: center;
+}
+
+#host_head_container .editable-input:-ms-input-placeholder
+{ /* Internet Explorer 10+ */
+    border-image: url('images/dot_square.png') 12 12 round;
+    border-image-width: 12px;
+    line-height: 25px;
+    font-family: 'Nanum Gothic';
+    font-size: 17px !important;
+    color: #f0795b;
+    text-align: center;
+}
+
+#host_content .editable-textarea
+{
+    width: 300px;
+    height: 80px;
+    font-family: 'Nanum Gothic';
+    font-size: 15px;
+    color: #443333;
+    resize: none;
+    outline: none;
+    overflow: auto;
+    text-align: left;
+    padding: 0px;
+}
+
+#host_content .editable-textarea::-webkit-input-placeholder
+{
+    border-image: url('images/dot_square.png') 12 12 round;
+    border-image-width: 12px;
+    line-height: 74px;
+    font-size: 17px !important;
+    font-family: 'Nanum Gothic';
+    color: #f0795b;
+    text-align: center;
+}
+
+#host_content .editable-textarea:-ms-input-placeholder
+{
+    border-image: url('images/dot_square.png') 12 12 round;
+    border-image-width: 12px;
+    line-height: 74px;
+    font-size: 16px !important;
+    font-family: 'Nanum Gothic';
+    color: #f0795b;
+    text-align: center;
+}
+
+#notice_content .editable-textarea
+{
+    width: 300px;
+    height: 80px;
+    font-family: 'Nanum Gothic';
+    font-size: 17px;
+    color: #f0795b;
+    resize: none;
+    outline: none;
+    overflow: auto;
+    text-align: left;
+    padding: 0px;
+}
+
+#notice_content .editable-textarea::-webkit-input-placeholder
+{
+    border-image: url('images/dot_square.png') 12 12 round;
+    border-image-width: 12px;
+    line-height: 74px;
+    font-size: 17px;
+    font-family: 'Nanum Gothic';
+    color: #beb7b7;
+    text-align: center;
+}
+
+#notice_content .editable-textarea:-ms-input-placeholder
+{
+    border-image: url('images/dot_square.png') 12 12 round;
+    border-image-width: 12px;
+    line-height: 74px;
+    font-size: 17px;
+    font-family: 'Nanum Gothic';
+    color: #beb7b7;
+    text-align: center;
+}
+/*
+ * Holder
+ */
+
+#article_image {
+    min-height: 380px;
+}
+
+#article_content textarea {
+    min-height: 600px;
+    width: 564px;
+    padding: 15px;
+    color: #5c514e;
+    overflow: auto;
+    font-size: 17px;
+    font-family: 'Nanum Gothic';
+    border-width: 2px;
+    border-radius: 5px;
+    border-color: #beb7b7;
+}
+
+#notice_container {
+    margin-bottom: 0px;
+}
+
+#notice_content {
+    color: #beb7b7 !important;
+}
+
+#media_tool_container
+{
+    position: relative;
+    font-family: 'Nanum Gothic';
+    font-size: 17px;
+    color: #f0795b;
+}
+
+#media_tool_container #media_tool
+{
+    position: absolute;
+    right: 30px;
+    bottom: 25px;
+    float: right;
+    width: 190px;
+}
+
+#media_tool_container #media_tool .m-tool
+{
+    float: left;
+    text-align: center;
+    margin-right: 30px;
+}
+
+#media_tool_container #media_tool .m-tool:first-child
+{
+    margin-right: 30px;
+}
+

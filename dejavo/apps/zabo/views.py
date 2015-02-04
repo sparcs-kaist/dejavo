@@ -88,8 +88,10 @@ def edit_article(request, article_id):
             return JsonResponse(status = 404, data = { 'error' : msg })
 
     if request.ACCEPT_FORMAT == 'html':
-        # TODO Give article editing page
-        return HttpResponse(status = 200, content = 'Article editing page')
+        return render(request, 'zabo/article_edit.html', {
+            'article' : article,
+            'request' : request,
+            })
 
     update_fields = request.POST.getlist('fields', None)
     if not update_fields:

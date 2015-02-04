@@ -1,0 +1,98 @@
+{% extends "zabo/layout.html" %}
+
+{% block meta %}
+
+{% endblock %}
+
+{% block css %}
+		<link rel="stylesheet" href="/static/css/article.css">
+		<link rel="stylesheet" href="/static/css/article_edit.css">
+{% endblock %}
+
+{% block title %}수정 - {{ article.title }}{% endblock %}
+
+{% block content %}
+		<div id="article_head_container">
+			<div id="article_title">
+				<input class="editable editable-input" placeholder="제목 입력" type="text"></input>
+			</div>
+			<div id="article_subtitle">
+				<input class="editable editable-input" placeholder="부제목 입력" type="text"></input>
+			</div>
+		</div>
+		<div id="article_body_container">
+			<div id="article_main">
+				<div id="article_image" class="editable-img">
+					<div style="position:relative; top: 140px;">
+						<img style="max-width:100%; width:auto; border-radius: 50%;" src="http://placehold.it/80x80"></img>
+						<div style="margin-top: 15px; font-size: 23px; font-family: 'Nanum Barun Gothic';">메인 포스터 업로드</div>
+					</div>
+				</div>
+				<div id="article_content">
+					<div>
+						<textarea class="editable editable-textarea" placeholder="내용 입력"></textarea>
+						<div id="media_tool_container">
+							<div id="media_tool">
+								<div class="m-tool">
+									<img style="max-width:100%; width:auto; border-radius: 50%;"
+										src="http://placehold.it/70x70"></img>
+									<div>사진 삽입</div>
+								</div>
+								<div style="float:left; text-align:center;">
+									<img style="max-width:100%; width:auto; border-radius: 50%;"
+									src="http://placehold.it/70x70"></img>
+									<div>동영상 삽입</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="article_sub">
+				<div id="article_sub_content">
+					<div id="timeslot_container" class="sub-container">
+						<div class="sub-head">일시</div>
+						<div class="sub-content">
+							<table id="timeslot_table">
+								<tbody>
+									<tr>
+										<div class="editable" style="font-size: 17px; height: 15px;">
+											<span style="position:relative; top:-3px">일시 추가</span>
+										</div>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div id="location_container" class="sub-container">
+						<div class="sub-head">장소</div>
+						<div class="sub-content">
+							<input class="editable editable-input" placeholder="장소 입력" type="text">
+							</input>
+						</div>
+					</div>
+					<div id="host_container" class="sub-container">
+						<div class="sub-head">주최자</div>
+						<div id="host_head_container" class="sub-content">
+							<img id="host_image" src="{{ request.user.profile.profile_image.url }}"></img>
+							<input class="editable editable-input" placeholder="주체 단체 명" type="text">
+							</input>
+						</div>
+						<div id="host_content" class="sub-content editable">
+							<textarea class="editable editable-textarea" placeholder="주체 단체 설명"></textarea>
+						</div>
+					</div>
+					<div id="notice_container" class="sub-container">
+						<div class="sub-head">공지사항</div>
+						<div id="notice_content" class="sub-content editable">
+							<textarea class="editable editable-textarea" placeholder="공지사항 입력"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div id="fb-root"></div>
+{% endblock %}
+
+{% block aftercontent %}
+{% endblock %}
