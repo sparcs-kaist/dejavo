@@ -11,8 +11,10 @@ from dejavo.apps.account.models import UserProfile
 import sys
 
 
+@require_accept_formats(['text/html'])
+@require_http_methods(['GET'])
 def main(request):
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
+    return render(request, 'zabo/main.html', {})
 
 
 @require_accept_formats(['text/html', 'application/json'])
