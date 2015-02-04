@@ -188,6 +188,7 @@ button.question-button
 {
     font-family: 'Nanum Gothic';
     font-size: 19px;
+    font-weight: bold;
     color: #696060;
     margin-right: 10px
 }
@@ -195,7 +196,7 @@ button.question-button
 .question-time
 {
     font-family: 'Nanum Gothic';
-    font-size: 15px;
+    font-size: 13px;
     color: #beb7b7;
 }
 
@@ -247,6 +248,7 @@ button.question-button
 {
     font-family: 'Nanum Gothic';
     font-size: 19px;
+    font-weight: bold;
     color: #696060;
     margin-right: 10px;
 }
@@ -254,7 +256,7 @@ button.question-button
 .answer-time
 {
     font-family: 'Nanum Gothic';
-    font-size: 15px;
+    font-size: 13px;
     color: #beb7b7;
 }
 
@@ -290,7 +292,7 @@ button.question-button
 .sub-content
 {
     font-family: 'Nanum Barun Gothic';
-    font-size: 27px;
+    font-size: 25px;
     color: #443333;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -300,10 +302,14 @@ button.question-button
 {
     border: 0;
     white-space: nowrap;
-
 }
 
 #timeslot_container table td
+{
+    padding: 0px 0px 10px 0px;
+}
+
+#timeslot_container table tr:last-child td
 {
     padding: 0px;
 }
@@ -313,10 +319,10 @@ button.timeslot-label
     pointer-events: none;
     font-size: 13px;
     font-family: 'Nanum Gothic';
-    top: -2px;
     position: relative;
     border-radius: 7px;
-    padding: 6px 9px;
+    top: -2px;
+    padding: 7px 9px;
     vertical-align: middle;
     background-color: #f0795b;
     margin-left: 20px;
@@ -411,12 +417,18 @@ button.timeslot-label
 {
     background-color: #6184d4;
     border-radius: 50%;
+    background-image: url('images/facebook_logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 #article_sub_share li#twitter
 {
     background-color: #31d0fd;
     border-radius: 50%;
+    background-image: url('images/twitter_logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 
