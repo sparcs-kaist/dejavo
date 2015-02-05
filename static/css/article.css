@@ -73,11 +73,6 @@ body
     margin-bottom: 20px;
 }
 
-#article_content p span.content-bold
-{
-    font-weight: bold;
-}
-
 /*
  * 댓글
  */
