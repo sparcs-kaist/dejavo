@@ -81,7 +81,7 @@ ol
 {
     height: 240px;
     line-height: 30px;
-    padding: 25px 30px 35px 0px;
+    padding: 25px 45px 35px 0px;
     color: #8d8582;
     font-family: 'Nanum Gothic';
     font-size: 17px;
@@ -94,4 +94,24 @@ ol
     font-family: 'Nanum Gothic';
     word-wrap: break-word;
     overflow: hidden;
+}
+
+.d_day
+{
+    float: right;
+    position: relative;
+    top: -116.6666666667%;
+    right: -5.2083333333%;
+    width: 100px;
+    height: 65px;
+    padding-top: 35px;
+    color: #ffffff;
+    font-family: 'Nanum Barun Gothic';
+    font-weight: 700;
+    font-size: 30px;
+    text-align: center;
+    border-radius: 50px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    background-color: #f0795b
 }
