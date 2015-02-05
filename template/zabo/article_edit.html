@@ -14,23 +14,39 @@
 {% block content %}
 		<div id="article_head_container">
 			<div id="article_title">
-				<input class="editable editable-input" placeholder="제목 입력" type="text"></input>
+				<input class="editable editable-input" placeholder="제목 입력"
+						type="text" value="{{ article.title }}">
+				</input>
 			</div>
 			<div id="article_subtitle">
-				<input class="editable editable-input" placeholder="부제목 입력" type="text"></input>
+				<input class="editable editable-input" placeholder="부제목 입력"
+						type="text" value="{{ article.subtitle }}">
+				</input>
 			</div>
 		</div>
 		<div id="article_body_container">
 			<div id="article_main">
-				<div id="article_image" class="editable-img">
-					<div style="position:relative; top: 140px;">
-						<img style="max-width:100%; width:auto; border-radius: 50%;" src="http://placehold.it/80x80"></img>
-						<div style="margin-top: 15px; font-size: 23px; font-family: 'Nanum Barun Gothic';">메인 포스터 업로드</div>
+				<div id="article_image">
+
+					{% if article.image %}
+					<div class="editable-img" style="border: 0px">
+						<img src={{ article.image.url }}></img>
 					</div>
+					{% else %}
+					<div class="editable-img">
+						<div style="position:relative; top: 140px;">
+							<img style="max-width:100%; width:auto; border-radius: 50%;" src="http://placehold.it/80x80"></img>
+							<div style="margin-top: 15px; font-size: 23px; font-family: 'Nanum Barun Gothic';">
+								메인 포스터 업로드
+							</div>
+						</div>
+					</div>
+					{% endif %}
+
 				</div>
 				<div id="article_content">
 					<div>
-						<textarea class="editable editable-textarea" placeholder="내용 입력"></textarea>
+						<textarea class="editable editable-textarea" placeholder="내용 입력">{{ article.content }}</textarea>
 						<div id="media_tool_container">
 							<div id="media_tool">
 								<div class="m-tool">
@@ -55,10 +71,20 @@
 						<div class="sub-content">
 							<table id="timeslot_table">
 								<tbody>
+									{% for t in article.timeslot.all %}
+										<tr>
+											<td>
+												{{ t.start_time|date:"n월 j일 G시 i분" }}
+											</td>
+											<td><button class="timeslot-label">{{ t.label }}</button></td>
+										</tr>
+									{% endfor %}
 									<tr>
-										<div class="editable" style="font-size: 17px; height: 15px;">
-											<span style="position:relative; top:-3px">일시 추가</span>
-										</div>
+										<td>
+											<div class="editable" style="font-size: 17px; height: 15px;">
+												<span>일시 추가</span>
+											</div>
+										</td>
 									</tr>
 								</tbody>
 							</table>
@@ -67,32 +93,45 @@
 					<div id="location_container" class="sub-container">
 						<div class="sub-head">장소</div>
 						<div class="sub-content">
-							<input class="editable editable-input" placeholder="장소 입력" type="text">
+							<input class="editable editable-input" placeholder="장소 입력"
+								type="text" value="{{ article.location }}">
 							</input>
 						</div>
 					</div>
 					<div id="host_container" class="sub-container">
 						<div class="sub-head">주최자</div>
 						<div id="host_head_container" class="sub-content">
+
+							{% if article.host_image %}
+							<img id="host_image" src="{{ article.host_image.url }}"></img>
+							{% else %}
 							<img id="host_image" src="{{ request.user.profile.profile_image.url }}"></img>
-							<input class="editable editable-input" placeholder="주체 단체 명" type="text">
+							{% endif %}
+
+							<input class="editable editable-input" placeholder="주체 단체 명"
+									type="text" value="{{ article.host_name }}">
 							</input>
 						</div>
 						<div id="host_content" class="sub-content editable">
-							<textarea class="editable editable-textarea" placeholder="주체 단체 설명"></textarea>
+							<textarea class="editable editable-textarea" placeholder="주체 단체 설명">{{ article.host_description }}</textarea>
 						</div>
 					</div>
 					<div id="notice_container" class="sub-container">
 						<div class="sub-head">공지사항</div>
 						<div id="notice_content" class="sub-content editable">
-							<textarea class="editable editable-textarea" placeholder="공지사항 입력"></textarea>
+							<textarea class="editable editable-textarea" placeholder="공지사항 입력">{{ article.announcement }}</textarea>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-        <div id="fb-root"></div>
 {% endblock %}
 
 {% block aftercontent %}
+<script src="{{ STATIC_URL }}js/jquery.autosize.input.js"></script>
+<script>
+	$(document).ready(function(){
+			$(".editable-input").autosizeInput();
+		}());
+</script>
 {% endblock %}
