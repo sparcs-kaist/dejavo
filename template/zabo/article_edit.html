@@ -118,6 +118,7 @@
 							<textarea class="editable editable-textarea" placeholder="공지사항 입력">{{ article.announcement }}</textarea>
 						</div>
 					</div>
+					<div id="update_news" class="sub_container">{{ article.updated_date|date:"n월 j일 G시 i분 s초" }}</div>
 				</div>
 			</div>
 		</div>
@@ -144,6 +145,9 @@
 					$(this).empty();
 				}
 			});
+			console.log(document.URL);
 		});
 </script>
+<script src="{{ STATIC_URL }}js/jquery.data-wrapper.js"></script>
+<script src="{{ STATIC_URL }}js/article-edit.js"></script>
 {% endblock %}

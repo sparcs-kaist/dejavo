@@ -1,5 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
@@ -72,6 +73,7 @@ def view_article(request, article_id):
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST', 'GET'])
 @auth_required
+@csrf_exempt
 def edit_article(request, article_id):
     try:
         article = Article.objects.get(id = article_id)
@@ -95,7 +97,7 @@ def edit_article(request, article_id):
             'request' : request,
             })
 
-    update_fields = request.POST.getlist('fields', None)
+    update_fields = request.POST.getlist('fields[]', None)
     if not update_fields:
         return JsonResponse(
                 status = 400,
