@@ -1,0 +1,59 @@
+ul
+{
+    margin: 0;
+    padding: 0;
+}
+
+li
+{
+    list-style: none;
+}
+
+#category_container
+{
+    margin-top: 18px;
+}
+
+#category_list
+{
+    margin: 0 auto;
+    width: 984px;
+    height: 185px;
+}
+
+.category_name
+{
+    float: left;
+    width: 220px;
+    height: 78px;
+    margin: 25px 12px 0px 12px;
+    line-height: 80px;
+    border: 1px solid #b7b3b3;
+    border-radius: 10px;
+    text-align: center;
+    color: #9c8d8a;
+    font-family: 'Nanum Barun Gothic';
+    font-size: 21px;
+    background-color: #fffbfa;
+}
+
+.category_name:hover
+{
+    color: #faf3f2;
+    background-color: #f0795b;
+}
+
+#main_list_container
+{
+    width: 960px;
+    margin: 0 auto;
+}
+
+#main_list_title
+{
+    padding: 70px 0;
+    text-align: center;
+    color: #7f6965;
+    font-family: 'Nanum Barun Gothic';
+    font-size: 29px;
+}

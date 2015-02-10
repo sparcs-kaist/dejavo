@@ -387,3 +387,9 @@ def delete_answer(request, article_id, question_id, answer_id):
 
 def edit_announcement(request, article_id, announcement_id):
     return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
+
+
+@require_accept_formats(['text/html', 'application/json'])
+@require_http_methods(['GET'])
+def view_category(request, category):
+    return render(request, 'zabo/category.html', {})

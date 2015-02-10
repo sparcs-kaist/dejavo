@@ -1,0 +1,32 @@
+{% extends "zabo/layout.html" %}
+
+{% block meta %}
+{% endblock %}
+
+{% block css %}
+		<link rel="stylesheet" href="/static/css/category.css">
+{% endblock %}
+
+{% block title %}ZABO PROJECT{% endblock %}
+
+{% block content %}
+		<div id="category_container">	
+			<ul id="category_list">
+				<li class="category_name">리쿠르팅</li>
+				<li class="category_name">공연</li>
+				<li class="category_name">대회</li>
+				<li class="category_name">전시</li>
+				<li class="category_name">설명회</li>
+				<li class="category_name">강연</li>
+				<li class="category_name">행사</li>
+				<li class="category_name">기타</li>
+			</ul>
+		</div>
+		<div id="main_list_container">
+			<div id="main_list_title">현재 진행 중인 행사 / 강연 자보</div>
+		</div>
+        <div id="fb-root"></div>
+{% endblock %}
+
+{% block aftercontent %}
+{% endblock %}
