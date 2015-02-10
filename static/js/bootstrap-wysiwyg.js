@@ -85,7 +85,25 @@
 				$.each(files, function (idx, fileInfo) {
 					if (/^image\//.test(fileInfo.type)) {
 						$.when(readFileIntoDataUrl(fileInfo)).done(function (dataUrl) {
-							execCommand('insertimage', dataUrl);
+							var image = new Image();
+							image.src = dataUrl;
+							
+							var canvas = document.createElement('canvas');
+
+							var MAX_WIDTH = 600;
+							var width = image.width;
+							var height = image.height;
+
+							if (width > MAX_WIDTH) {
+								height *= MAX_WIDTH / width;
+								width = MAX_WIDTH;
+							}
+							canvas.width = width;
+							canvas.height = height;
+							canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+							var resizedImage = canvas.toDataURL('image/jpeg');
+							execCommand('insertimage', resizedImage);
+
 						}).fail(function (e) {
 							options.fileUploadError("file-reader", e);
 						});
