@@ -117,18 +117,20 @@
 				<div id="article_sub_content">
 					<div id="timeslot_container" class="sub-container">
 						<div class="sub-head">일시</div>
-						<table class="sub-content">
-							<tbody>
-							{% for t in article.timeslot.all %}
-								<tr>
-									<td>
-										{{ t.start_time|date:"n월 j일 G시 i분" }}
-									</td>
-									<td><button class="timeslot-label">{{ t.label }}</button></td>
-									</tr>
-							{% endfor %}
-							</tbody>
-						</table>
+						<div class="siub-content">
+							<table class="sub-content">
+								<tbody>
+								{% for t in article.timeslot.all %}
+									<tr>
+										<td>
+											{{ t.start_time|date:"n월 j일 G시 i분" }}
+										</td>
+										<td><button class="timeslot-label">{{ t.label }}</button></td>
+										</tr>
+								{% endfor %}
+								</tbody>
+							</table>
+						</div>
 					</div>
 					<div id="location_container" class="sub-container">
 						<div class="sub-head">장소</div>

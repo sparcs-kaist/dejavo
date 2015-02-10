@@ -104,6 +104,8 @@ class Article(models.Model):
                 'subtitle' : self.subtitle,
                 'owner' : owner_list,
                 'category' : self.category,
+                'location' : self.location,
+                'announcement' : self.announcement,
                 'created_date' : self.created_date,
                 'updated_date' : self.updated_date,
                 'content' : self.content,

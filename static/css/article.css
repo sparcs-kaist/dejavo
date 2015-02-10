@@ -73,11 +73,6 @@ body
     margin-bottom: 20px;
 }
 
-#article_content p span.content-bold
-{
-    font-weight: bold;
-}
-
 /*
  * 댓글
  */
@@ -350,7 +345,7 @@ button.timeslot-label
 #host_name
 {
     font-family: 'Nanum Barun Gothic';
-    font-size: 27px;
+    font-size: 25px;
     color: #443333;
     float: left;
     height: 40px;
