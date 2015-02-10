@@ -135,6 +135,7 @@ def edit_article(request, article_id):
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST'])
 @auth_required
+@csrf_exempt
 def create_timeslot(request, article_id):
     try:
         article = Article.objects.get(id = article_id)
@@ -143,8 +144,8 @@ def create_timeslot(request, article_id):
             return JsonResponse(status = 403, data = { 'error' : msg })
         timeslot = Timeslot(article = article,
                 timeslot_type = request.POST.get('type', ''),
-                start_time = request.POST.get('start_time', ''),
-                end_time = request.POST.get('end_time', ''),
+                start_time = request.POST.get('start_time', None),
+                end_time = request.POST.get('end_time', None),
                 label = request.POST.get('label', '')
                 )
         timeslot.full_clean()
@@ -163,7 +164,7 @@ def create_timeslot(request, article_id):
         return JsonResponse(
                 status = 400,
                 data = {
-                    'error' : 'Invaild format',
+                    'error' : 'Invalid format',
                     'msg' : e.message_dict,
                     },
                 )
@@ -172,6 +173,7 @@ def create_timeslot(request, article_id):
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST'])
 @auth_required
+@csrf_exempt
 def delete_timeslot(request, article_id, timeslot_id):
     try:
         timeslot = Timeslot.objects.get(id = timeslot_id)

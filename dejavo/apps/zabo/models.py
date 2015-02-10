@@ -153,6 +153,15 @@ class Timeslot(models.Model):
     end_time = models.DateTimeField(blank = True, null = True)
     label = models.CharField(max_length = 50, blank = True)
 
+    def as_json(self):
+        return {
+                'id' : self.id,
+                'type' : self.timeslot_type,
+                'start_time' : self.start_time,
+                'end_time' : self.end_time,
+                'label' : self.label,
+            }
+
 
 class Attachment(models.Model):
     filepath = models.FileField(upload_to = 'attachment')

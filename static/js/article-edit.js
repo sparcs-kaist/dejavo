@@ -1,10 +1,87 @@
 $(document).ready(function(){
 
+	$.each($('#timeslot_table tr'), function(i, v){
+		var $this = $(this);
+		var timeslotID = $this.attr('timeslot-id');
+		var removeIcon = $(this).find('.timeslot-remove');
+		removeIcon.click(function(e) {
+			$.ajax({
+				'type' : 'POST',
+				'url' : '/article/' + articleID + '/timeslot/delete/' + timeslotID + '/',
+				'dataType' : 'json',
+				'success' : function (data, textStatus, jqXHR) {
+					$this.remove();
+				},
+				'error' : function(req, textStatus, err) {
+					console.log(textStatus);
+				},
+			});
+		});
+	});
+
+	$('#timeslot_add_container').click(function(e){
+		var ele = $('#timeslot_add_form');
+		var $this = $(this);
+		var position = $this.position();
+		ele.css({
+			'top' : position.top + 40,
+			'left' : position.left - 300,
+		});
+		ele.toggle();
+	});
+
+	var getTimeslotTime = function() {
+		// TODO validation
+		return $('#ts_year').val() + '-' + 
+			$('#ts_month').val() + '-' + 
+			$('#ts_date').val() + 'T' + 
+			$('#ts_hour').val() + ':' + 
+			$('#ts_minute').val() + 'Z';
+	};
+
+	$('#timeslot_add_button').click(function(e){
+		e.preventDefault();
+
+		var postData = {
+			'type' : 'point',
+			'start_time' : getTimeslotTime(),
+			'label' : $('#ts_label').val(),
+		};
+
+		var timeslotTable = $('table#timeslot_table tbody');
+
+		$.ajax({
+			'type' : 'POST',
+			'url' : '/article/' + articleID + '/timeslot/create/',
+			'data' : postData,
+			'dataType' : 'json',
+			'success' : function (data, textStatus, jqXHR) {
+				var stime = new Date(data.start_time);
+				var tr = $('<tr></tr>').attr('timeslot-id', data.id);
+				var removeTD = $('<td class="timeslot-remove"></td>');
+				removeTD.append('<img class="timeslot-remove-icon" src="http://placehold.it/20x20"></img>');
+				var dateTD = $('<td>' + (stime.getMonth() + 1) + '월 ' + stime.getDate() + '일 ' +
+							stime.getHours() + '시 ' + stime.getMinutes() + '분</td>');
+				var labelTD = $('<td></td>');
+				labelTD.append('<button class="timeslot-label">' + data.label + '</button>');;
+
+				tr.append(removeTD).append(dateTD).append(labelTD);
+				timeslotTable.append(tr);
+				$('#timeslot_add_form').toggle();
+				$('#timeslot_add_form input').val('');
+			},
+			'error' : function(req, textStatus, err) {
+				console.log(textStatus);
+			},
+		});
+
+	});
+
 	$('#article_image input').fileupload({
 		'url' : document.URL,
 		'dataType' : 'json',
 		'done' : function(e, data) {
-			var newImage = $('<img></img>').attr({
+			var newImage = $(document.createElement('img')).attr({
 				'src' : data.result.article.poster,
 			}).hide();
 			var toAppend = $('#article_image div.editable-img');
@@ -38,6 +115,11 @@ $(document).ready(function(){
 		//},
 	 	'formData' : {'fields[]' : 'host_image'}
 	});	
+
+	$('#edit_button').click(function(e){
+		e.preventDefault();
+		update();
+	});
 
 	var titleInput = $("#article_title_input").datawrapper({
 		'getData' : function() {
@@ -149,9 +231,6 @@ $(document).ready(function(){
 			return;
 		}
 
-		console.log(postData);
-		clearInterval(timer);
-
 		$.ajax({
 			'type' : 'POST',
 			'url' : document.URL,
@@ -163,7 +242,7 @@ $(document).ready(function(){
 					d.setData(data['article']);
 				});
 				var dd = new Date(data['article']['updated_date']);
-				$("#update_news").text(dd.getMonth() + '월 ' + dd.getDate() + '일 ' + 
+				$("#update_news").text((dd.getMonth() + 1) + '월 ' + dd.getDate() + '일 ' + 
 					dd.getHours() + '시 ' + dd.getMinutes() + '분 ' + dd.getSeconds() + '초');
 			},
 			'error' : function(req, textStatus, err) {

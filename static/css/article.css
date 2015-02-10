@@ -129,16 +129,10 @@ textarea.question-box
 
 button.question-button
 {
-    font-family: inherit;
     font-size: 17px;
-    font-weight: 500;
-    border-radius: 7px;
     height: 42px;
     width: 135px;
-    background-color: #f0795b;
-    color: #ffffff;
     float: right;
-    border: 0px;
 }
 
 .question-box-container
@@ -303,7 +297,7 @@ button.question-button
 
 #timeslot_container table td
 {
-    padding: 0px 0px 10px 0px;
+    padding: 0px 0px 7px 0px;
 }
 
 #timeslot_container table tr:last-child td
@@ -314,17 +308,10 @@ button.question-button
 button.timeslot-label
 {
     pointer-events: none;
-    font-size: 13px;
-    font-family: 'Nanum Gothic';
     position: relative;
-    border-radius: 7px;
-    top: -2px;
+    top: -3px;
     padding: 7px 9px;
-    vertical-align: middle;
-    background-color: #f0795b;
     margin-left: 20px;
-    color: #ffffff;
-    border: 0px;
 }
 
 #host_head_container

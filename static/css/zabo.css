@@ -17,6 +17,31 @@ a:hover
     text-decoration: none;
 }
 
+button
+{
+    font-size: 13px;
+    font-family: 'Nanum Gothic';
+    font-weight: 500;
+    border-radius: 7px;
+    background-color: #f0795b;
+    color: #ffffff;
+    padding: 10px 20px 10px 20px;
+    border: 0px;
+}
+
+.button-large
+{
+    font-size: 27px;
+    padding: 20px 30px 20px 30px;
+    font-family: 'Nanum Barun Gothic';
+}
+
+.button-small
+{
+    padding: 7px 9px 7px 9px;
+    font-family: 'Nanum Gothic';
+}
+
 #head_container
 {
     background: #ffffff;

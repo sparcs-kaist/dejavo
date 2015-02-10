@@ -74,6 +74,25 @@ textarea:focus:-ms-input-placeholder
  * Specific CSS
  */
 
+#timeslot_container table
+{
+    position: relative;
+    border: 0px;
+    left: -32px;
+}
+
+#timeslot_container table td.timeslot-remove
+{
+    min-width: 30px;
+}
+
+#timeslot_container table td.timeslot-remove img.timeslot-remove-icon
+{
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+}
+
 #article_title .editable-input
 {
     padding: 0px;
@@ -296,15 +315,6 @@ textarea:focus:-ms-input-placeholder
 /*
  * Holder
  */
-#article_content.editable-textarea
-{
-    border: 0px;
-}
-
-#article_content.editable-textarea
-{
-    margin-bottom: 10px;
-}
 
 #article_content.editable-textarea p:first-child
 {
@@ -316,6 +326,7 @@ textarea:focus:-ms-input-placeholder
     min-height: 600px;
     max-height: 800px;
     width: 576px;
+    margin-bottom: 10px;
     padding: 10px 10px 0px 10px;
     color: #5c514e;
     overflow: auto;
@@ -323,12 +334,6 @@ textarea:focus:-ms-input-placeholder
     font-family: 'Nanum Gothic';
     border: solid 2px #beb7b7;
     border-radius: 5px;
-
-    white-space: pre-wrap;      /* CSS3 */   
-    white-space: -moz-pre-wrap; /* Firefox */    
-    white-space: -pre-wrap;     /* Opera <7 */   
-    white-space: -o-pre-wrap;   /* Opera 7 */    
-    word-wrap: break-word;      /* IE */
 }
 
 #article_content.editable-textarea img
@@ -353,11 +358,23 @@ textarea:focus:-ms-input-placeholder
 #notice_container
 {
     margin-bottom: 0px;
+    border-bottom: 2px solid #f6f0ee;
 }
 
 #notice_content
 {
+    margin-bottom: 20px;
     color: #beb7b7 !important;
+}
+
+#edit_button_container
+{
+    margin: 20px 0px 20px 0px;
+}
+
+#edit_button
+{
+    float: right;
 }
 
 #media_tool_container
@@ -404,4 +421,21 @@ textarea:focus:-ms-input-placeholder
     background-image: url('images/video_img.png');
     background-repeat: no-repeat;
     background-position: center;
+}
+
+#edit_button
+{
+    width: 150px;
+    height: 70px;
+}
+
+#timeslot_add_form input
+{
+    border: 0px;
+    height: 23px;
+    margin-left: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-family: 'Nanum Gothic';
+    color: #5d5454;
 }
