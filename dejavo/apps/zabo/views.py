@@ -391,5 +391,20 @@ def edit_announcement(request, article_id, announcement_id):
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['GET'])
-def view_category(request, category):
+def view_category(request):
     return render(request, 'zabo/category.html', {})
+
+
+@require_accept_formats(['application/json'])
+@require_http_methods(['GET'])
+def get_category(request, category):
+    article_list = []
+    for a in Article.objects.filter(category = category):
+        article_list.append(a.as_json())
+    
+    return JsonResponse(
+            status = 200,
+            data = {
+                'articles' : article_list
+                }
+            )

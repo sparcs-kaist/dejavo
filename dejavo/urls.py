@@ -2,7 +2,6 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.views.generic import RedirectView
 
 admin.autodiscover()
 
@@ -19,8 +18,8 @@ urlpatterns = patterns('',
     url(r'^jwt/login/$', 'dejavo.apps.account.views.jwt_login'),
     url(r'^jwt/refresh/$', 'dejavo.apps.account.views.jwt_refresh'),
 
-    url(r'^category/$', RedirectView.as_view(url='/category/recruiting/')),
-    url(r'^category/(?P<category>\D+)$', 'dejavo.apps.zabo.views.view_category'),
+    url(r'^category/$', 'dejavo.apps.zabo.views.view_category'),
+    url(r'^category/(?P<category>\D+)/$', 'dejavo.apps.zabo.views.get_category'),
 
     url(r'^account/', include('dejavo.apps.account.urls')),
     url(r'^article/', include('dejavo.apps.zabo.urls')),
