@@ -1,9 +1,45 @@
 $(document).ready(function(){
-	var titleInput = $("#article_title input").datawrapper({
-		'trigger' : ['input'],
-		'onChanged' : function() {
-			resetTimer();
+
+	$('#article_image input').fileupload({
+		'url' : document.URL,
+		'dataType' : 'json',
+		'done' : function(e, data) {
+			var newImage = $('<img></img>').attr({
+				'src' : data.result.article.poster,
+			}).hide();
+			var toAppend = $('#article_image div.editable-img');
+			toAppend.empty().append(newImage);
+			newImage.fadeIn('slow');
 		},
+		//'progressall' : function(e, data) {
+		//	var progress = parseInt(data.loaded / data.total * 100, 10);
+		//	$('#image-progress').text(progress + '%');
+		//},
+	 	'formData' : {'fields[]' : 'image'}
+	});	
+
+	$('#host_image_input').fileupload({
+		'url' : document.URL,
+		'dataType' : 'json',
+		'done' : function(e, data) {
+			var newImage = $('<img></img>').attr({
+				'src' : data.result.article.host.image,
+				'id' : 'host_image',
+			}).hide();
+			var toPrepend = $('#host_head_container');
+			var oldImage = $('img#host_image');
+			oldImage.remove();
+			toPrepend.prepend(newImage);
+			newImage.fadeIn('slow');
+		},
+		//'progressall' : function(e, data) {
+		//	var progress = parseInt(data.loaded / data.total * 100, 10);
+		//	$('#image-progress').text(progress + '%');
+		//},
+	 	'formData' : {'fields[]' : 'host_image'}
+	});	
+
+	var titleInput = $("#article_title_input").datawrapper({
 		'getData' : function() {
 			return {
 				'field' : 'title',
@@ -15,11 +51,7 @@ $(document).ready(function(){
 		},
 	}).data('datawrapper');
 
-	var subtitleInput = $("#article_subtitle input").datawrapper({
-		'trigger' : ['input'],
-		'onChanged' : function() {
-			resetTimer();
-		},
+	var subtitleInput = $("#article_subtitle_input").datawrapper({
 		'getData' : function() {
 			return {
 				'field' : 'subtitle',
@@ -32,10 +64,6 @@ $(document).ready(function(){
 	}).data('datawrapper');
 
 	var articleContent = $("#article_content").datawrapper({
-		'trigger' : ['input'],
-		'onChanged' : function () {
-			resetTimer();
-		},
 		'getData' : function () {
 			return {
 				'field' : 'content',
@@ -47,11 +75,7 @@ $(document).ready(function(){
 		},
 	}).data('datawrapper');
 
-	var locationInput = $("#location_container input").datawrapper({
-		'trigger' : ['input'],
-		'onChanged' : function () {
-			resetTimer();
-		},
+	var locationInput = $("#location_input").datawrapper({
 		'getData' : function() {
 			return {
 				'field' : 'location',
@@ -63,11 +87,7 @@ $(document).ready(function(){
 		},
 	}).data('datawrapper');
 
-	var hostnameInput = $("#host_head_container input").datawrapper({
-		'trigger' : ['input'],
-		'onChanged' : function () {
-			resetTimer();
-		},
+	var hostnameInput = $("#host_name_input").datawrapper({
 		'getData' : function() {
 			return {
 				'field' : 'host_name',
@@ -79,11 +99,7 @@ $(document).ready(function(){
 		},
 	}).data('datawrapper');
 
-	var hostdescTextarea = $("#host_content textarea").datawrapper({
-		'trigger' : ['input'],
-		'onChanged' : function () {
-			resetTimer();
-		},
+	var hostdescTextarea = $("#host_content_textarea").datawrapper({
 		'getData' : function() {
 			return {
 				'field' : 'host_description',
@@ -95,11 +111,7 @@ $(document).ready(function(){
 		},
 	}).data('datawrapper');
 
-	var noticeTextarea = $("#notice_content textarea").datawrapper({
-		'trigger' : ['input'],
-		'onChanged' : function () {
-			resetTimer();
-		},
+	var noticeTextarea = $("#notice_content_textarea").datawrapper({
 		'getData' : function() {
 			return {
 				'field' : 'announcement',
@@ -125,7 +137,7 @@ $(document).ready(function(){
 		var postData = {'fields' : []};
 		var flag = false;
 		$.each(checkList, function (i, d) {
-			if (d.isChanged()) {
+			if (d.isChanged()){
 				flag = true;
 				var dict = d.getData();
 				postData[dict['field']] = dict['value'];
@@ -153,26 +165,10 @@ $(document).ready(function(){
 				var dd = new Date(data['article']['updated_date']);
 				$("#update_news").text(dd.getMonth() + '월 ' + dd.getDate() + '일 ' + 
 					dd.getHours() + '시 ' + dd.getMinutes() + '분 ' + dd.getSeconds() + '초');
-
-				timer = setInterval(update, 20 * 1000);
 			},
 			'error' : function(req, textStatus, err) {
 				console.log(textStatus);
-				timer = setInterval(update, 20 * 1000);
 			},
 		});
 	};
-
-	var timer = setInterval(update, 20 * 1000);
-	var shortTimer = function () {
-		update();
-		clearInterval(timer);
-		timer = setInterval(update, 20 * 1000);
-	};
-
-	function resetTimer() {
-		clearInterval(timer);
-		timer = setInterval(shortTimer, 2 * 1000);
-	}
-
 });

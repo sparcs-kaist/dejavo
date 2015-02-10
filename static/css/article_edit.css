@@ -1,3 +1,14 @@
+.cross-large
+{
+    width: 80px;
+    height: 80px;
+    margin: auto;
+    border-radius: 50%;
+    background-image: url('images/cross_large.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #f0795b;
+}
 
 .editable
 {
