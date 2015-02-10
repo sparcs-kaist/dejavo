@@ -41,22 +41,14 @@
 		return this.each(function () {
 			var $this = $(this);
 			if (!$this.data('datawrapper')) {
-				// If instance not already created and attached
-				if (userOptions == undefined) {
-					// Try get options from attribute
-					userOptions = $.extend({}, $.fn.datawrapper.defaults, userOptions);
-				}
-				// Create and attach instance
+				userOptions = $.extend({}, $.fn.datawrapper.defaults, userOptions);
 				$this.data('datawrapper', new DataWrapper(this, userOptions));
 			}
 		});
 	};
 
 	$.fn.datawrapper.defaults = {
-		'mode' : 'manual',
-		'invertal' : 30,
-		'trigger' : [],
-
+		'trigger' : ['input'],
 		'getData' : function () {},
 		'setData' : function () {},
 		'onChanged' : function () {},
