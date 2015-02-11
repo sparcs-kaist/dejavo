@@ -47,7 +47,7 @@
 		<link rel="stylesheet" href="/static/css/article.css">
 {% endblock %}
 
-{% block title %}Article View page{% endblock %}
+{% block title %}{{ article.title }}{% endblock %}
 
 {% block content %}
 		<div id="article_head_container">
@@ -72,7 +72,7 @@
 							<div class="question-box-container">
 								<div class="question-textbox">
 									<div class="arrow-left"></div>
-									<textarea class="question-box">댓글을 입력하세요</textarea>
+									<textarea class="question-box" placeholder="댓글을 입력하세요"></textarea>
 								</div>
 								<button class="question-button">댓글달기</button>
 							</div>
