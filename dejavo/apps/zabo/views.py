@@ -10,6 +10,7 @@ from dejavo.apps.zabo.models import Article, Timeslot, Question, Answer
 from dejavo.apps.account.models import UserProfile
 
 import sys
+import json
 
 
 @require_accept_formats(['text/html'])
@@ -97,22 +98,47 @@ def edit_article(request, article_id):
             'request' : request,
             })
 
-    update_fields = request.POST.getlist('fields[]', None)
-    if not update_fields:
+    update_fields = request.POST.get('fields', '').split(',')
+    if len(update_fields) == 0:
         return JsonResponse(
                 status = 400,
                 data = {
-                    'error' : 'fields parameter is required'
+                    'error' : 'fields value should exist at least one'
                     }
                 )
 
-    model_fields = Article._meta.get_all_field_names()
+    model_fields = map(lambda f : f.name, Article._meta.local_fields)
     real_update_field = set(update_fields) & set(model_fields)
 
     try:
         article.set_fields(real_update_field, request.POST, request.FILES)
         article.clean()
         article.save()
+
+        if 'timeslot' in update_fields:
+            post_timeslot_str = request.POST.get('timeslot')
+            post_timeslot_list = json.loads(post_timeslot_str)
+
+            keep_timeslot = []
+            new_timeslot = []
+            for ts in post_timeslot_list:
+                if 'id' in ts:
+                    keep_timeslot.append(int(ts['id']))
+                else:
+                    new_timeslot.append(ts)
+
+            timeslot_list = map(lambda t : t['id'],
+                    Timeslot.objects.filter(article = article).values('id'))
+            remove_list = set(timeslot_list) - set(keep_timeslot)
+            for tid in remove_list:
+                Timeslot.objects.filter(id__in = remove_list).delete();
+
+            for ts in new_timeslot:
+                new_ts = Timeslot(article = article, timeslot_type = ts['type'],
+                        start_time = ts['start_time'], end_time = None,
+                        label = ts['label'])
+
+                new_ts.save()
 
         return JsonResponse(
                 status = 200,
@@ -127,7 +153,7 @@ def edit_article(request, article_id):
                 status = 400,
                 data = {
                     'error' : 'Invalid format',
-                    'msg' : e.message_dict,
+                    'msg' : e
                     },
                 )
 

@@ -5,17 +5,7 @@ $(document).ready(function(){
 		var timeslotID = $this.attr('timeslot-id');
 		var removeIcon = $(this).find('.timeslot-remove');
 		removeIcon.click(function(e) {
-			$.ajax({
-				'type' : 'POST',
-				'url' : '/article/' + articleID + '/timeslot/delete/' + timeslotID + '/',
-				'dataType' : 'json',
-				'success' : function (data, textStatus, jqXHR) {
-					$this.remove();
-				},
-				'error' : function(req, textStatus, err) {
-					console.log(textStatus);
-				},
-			});
+			$this.remove();
 		});
 	});
 
@@ -30,95 +20,122 @@ $(document).ready(function(){
 		ele.toggle();
 	});
 
-	var getTimeslotTime = function() {
-		// TODO validation
-		return $('#ts_year').val() + '-' + 
-			$('#ts_month').val() + '-' + 
-			$('#ts_date').val() + 'T' + 
-			$('#ts_hour').val() + ':' + 
-			$('#ts_minute').val() + 'Z';
-	};
-
 	$('#timeslot_add_button').click(function(e){
 		e.preventDefault();
+		var data = getNewTimeSlot();
+		var stime = data.start_time;
 
-		var postData = {
-			'type' : 'point',
-			'start_time' : getTimeslotTime(),
-			'label' : $('#ts_label').val(),
-		};
+		var tr = $('<tr></tr>').attr('mode', 'new');
+		var removeTD = $('<td></td>').addClass('timeslot-remove');
+		removeTD.append('<img src="http://placehold.it/20x20"></img>').addClass('timeslot-remove-icon');
+		var dateTD = $('<td>' + (stime.getMonth() + 1) + '월 ' +
+							stime.getDate() + '일 ' + stime.getHours() + '시 ' +
+							stime.getMinutes() + '분</td>')
+					.addClass('timeslot-time')
+					.attr({
+						'time-year' : stime.getFullYear(),
+						'time-month' : stime.getMonth() + 1,
+						'time-date' : stime.getDate(),
+						'time-hour' : stime.getHours(),
+						'time-minute' : stime.getMinutes(),
+					});
+		var labelTD = $('<td></td>');
+		labelTD.append('<button class="timeslot-label">' + data.label + '</button>');;
 
-		var timeslotTable = $('table#timeslot_table tbody');
+		tr.append(removeTD).append(dateTD).append(labelTD);
+		$('#timeslot_table tbody').append(tr);
 
-		$.ajax({
-			'type' : 'POST',
-			'url' : '/article/' + articleID + '/timeslot/create/',
-			'data' : postData,
-			'dataType' : 'json',
-			'success' : function (data, textStatus, jqXHR) {
-				var stime = new Date(data.start_time);
-				var tr = $('<tr></tr>').attr('timeslot-id', data.id);
-				var removeTD = $('<td class="timeslot-remove"></td>');
-				removeTD.append('<img class="timeslot-remove-icon" src="http://placehold.it/20x20"></img>');
-				var dateTD = $('<td>' + (stime.getMonth() + 1) + '월 ' + stime.getDate() + '일 ' +
-							stime.getHours() + '시 ' + stime.getMinutes() + '분</td>');
-				var labelTD = $('<td></td>');
-				labelTD.append('<button class="timeslot-label">' + data.label + '</button>');;
-
-				tr.append(removeTD).append(dateTD).append(labelTD);
-				timeslotTable.append(tr);
-				$('#timeslot_add_form').toggle();
-				$('#timeslot_add_form input').val('');
-			},
-			'error' : function(req, textStatus, err) {
-				console.log(textStatus);
-			},
+		removeTD.click(function (e){
+			tr.remove();
 		});
 
+		$('#timeslot_add_form').toggle();
+		$('#timeslot_add_form input').val('');
 	});
 
-	$('#article_image input').fileupload({
-		'url' : document.URL,
-		'dataType' : 'json',
-		'done' : function(e, data) {
-			var newImage = $(document.createElement('img')).attr({
-				'src' : data.result.article.poster,
-			}).hide();
-			var toAppend = $('#article_image div.editable-img');
-			toAppend.empty().append(newImage);
-			newImage.fadeIn('slow');
-		},
-		//'progressall' : function(e, data) {
-		//	var progress = parseInt(data.loaded / data.total * 100, 10);
-		//	$('#image-progress').text(progress + '%');
-		//},
-	 	'formData' : {'fields[]' : 'image'}
-	});	
+	var getNewTimeSlot = function() {
+		// TODO validation
+		var newDate = new Date();
+		newDate.setFullYear($('#ts_year').val());
+		newDate.setMonth($('#ts_month').val() - 1);
+		newDate.setDate($('#ts_date').val());
+		newDate.setHours($('#ts_hour').val());
+		newDate.setMinutes($('#ts_minute').val());
 
-	$('#host_image_input').fileupload({
-		'url' : document.URL,
-		'dataType' : 'json',
-		'done' : function(e, data) {
-			var newImage = $('<img></img>').attr({
-				'src' : data.result.article.host.image,
-				'id' : 'host_image',
-			}).hide();
-			var toPrepend = $('#host_head_container');
-			var oldImage = $('img#host_image');
-			oldImage.remove();
-			toPrepend.prepend(newImage);
-			newImage.fadeIn('slow');
+		return {
+			'label' : $('#ts_label').val(),
+			'start_time' : newDate,
+			'type' : 'point',
+		};
+	};
+
+	var timeslotTable = $('#timeslot_table').datawrapper({
+		'trigger' : ['DOMSubtreeModified'],
+		'getData': function() {
+			var data = [];
+			$.each(this.element.find('tr'), function(i, _tr){
+				var tr = $(_tr);
+				var timeslot = { };
+				var mode = tr.attr('mode');
+				if (mode == 'old'){
+					timeslot['id'] = tr.attr('timeslot-id');
+				} else {
+					var label = tr.find('.timeslot-label').text();
+					var timeTD = tr.find('.timeslot-time');
+					var time = timeTD.attr('time-year') + '-' + timeTD.attr('time-month') +
+							'-' + timeTD.attr('time-date') + 'T' + timeTD.attr('time-hour') +
+							':' + timeTD.attr('time-minute') + 'Z';
+					timeslot['label'] =  label;
+					timeslot['start_time'] = time;
+					timeslot['type'] = 'point';
+				}
+				data.push(timeslot);
+			});
+			return {
+				'field' : 'timeslot',
+				'value' : JSON.stringify(data),
+			};
 		},
-		//'progressall' : function(e, data) {
-		//	var progress = parseInt(data.loaded / data.total * 100, 10);
-		//	$('#image-progress').text(progress + '%');
-		//},
-	 	'formData' : {'fields[]' : 'host_image'}
-	});	
+	}).data('datawrapper');
+
+	$('#article_image_input').change(function() {
+		if (this.files && this.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				var newImage = $(document.createElement('img')).attr({
+					'src' : e.target.result,
+				}).hide();
+				var toAppend = $('#article_image div.editable-img');
+				toAppend.empty().append(newImage);
+				newImage.fadeIn('slow');
+			}
+			reader.readAsDataURL(this.files[0]);
+		}
+	});
+
+	$('#host_image_input').change(function() {
+		if (this.files && this.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				var newImage = $('<img></img>').attr({
+					'src' : e.target.result,
+					'id' : 'host_image',
+				}).hide();
+				var toPrepend = $('#host_head_container');
+				var oldImage = $('img#host_image');
+				oldImage.remove();
+				toPrepend.prepend(newImage);
+				newImage.fadeIn('slow');
+			}
+			reader.readAsDataURL(this.files[0]);
+		}
+	});
 
 	$('#edit_button').click(function(e){
 		e.preventDefault();
-		update();
+		if (!update()) {
+			update(true);
+		}
 	});
 
 	var titleInput = $("#article_title_input").datawrapper({
@@ -142,6 +159,36 @@ $(document).ready(function(){
 		},
 		'setData' : function(data) {
 			this.element.val(data['subtitle']);
+		},
+	}).data('datawrapper');
+
+	var articleImageInput = $('#article_image_input').datawrapper({
+		'trigger' : ['change'],
+		'getData' : function() {
+			var realInput = this.element[0];
+			if (realInput.files && realInput.files[0]){
+				return {
+					'field' : 'image',
+					'value' : realInput.files[0],
+				};
+			} else {
+				return null;
+			}
+		},
+	}).data('datawrapper');
+
+	var hostImageInput = $('#host_image_input').datawrapper({
+		'trigger' : ['change'],
+		'getData' : function() {
+			var realInput = this.element[0];
+			if (realInput.files && realInput.files[0]){
+				return {
+					'field' : 'image',
+					'value' : realInput.files[0],
+				};
+			} else {
+				return null;
+			}
 		},
 	}).data('datawrapper');
 
@@ -208,34 +255,45 @@ $(document).ready(function(){
 	var checkList = [
 				titleInput,
 				subtitleInput,
+				timeslotTable,
+				articleImageInput,
 				articleContent,
 				locationInput,
+				hostImageInput,
 				hostnameInput,
 				hostdescTextarea,
-				noticeTextarea
+				noticeTextarea,
 			];
 
-	var update = function () {
-		var postData = {'fields' : []};
-		var flag = false;
+	var update = function (forced) {
+		var _forced = forced || false;
+
+		var formData = new FormData();
+		var fieldsData = [];
+
 		$.each(checkList, function (i, d) {
-			if (d.isChanged()){
-				flag = true;
+			if (_forced || d.isChanged()){
 				var dict = d.getData();
-				postData[dict['field']] = dict['value'];
-				postData['fields'].push(dict['field']);
+				if (dict) {
+					fieldsData.push(dict['field']);
+					formData.append(dict['field'], dict['value']);
+				}
 			}
 		});
 
-		if (!flag) {
-			return;
+		if (!_forced && fieldsData.length == 0){
+			return false;
 		}
+
+		formData.append('fields', fieldsData);
 
 		$.ajax({
 			'type' : 'POST',
 			'url' : document.URL,
-			'data' : postData,
+			'data' : formData,
 			'dataType' : 'json',
+			'contentType' : false,
+			'processData' : false,
 			'success' : function (data, textStatus, jqXHR) {
 				$.each(checkList, function (i, d) {
 					d.reset();
@@ -249,5 +307,7 @@ $(document).ready(function(){
 				console.log(textStatus);
 			},
 		});
+
+		return true;
 	};
 });
