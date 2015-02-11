@@ -13,8 +13,12 @@ $(document).ready(function(){
 		return s;
 	};
 
+	var $current_button = null;
+
 	$('#category_list button').click(function(){
 		var category_name = this.innerText;
+		if($current_button) $current_button.removeClass('toggled');
+		($current_button = $(this)).addClass('toggled');
 		$.get("/category/"+this.value+"/?accept=application/json", function(data){
 			$main_list.empty();
 			var elems = [],
