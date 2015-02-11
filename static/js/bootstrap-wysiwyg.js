@@ -101,7 +101,7 @@
 							canvas.width = width;
 							canvas.height = height;
 							canvas.getContext('2d').drawImage(image, 0, 0, width, height);
-							var resizedImage = canvas.toDataURL('image/jpeg');
+							var resizedImage = canvas.toDataURL('image/png');
 							execCommand('insertimage', resizedImage);
 
 						}).fail(function (e) {
