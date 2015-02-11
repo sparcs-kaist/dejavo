@@ -1,5 +1,56 @@
 $(document).ready(function(){
 
+	$('input#article_title_input').editable({
+		'placeholder' : '제목 입력',
+		'font-size' : '49px',
+		'line-height' : '49px',
+		'font-family' : 'Nanum Barun Gothic',
+		'text-position' : {
+			'top' : -3
+		},
+	});
+
+	$('input#article_subtitle_input').editable({
+		'placeholder' : '부제목 입력',
+		'font-size' : '21px',
+		'line-height' : '21px',
+		'font-family' : 'Nanum Barun Gothic',
+		'text-position' : {
+			'top' : -3
+		},
+	});
+
+	$('input#location_input').editable({
+		'placeholder' : '장소 입력',
+		'font-size' : '25px',
+		'line-height' : '25px',
+		'font-family' : 'Nanum Barun Gothic',
+		'text-position' : {
+			'top' : 3
+		},
+	});
+
+	$('input#host_name_input').editable({
+		'placeholder' : '주체 단체 명',
+		'font-size' : '25px',
+		'line-height' : '25px',
+		'font-family' : 'Nanum Barun Gothic',
+		'text-position' : {
+			'top' : 3
+		},
+	});
+
+	$('textarea#host_content_textarea').editable({
+		'placeholder' : '주체 단체 설명',
+		'line-height' : '68px',
+	});
+
+	$('textarea#notice_content_textarea').editable({
+		'placeholder' : '공지사항 입력',
+		'line-height' : '68px',
+		'color' : '#beb7b7',
+	});
+
 	$.each($('#timeslot_table tr'), function(i, v){
 		var $this = $(this);
 		var timeslotID = $this.attr('timeslot-id');

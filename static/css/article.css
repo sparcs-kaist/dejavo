@@ -16,9 +16,9 @@ body
 {
     font-family: 'Nanum Barun Gothic';
     font-size: 49px;
-    height: 57px;
+    height: 49px;
+    margin-bottom: 18px;
     color: #5c514e;
-    margin-bottom: 10px;
 }
 
 #article_subtitle
