@@ -20,7 +20,7 @@ li
     height: 210px;
 }
 
-.category_name
+#category_list button
 {
     float: left;
     width: 220px;
@@ -34,9 +34,10 @@ li
     font-family: 'Nanum Barun Gothic';
     font-size: 21px;
     background-color: #fffbfa;
+	cursor: pointer;
 }
 
-.category_name:hover
+#category_list button:hover
 {
     color: #faf3f2;
     background-color: #f0795b;
