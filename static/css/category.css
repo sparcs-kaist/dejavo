@@ -20,12 +20,13 @@ li
     height: 210px;
 }
 
-.category_name
+#category_list button
 {
     float: left;
     width: 220px;
     height: 78px;
     margin: 25px 12px 0px 12px;
+	padding: 0;
     line-height: 80px;
     border: 1px solid #b7b3b3;
     border-radius: 10px;
@@ -34,9 +35,10 @@ li
     font-family: 'Nanum Barun Gothic';
     font-size: 21px;
     background-color: #fffbfa;
+	cursor: pointer;
 }
 
-.category_name:hover
+#category_list button:hover
 {
     color: #faf3f2;
     background-color: #f0795b;
@@ -56,3 +58,61 @@ li
     font-family: 'Nanum Barun Gothic';
     font-size: 29px;
 }
+
+/* 임시 */
+
+#main_list /* 메인 목록 */
+{
+	display: -webkit-flex;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+
+#main_list .elem /* 메인 목록에 뜨는 행사 */
+{
+	width: 30%;
+}
+
+#main_list .elem_wide /* 두 칸 짜리 행사 */
+{
+	width: 60%;
+}
+
+#main_list .elem img
+{
+	width: 100%;
+}
+
+#main_list .elem .dday
+{}
+
+#main_list .elem .dday_near
+{}
+
+#main_list .elem .dday_today
+{}
+
+#main_list .elem .dday_past
+{}
+
+#main_list .elem dt
+{}
+
+#main_list .elem dd
+{}
+
+/* 카테고리명 */
+#main_list .elem dt.elem_title
+{}
+
+/* 행사 이름 */
+#main_list .elem dd.elem_title
+{}
+
+#main_list .elem dt.elem_time
+{}
+
+#main_list .elem dd.elem_time
+{}

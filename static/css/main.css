@@ -7,7 +7,8 @@ ol
 #main_head_container
 {
     height: 522px;
-    background: #888888;
+    background: url('images/banner.png') no-repeat center center;
+    background-size: cover;
 }
 
 #main_list_container
@@ -85,6 +86,7 @@ ol
     color: #8d8582;
     font-family: 'Nanum Gothic';
     font-size: 17px;
+    box-shadow: 1px 1px 3px #888888;
 }
 
 .event_desc pre
@@ -102,9 +104,9 @@ ol
     position: relative;
     top: -116.6666666667%;
     right: -5.2083333333%;
+    padding-top: 35px;
     width: 100px;
-    height: 100px;
-    line-height: 100px;
+    height: 65px;
     color: #ffffff;
     font-family: 'Nanum Barun Gothic';
     font-weight: 700;
