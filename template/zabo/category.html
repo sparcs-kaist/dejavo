@@ -12,21 +12,23 @@
 {% block content %}
 		<div id="category_container">	
 			<ul id="category_list">
-				<li class="category_name">리쿠르팅</li>
-				<li class="category_name">공연</li>
-				<li class="category_name">대회</li>
-				<li class="category_name">전시</li>
-				<li class="category_name">설명회</li>
-				<li class="category_name">강연</li>
-				<li class="category_name">행사</li>
-				<li class="category_name">기타</li>
+				<li><button value='recruit'>리쿠르팅</button></li>
+				<li><button>공연</button></li>
+				<li><button>대회</button></li>
+				<li><button>전시</button></li>
+				<li><button>설명회</button></li>
+				<li><button>강연</button></li>
+				<li><button value='event'>행사</button></li>
+				<li><button>기타</button></li>
 			</ul>
 		</div>
 		<div id="main_list_container">
 			<div id="main_list_title">현재 진행 중인 행사 / 강연 자보</div>
+			<ul id="main_list"></ul>
 		</div>
         <div id="fb-root"></div>
 {% endblock %}
 
 {% block aftercontent %}
+<script src="{{ STATIC_URL }}js/category.js"></script>
 {% endblock %}
