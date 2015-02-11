@@ -281,3 +281,14 @@
     font-family: 'Nanum Gothic';
     color: #5d5454;
 }
+
+.timeslot-remove-icon
+{
+    background-image: url('images/delete_icon.png');
+    background-repeat: no-repeat;
+    width: 22px;
+    height: 22px;
+    float:left;
+    position: relative;
+    top : -1px;
+}

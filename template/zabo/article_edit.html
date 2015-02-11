@@ -68,7 +68,7 @@
 									{% for t in article.timeslot.all %}
 										<tr timeslot-id="{{ t.id }}" mode="old">
 											<td class="timeslot-remove">
-												<img class="timeslot-remove-icon" src="http://placehold.it/20x20"></img>
+												<div class="timeslot-remove-icon" src=""></div>
 											</td>
 											<td class="timeslot-time">{{ t.start_time|date:"n월 j일 G시 i분" }}</td>
 											<td><button class="timeslot-label">{{ t.label }}</button></td>
@@ -82,11 +82,12 @@
 									padding-left: 5px; padding-right: 2px;
 									border-top-left-radius: 5px; border-bottom-left-radius: 5px;">
 									<div style="width: 18px; height: 18px; background-color: #ffffff;
+										background-image: url('{{ STATIC_URL }}/css/images/cross_red.png');
 										border-radius: 50%; top: 5.5px; position:relative;">
 									</div>
 								</div>
 								<button class="button-small" style="border-radius: 0px 5px 5px 0px;
-									padding-left: 5px; pointer-events: none;">
+									padding-left: 5px; pointer-events: none; height: 29px;">
 									일시추가
 								</button>
 							</div>
@@ -108,7 +109,7 @@
 								<input id="ts_minute" type="text" style="width: 43px;"></input>
 								<span>분</span>
 								<button id="timeslot_add_button" 
-									style="padding: 5px 6px; border-radius: 5px; margin-left: 30px;">추가</button>
+									style="padding: 5px 6px; border-radius: 5px; margin-left: 25px;">추가</button>
 							</div>
 						</div>
 					</div>
@@ -171,17 +172,20 @@
 <script>
 	var articleID = {{ article.id }};
 	$(document).ready(function(){
-			document.execCommand('defaultParagraphSeparator', false, 'p');
-			$(".editable-input").autosizeInput();
-			$("#article_content").wysiwyg();
-			$("#article_content").on('blur', function(e) {
-				var _h = $(this).html();
-				if (_h == "<p></p>" || _h == "<p><br></p>")
-				{
-					$(this).empty();
-				}
-			});
-		});
+		document.execCommand('defaultParagraphSeparator', false, 'p');
+
+		var isWebkit = ('WebkitAppearance' in document.documentElement.style);
+		var editor = $("#article_content");
+		editor.on('blur', function(e) {
+			var _h = $(this).html();
+			if (_h == "<p></p>" || _h == "<p><br></p>")
+			{
+				$(this).empty();
+			}
+		})
+		editor.wysiwyg();
+		$(".editable-input").autosizeInput();
+	});
 </script>
 <script src="{{ STATIC_URL }}js/jquery.data-wrapper.js"></script>
 <script src="{{ STATIC_URL }}js/article-edit.js"></script>

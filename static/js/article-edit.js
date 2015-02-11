@@ -78,7 +78,7 @@ $(document).ready(function(){
 
 		var tr = $('<tr></tr>').attr('mode', 'new');
 		var removeTD = $('<td></td>').addClass('timeslot-remove');
-		removeTD.append('<img src="http://placehold.it/20x20"></img>').addClass('timeslot-remove-icon');
+		removeTD.append($('<div></div>').addClass('timeslot-remove-icon'));
 		var dateTD = $('<td>' + (stime.getMonth() + 1) + '월 ' +
 							stime.getDate() + '일 ' + stime.getHours() + '시 ' +
 							stime.getMinutes() + '분</td>')
