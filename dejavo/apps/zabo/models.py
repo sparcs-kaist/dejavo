@@ -8,8 +8,14 @@ import os
 class Article(models.Model):
 
     CATEGORY_TYPE = (
-            ('event', 'Event'),
             ('recruit', 'Recruit'),
+            ('performance', 'Performance'),
+            ('competition', 'Competition'),
+            ('display', 'Display'),
+            ('briefing', 'Briefing'),
+            ('lecture', 'Lecture'),
+            ('event', 'Event'),
+            ('etc', 'Etc'),
             )
 
     owner = models.ManyToManyField(settings.AUTH_USER_MODEL)
