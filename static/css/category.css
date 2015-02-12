@@ -45,6 +45,11 @@ li
     background-color: #f0795b;
 }
 
+#category_list button:focus
+{
+	outline: 0;
+}
+
 #main_list_container
 {
     width: 960px;
@@ -141,16 +146,7 @@ li
 	color: #433;
     font-size: 13px;
 	text-align: left;
-}
-
-/* 카테고리명 */
-#main_list .elem th.elem_title
-{
-}
-
-/* 행사 이름 */
-#main_list .elem td.elem_title
-{
+	vertical-align: top;
 }
 
 #main_list .elem .elem_time
