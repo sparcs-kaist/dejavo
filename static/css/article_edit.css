@@ -17,27 +17,6 @@
     outline: 0;
 }
 
-input:focus::-webkit-input-placeholder,
-textarea:focus::-webkit-input-placeholder
-{
-    border: 0;
-    color: transparent !important;
-}
-
-input:focus::-moz-placeholder,
-textarea:focus::-moz-placeholder
-{
-    border: 0;
-    color: transparent !important;
-}
-
-input:focus:-ms-input-placeholder,
-textarea:focus:-ms-input-placeholder
-{
-    border: 0;
-    color: transparent !important;
-}
-
 /*
  * editable input
  */
@@ -96,7 +75,7 @@ textarea:focus:-ms-input-placeholder
 #article_title .editable-input
 {
     padding: 0px;
-    height: 57px;
+    height: 49px;
     font-size: 49px;
     min-width: 360px;
     max-width: 90%;
@@ -113,56 +92,6 @@ textarea:focus:-ms-input-placeholder
     color: #6a6a6a;
 }
 
-#article_title .editable-input::-webkit-input-placeholder 
-{ /* WebKit browsers */
-    border-image: url('images/dot_square.png') 12 12 round;
-    border-image-width: 12px;
-    line-height: 57px;
-    font-family: 'Nanum Barun Gothic';
-    font-size: 31px !important;
-    color: #f0795b;
-}
-
-#article_subtitle .editable-input::-webkit-input-placeholder 
-{ /* WebKit browsers */
-    border-image: url('images/dot_square.png') 12 12 round;
-    border-image-width: 12px;
-    line-height: 18px;
-    font-family: 'Nanum Gothic';
-    font-size: 14px !important;
-    color: #f0795b;
-}
-
-#article_title .editable-input:-ms-input-placeholder
-{ /* Internet Explorer 10+ */
-    border-image: url('images/dot_square.png') 12 12 round;
-    border-image-width: 12px;
-    line-height: 57px;
-    font-family: 'Nanum Barun Gothic';
-    font-size: 31px !important;
-    color: #f0795b;
-}
-
-#article_subtitle .editable-input:-ms-input-placeholder
-{ /* Internet Explorer 10+ */
-    border-image: url('images/dot_square.png') 12 12 round;
-    border-image-width: 12px;
-    line-height: 18px;
-    font-family: 'Nanum Barun Gothic';
-    font-size: 14px !important;
-    color: #f0795b;
-}
-
-#article_content .editable-textarea::-webkit-input-placeholder
-{
-    color: #beb7b7;
-}
-
-#article_content .editable-textarea:-ms-input-placeholder
-{
-    color: #beb7b7;
-}
-
 /*
  * location
  */
@@ -175,28 +104,6 @@ textarea:focus:-ms-input-placeholder
     color: #443333;
     text-align: left;
     padding: 0px;
-}
-
-#location_container .editable-input::-webkit-input-placeholder
-{
-    border-image: url('images/dot_square.png') 12 12 round;
-    border-image-width: 12px;
-    line-height: 23px;
-    font-family: 'Nanum Gothic';
-    font-size: 17px !important;
-    color: #f0795b;
-    text-align: center;
-}
-
-#location_container .editable-input:-ms-input-placeholder
-{ /* Internet Explorer 10+ */
-    border-image: url('images/dot_square.png') 12 12 round;
-    border-image-width: 12px;
-    line-height: 23px;
-    font-family: 'Nanum Gothic';
-    font-size: 17px !important;
-    color: #f0795b;
-    text-align: center;
 }
 
 /*
@@ -219,28 +126,6 @@ textarea:focus:-ms-input-placeholder
     padding: 0px;
 }
 
-#host_head_container .editable-input::-webkit-input-placeholder
-{
-    border-image: url('images/dot_square.png') 12 12 round;
-    border-image-width: 12px;
-    line-height: 23px;
-    font-family: 'Nanum Gothic';
-    font-size: 17px !important;
-    color: #f0795b;
-    text-align: center;
-}
-
-#host_head_container .editable-input:-ms-input-placeholder
-{ /* Internet Explorer 10+ */
-    border-image: url('images/dot_square.png') 12 12 round;
-    border-image-width: 12px;
-    line-height: 23px;
-    font-family: 'Nanum Gothic';
-    font-size: 17px !important;
-    color: #f0795b;
-    text-align: center;
-}
-
 #host_content .editable-textarea
 {
     width: 300px;
@@ -253,28 +138,6 @@ textarea:focus:-ms-input-placeholder
     overflow: auto;
     text-align: left;
     padding: 0px;
-}
-
-#host_content .editable-textarea::-webkit-input-placeholder
-{
-    border-image: url('images/dot_square.png') 12 12 round;
-    border-image-width: 12px;
-    line-height: 74px;
-    font-size: 17px !important;
-    font-family: 'Nanum Gothic';
-    color: #f0795b;
-    text-align: center;
-}
-
-#host_content .editable-textarea:-ms-input-placeholder
-{
-    border-image: url('images/dot_square.png') 12 12 round;
-    border-image-width: 12px;
-    line-height: 74px;
-    font-size: 16px !important;
-    font-family: 'Nanum Gothic';
-    color: #f0795b;
-    text-align: center;
 }
 
 #notice_content .editable-textarea
@@ -291,27 +154,6 @@ textarea:focus:-ms-input-placeholder
     padding: 0px;
 }
 
-#notice_content .editable-textarea::-webkit-input-placeholder
-{
-    border-image: url('images/dot_square.png') 12 12 round;
-    border-image-width: 12px;
-    line-height: 74px;
-    font-size: 17px;
-    font-family: 'Nanum Gothic';
-    color: #beb7b7;
-    text-align: center;
-}
-
-#notice_content .editable-textarea:-ms-input-placeholder
-{
-    border-image: url('images/dot_square.png') 12 12 round;
-    border-image-width: 12px;
-    line-height: 74px;
-    font-size: 17px;
-    font-family: 'Nanum Gothic';
-    color: #beb7b7;
-    text-align: center;
-}
 /*
  * Holder
  */
@@ -438,4 +280,15 @@ textarea:focus:-ms-input-placeholder
     text-align: center;
     font-family: 'Nanum Gothic';
     color: #5d5454;
+}
+
+.timeslot-remove-icon
+{
+    background-image: url('images/delete_icon.png');
+    background-repeat: no-repeat;
+    width: 22px;
+    height: 22px;
+    float:left;
+    position: relative;
+    top : -1px;
 }

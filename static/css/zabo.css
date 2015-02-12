@@ -49,9 +49,10 @@ button
 
 #head_bar
 {
-    width: 960px;
+    max-width: 1600px;
     margin: 0 auto;
     height: 80px;
+    overflow-y: hidden;
 }
 
 #head_bar div
@@ -61,7 +62,8 @@ button
 
 #home
 {
-    width:245px;
+    margin-left: 20px;
+    width: 305px;
     float: left;
     font-family: 'Nanum Barun Gothic';
     font-size: 24px;
@@ -84,6 +86,11 @@ button
 .menu_right
 {
     float: right;
+}
+
+#name
+{
+    margin-right: 20px;
 }
 
 .profile_img

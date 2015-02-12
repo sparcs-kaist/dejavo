@@ -14,13 +14,11 @@
 {% block content %}
 		<div id="article_head_container">
 			<div id="article_title">
-				<input class="editable editable-input" id="article_title_input"
-					placeholder="제목 입력" type="text" value="{{ article.title }}">
+				<input class="editable editable-input" id="article_title_input" type="text" value="{{ article.title }}">
 				</input>
 			</div>
 			<div id="article_subtitle">
-				<input class="editable editable-input" id="article_subtitle_input"
-					placeholder="부제목 입력" type="text" value="{{ article.subtitle }}">
+				<input class="editable editable-input" id="article_subtitle_input" type="text" value="{{ article.subtitle }}">
 				</input>
 			</div>
 		</div>
@@ -68,11 +66,11 @@
 							<table id="timeslot_table">
 								<tbody>
 									{% for t in article.timeslot.all %}
-										<tr timeslot-id="{{ t.id }}">
+										<tr timeslot-id="{{ t.id }}" mode="old">
 											<td class="timeslot-remove">
-												<img class="timeslot-remove-icon" src="http://placehold.it/20x20"></img>
+												<div class="timeslot-remove-icon" src=""></div>
 											</td>
-											<td>{{ t.start_time|date:"n월 j일 G시 i분" }}</td>
+											<td class="timeslot-time">{{ t.start_time|date:"n월 j일 G시 i분" }}</td>
 											<td><button class="timeslot-label">{{ t.label }}</button></td>
 										</tr>
 									{% endfor %}
@@ -80,14 +78,16 @@
 							</table>
 							<div id="timeslot_add_container">
 								<div style="background-color: #f0795b; height: 29px; float:left;
-									position: relative; top: 2px; padding-left: 5px;
+									position: relative; top: 2px; right: -1px;
+									padding-left: 5px; padding-right: 2px;
 									border-top-left-radius: 5px; border-bottom-left-radius: 5px;">
 									<div style="width: 18px; height: 18px; background-color: #ffffff;
+										background-image: url('{{ STATIC_URL }}/css/images/cross_red.png');
 										border-radius: 50%; top: 5.5px; position:relative;">
 									</div>
 								</div>
 								<button class="button-small" style="border-radius: 0px 5px 5px 0px;
-									padding-left: 5px; pointer-events: none;">
+									padding-left: 5px; pointer-events: none; height: 29px;">
 									일시추가
 								</button>
 							</div>
@@ -109,7 +109,7 @@
 								<input id="ts_minute" type="text" style="width: 43px;"></input>
 								<span>분</span>
 								<button id="timeslot_add_button" 
-									style="padding: 5px 6px; border-radius: 5px; margin-left: 30px;">추가</button>
+									style="padding: 5px 6px; border-radius: 5px; margin-left: 25px;">추가</button>
 							</div>
 						</div>
 					</div>
@@ -117,7 +117,7 @@
 						<div class="sub-head">장소</div>
 						<div class="sub-content">
 							<input class="editable editable-input" id="location_input"
-								placeholder="장소 입력" type="text" value="{{ article.location }}">
+								type="text" value="{{ article.location }}">
 							</input>
 						</div>
 					</div>
@@ -135,20 +135,19 @@
 
 							<input id="host_image_input" name="host_image" type="file"
 								style="opacity:0; position: absolute; top: 0px; left: 0px; width: 0px; height: 0px;">
-							<input id="host_name_input" class="editable editable-input" placeholder="주체 단체 명"
+							<input id="host_name_input" class="editable editable-input"
 									type="text" value="{{ article.host_name }}">
 							</input>
 						</div>
-						<div id="host_content" class="sub-content editable">
-							<textarea class="editable editable-textarea" id="host_content_textarea"
-								placeholder="주체 단체 설명">{{ article.host_description }}</textarea>
+						<div id="host_content" class="sub-content">
+							<textarea class="editable editable-textarea"
+								id="host_content_textarea">{{ article.host_description }}</textarea>
 						</div>
 					</div>
 					<div id="notice_container" class="sub-container">
 						<div class="sub-head">공지사항</div>
-						<div id="notice_content" class="sub-content editable">
-							<textarea class="editable editable-textarea" id="notice_content_textarea"
-								placeholder="공지사항 입력">{{ article.announcement }}</textarea>
+						<div id="notice_content" class="sub-content">
+							<textarea class="editable editable-textarea" id="notice_content_textarea">{{ article.announcement }}</textarea>
 						</div>
 					</div>
 					<div id="edit_button_container">
@@ -169,23 +168,24 @@
 <script src="{{ STATIC_URL }}js/jquery.autosize.input.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.hotkeys.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap-wysiwyg.js"></script>
-<script src="{{ STATIC_URL }}js/jquery.ui.widget.js"></script>
-<script src="{{ STATIC_URL }}js/jquery.iframe-transport.js"></script>
-<script src="{{ STATIC_URL }}js/jquery.fileupload.js"></script>
+<script src="{{ STATIC_URL }}js/jquery.editable.js"></script>
 <script>
 	var articleID = {{ article.id }};
 	$(document).ready(function(){
-			document.execCommand('defaultParagraphSeparator', false, 'p');
-			$(".editable-input").autosizeInput();
-			$("#article_content").wysiwyg();
-			$("#article_content").on('blur', function(e) {
-				var _h = $(this).html();
-				if (_h == "<p></p>" || _h == "<p><br></p>")
-				{
-					$(this).empty();
-				}
-			});
-		});
+		document.execCommand('defaultParagraphSeparator', false, 'p');
+
+		var isWebkit = ('WebkitAppearance' in document.documentElement.style);
+		var editor = $("#article_content");
+		editor.on('blur', function(e) {
+			var _h = $(this).html();
+			if (_h == "<p></p>" || _h == "<p><br></p>")
+			{
+				$(this).empty();
+			}
+		})
+		editor.wysiwyg();
+		$(".editable-input").autosizeInput();
+	});
 </script>
 <script src="{{ STATIC_URL }}js/jquery.data-wrapper.js"></script>
 <script src="{{ STATIC_URL }}js/article-edit.js"></script>
