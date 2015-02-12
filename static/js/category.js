@@ -25,14 +25,17 @@ $(document).ready(function(){
 				now = Date.now();
 			if(data && data.articles){
 				elems = data.articles.map(function(article){
-					var i, d = null;
-					$main_elem = $("<div class='elem'/>");
-					$main_elem.append($("<div class='poster'></div>").append($("<img/>").attr({'src':article.poster, 'alt':article.title}).load(function(){
-						var $this = $(this);
-						var scaled_width = this.width * 317/this.height;
-						var cell_size = Math.round(scaled_width/223);
-						if(cell_size >= 2) $this.parent().parent().addClass('elem_wide');
-					})));
+					var i, d=null,
+						$main_elem = $("<div class='elem'/>"),
+						$poster_div = $("<div class='poster'></div>"),
+						$img = $("<img/>").attr({'src':article.poster, 'alt':article.title}).load(function(){;
+							var scaled_width = this.width * 317/this.height;
+							var cell_size = Math.round(scaled_width/223);
+							if(cell_size >= 2) $main_elem.addClass('elem_wide');
+							$poster_div.append($img);
+						});
+
+					$main_elem.append($poster_div);
 					
 					for(i=0; i<article.timeslot.length; i++){
 						d = new Date(article.timeslot[i].start_time);
