@@ -9,7 +9,7 @@ $(document).ready(function(){
 		if(!d) return '?/??';
 		var s = (d.getMonth()+1)+'/'+padZero(d.getDate());
 		var h = d.getHours()%12; if(h==0) h=12;
-		s += ' '+h+(d.getHours()>=12?'PM':'AM');
+		s += ' '+h+(d.getHours()>=12?'pm':'am');
 		return s;
 	};
 
