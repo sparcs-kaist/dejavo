@@ -87,6 +87,7 @@ li
 
 #main_list .elem img
 {
+	width: 100%;
     height: 315px;
 }
 
@@ -116,42 +117,40 @@ li
 #main_list .elem .dday_past
 {}
 
-#main_list .elem dl
+#main_list .elem table
 {
     margin: 0;
 }
 
-#main_list .elem dt
+#main_list .elem th
 {
     font-family: 'Nanum Gothic';
     font-size: 11px;
+	text-align: left;
 }
 
-#main_list .elem dd
+#main_list .elem td
 {
     margin: 0;
     font-family: 'Nanum Gothic';
     font-size: 13px;
+	text-align: left;
 }
 
 /* 카테고리명 */
-#main_list .elem dt.elem_title
+#main_list .elem th.elem_title
 {
-    float: left;
 }
 
 /* 행사 이름 */
-#main_list .elem dd.elem_title
+#main_list .elem td.elem_title
 {
-    float: left;
 }
 
-#main_list .elem dt.elem_time
+#main_list .elem th.elem_time
 {
-    float: right;
 }
 
-#main_list .elem dd.elem_time
+#main_list .elem td.elem_time
 {
-    float: right;
 }

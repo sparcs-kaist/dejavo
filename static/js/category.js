@@ -56,11 +56,9 @@ $(document).ready(function(){
 						$dday_elem.addClass('dday_past');
 					}
 
-					$main_elem.append([$dday_elem, $("<dl>").append([
-						$("<dt class='elem_title'/>").text(category_name),
-						$("<dd class='elem_title'/>").text(article.title),
-						$("<dt class='elem_time'/>").text('시간'),
-						$("<dd class='elem_time'/>").append($("<time/>").attr('datetime', d.toISOString()).text(toDisplayDate(d)))
+					$main_elem.append([$dday_elem, $("<table/>").append([
+						$("<tr/>").append([$("<th class='elem_title'/>").text(category_name), $("<th class='elem_time'>시간</td>")]),
+						$("<tr/>").append([$("<td class='elem_title'/>").text(article.title), $("<td class='elem_time'>").append($("<time/>").attr('datetime', d.toISOString()).text(toDisplayDate(d)))])
 					])]);
 					return $main_elem;
 				});
