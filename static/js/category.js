@@ -13,22 +13,29 @@ $(document).ready(function(){
 		return s;
 	};
 
+	var $current_button = null;
+
 	$('#category_list button').click(function(){
 		var category_name = this.innerText;
+		if($current_button) $current_button.removeClass('toggled');
+		($current_button = $(this)).addClass('toggled');
 		$.get("/category/"+this.value+"/?accept=application/json", function(data){
 			$main_list.empty();
 			var elems = [],
 				now = Date.now();
 			if(data && data.articles){
 				elems = data.articles.map(function(article){
-					var i, d = null;
-					$main_elem = $("<div class='elem'/>");
-					$main_elem.append($("<div class='poster'></div>").append($("<img/>").attr({'src':article.poster, 'alt':article.title}).load(function(){
-						var $this = $(this);
-						var scaled_width = this.width * 317/this.height;
-						var cell_size = Math.round(scaled_width/223);
-						if(cell_size >= 2) $this.parent().parent().addClass('elem_wide');
-					})));
+					var i, d=null,
+						$main_elem = $("<div class='elem'/>"),
+						$poster_div = $("<div class='poster'></div>"),
+						$img = $("<img/>").attr({'src':article.poster, 'alt':article.title}).load(function(){;
+							var scaled_width = this.width * 317/this.height;
+							var cell_size = Math.round(scaled_width/223);
+							if(cell_size >= 2) $main_elem.addClass('elem_wide');
+							$poster_div.append($img);
+						});
+
+					$main_elem.append($poster_div);
 					
 					for(i=0; i<article.timeslot.length; i++){
 						d = new Date(article.timeslot[i].start_time);
@@ -49,11 +56,9 @@ $(document).ready(function(){
 						$dday_elem.addClass('dday_past');
 					}
 
-					$main_elem.append([$dday_elem, $("<dl>").append([
-						$("<dt class='elem_title'/>").text(category_name),
-						$("<dd class='elem_title'/>").text(article.title),
-						$("<dt class='elem_time'/>").text('시간'),
-						$("<dd class='elem_time'/>").append($("<time/>").attr('datetime', d.toISOString()).text(toDisplayDate(d)))
+					$main_elem.append([$dday_elem, $("<table/>").append([
+						$("<tr/>").append([$("<th class='elem_title'/>").text(category_name), $("<th class='elem_time'>시간</td>")]),
+						$("<tr/>").append([$("<td class='elem_title'/>").text(article.title), $("<td class='elem_time'>").append($("<time/>").attr('datetime', d.toISOString()).text(toDisplayDate(d)))])
 					])]);
 					return $main_elem;
 				});
