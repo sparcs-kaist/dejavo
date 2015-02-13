@@ -1,5 +1,6 @@
 ul
 {
+    margin: 0;
     padding: 0;
 }
 
@@ -38,10 +39,15 @@ li
 	cursor: pointer;
 }
 
-#category_list button:hover
+#category_list button:hover, #category_list button.toggled
 {
     color: #faf3f2;
     background-color: #f0795b;
+}
+
+#category_list button:focus
+{
+	outline: 0;
 }
 
 #main_list_container
@@ -72,21 +78,40 @@ li
 
 #main_list .elem /* 메인 목록에 뜨는 행사 */
 {
-	width: 30%;
+	position: relative;
+    margin-bottom: 54px;
+    width: 222px;
+    height: 370px;
+    background: #ffffff;
+	font-family: 'Nanum Gothic';
+    font-weight: 800;
+    overflow: hidden;
+	box-shadow: 1px 1px 1px #ccc;
 }
 
 #main_list .elem_wide /* 두 칸 짜리 행사 */
 {
-	width: 60%;
+    width: 468px;
 }
 
 #main_list .elem img
 {
 	width: 100%;
+    height: 315px;
 }
 
 #main_list .elem .dday
-{}
+{
+	position: absolute;
+	top: 295px; right: 0;
+	text-align: center;
+	font-size: 11px;
+	color: white;
+	width: 40px; height: 40px;
+	line-height: 40px;
+	border-radius: 20px;
+	background-color: #c1c1c1;
+}
 
 #main_list .elem .dday_near
 {}
@@ -97,22 +122,34 @@ li
 #main_list .elem .dday_past
 {}
 
-#main_list .elem dt
-{}
+#main_list .elem table
+{
+    margin: 6px;
+	position: relative;
+	width: 100%;
+    font-family: 'Nanum Gothic';
+	font-weight: bold;
+	border-spacing: 0;
+	line-height: 1.05em;
+}
 
-#main_list .elem dd
-{}
+#main_list .elem th
+{
+	color: #636363;
+    font-size: 11px;
+	text-align: left;
+}
 
-/* 카테고리명 */
-#main_list .elem dt.elem_title
-{}
+#main_list .elem td
+{
+    margin: 0;
+	color: #433;
+    font-size: 13px;
+	text-align: left;
+	vertical-align: top;
+}
 
-/* 행사 이름 */
-#main_list .elem dd.elem_title
-{}
-
-#main_list .elem dt.elem_time
-{}
-
-#main_list .elem dd.elem_time
-{}
+#main_list .elem .elem_time
+{
+	width: 77px;
+}
