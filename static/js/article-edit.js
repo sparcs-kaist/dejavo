@@ -1,5 +1,11 @@
 $(document).ready(function(){
 
+	var $current_button = $('#category_list button.toggled');
+	$('#category_list button').click(function(){
+		if($current_button) $current_button.removeClass('toggled');
+		($current_button = $(this)).addClass('toggled');
+	});
+
 	$('div#article_image_new').hover(function (){
 		var $this = $(this);
 		var div = $this.find('div.cross-large');
@@ -167,6 +173,16 @@ $(document).ready(function(){
 			'type' : 'point',
 		};
 	};
+	var categoryButton = $('#category_list').datawrapper({
+		'trigger' : ['DOMSubtreeModified'],
+		'getData' : function() {
+			var toggledValue = this.element.find('button.toggled').val();
+			return {
+				'field' : 'category',
+				'value' : toggledValue,
+			};
+		},
+	}).data('datawrapper');
 
 	var timeslotTable = $('#timeslot_table').datawrapper({
 		'trigger' : ['DOMSubtreeModified'],
@@ -358,6 +374,7 @@ $(document).ready(function(){
 	var checkList = [
 				titleInput,
 				subtitleInput,
+				categoryButton,
 				timeslotTable,
 				articleImageInput,
 				articleContent,
@@ -403,7 +420,7 @@ $(document).ready(function(){
 					d.setData(data['article']);
 				});
 				var dd = new Date(data['article']['updated_date']);
-				$("#update_news").text((dd.getMonth() + 1) + '월 ' + dd.getDate() + '일 ' + 
+				$("#update_time").text((dd.getMonth() + 1) + '월 ' + dd.getDate() + '일 ' +
 					dd.getHours() + '시 ' + dd.getMinutes() + '분 ' + dd.getSeconds() + '초');
 			},
 			'error' : function(req, textStatus, err) {

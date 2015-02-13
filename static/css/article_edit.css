@@ -41,6 +41,12 @@
     border-image-width: 12px;
     text-align: center;
     color: #f0795b;
+    cursor: pointer;
+}
+
+#article_image .editable-img img
+{
+    transition: all 0.5s;
 }
 
 #article_image .editable-img img:hover
@@ -125,6 +131,17 @@
     padding: 0px;
 }
 
+#host_image
+{
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+#host_image:hover
+{
+    opacity: 0.8;
+}
+
 #host_content .editable-textarea
 {
     width: 300px;
@@ -180,11 +197,6 @@
 #article_content.editable-textarea img
 {
     max-width: 560px;
-}
-
-#article_sub_content
-{
-    border: 0px;
 }
 
 [contentEditable=true]:empty:not(:focus):before
@@ -266,8 +278,77 @@
 
 #edit_button
 {
-    width: 150px;
+    width: 135px;
     height: 70px;
+    cursor: pointer;
+}
+
+#cancel_button
+{
+    width: 135px;
+    height: 70px;
+    color: #f0795b;
+    background-color: transparent;
+    transition: all 0.5s;
+    border: solid 2px transparent;
+    cursor: pointer;
+}
+
+#cancel_button:hover
+{
+    color: #f15050;
+    border-color: #f15050;
+}
+
+#update_news
+{
+    text-align: center;
+    color: #beb7b7;
+    font-size: 13px;
+    font-family: 'Nanum Gothic';
+    margin-bottom: 20px;
+}
+
+#category_list
+{
+    list-style: none;
+    width: 300px;
+    height: 60px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#category_list li.empty
+{
+    float: left;
+    width: 65px;
+    height: 24px;
+    margin: 5px 10px 0px 0px;
+    padding: 0;
+}
+
+#category_list button
+{
+    float: left;
+    width: 65px;
+    height: 24px;
+    margin: 5px 10px 0px 0px;
+    padding: 0;
+    line-height: 24px;
+    border: 1px solid #b7b3b3;
+    border-radius: 3px;
+    text-align: center;
+    color: #9c8d8a;
+    font-family: 'Nanum Barun Gothic';
+    font-size: 12px;
+    background-color: #fffbfa;
+    cursor: pointer;
+}
+
+#category_list button:hover, #category_list button.toggled
+{
+    color: #faf3f2;
+    background-color: #f0795b;
 }
 
 #timeslot_add_container
@@ -275,6 +356,7 @@
     background-color: #f0795b;
     border-radius: 5px;
     float: left;
+    cursor: pointer;
 }
 
 #timeslot_add_form input
@@ -297,4 +379,65 @@
     float:left;
     position: relative;
     top : -1px;
+}
+
+#owner_container ul
+{
+    list-style-type: none;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    padding: 0px;
+    position: relative;
+    left: -18px;
+    width: 318px;
+}
+
+#owner_container ul:after
+{
+    clear: both;
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+#owner_container ul li
+{
+    height: 48px;
+    margin-bottom: 16px;
+    float: left;
+}
+
+#owner_container ul li div.timeslot-remove-icon
+{
+    position: relative;
+    left: -10px;
+    top: 13px;
+}
+
+#owner_container ul li img.owner-profile-image
+{
+    width: 48px;
+    height: inherit;
+    border-radius: 50%;
+    margin-right: 25px;
+    float: inherit;
+}
+
+#owner_container ul li div.owner-profile-text
+{
+    font-family: 'Nanum Gothic';
+    font-size: 17px;
+    height: inherit;
+    line-height: 48px;
+    color: #696060;
+    float: inherit;
+}
+
+#owner_add_container
+{
+    background-color: #f0795b;
+    border-radius: 5px;
+    float: left;
+    cursor: pointer;
+    font-size: 25px;
+    font-family: 'Nanum Barun Gothic';
 }

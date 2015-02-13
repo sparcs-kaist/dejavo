@@ -60,6 +60,49 @@
 			</div>
 			<div id="article_sub">
 				<div id="article_sub_content">
+					<div id="category_container" class="sub-container">
+						<div class="sub-head">카테고리</div>
+						<div class="sub-content">
+							<ul id="category_list">
+								{% if article.category == "recruit" %}
+									<li><button class="toggled" value="recruit">리쿠르팅</button></li>
+								{% else %}
+									<li><button value="recruit">리쿠르팅</button></li>
+								{% endif %}
+								{% if article.category == "performance" %}
+									<li><button class="toggled" value="performance">공연</button></li>
+								{% else %}
+									<li><button value="performance">공연</button></li>
+								{% endif %}
+								{% if article.category == "competition" %}
+									<li><button class="toggled" value="competition">대회</button></li>
+								{% else %}
+									<li><button value="competition">대회</button></li>
+								{% endif %}
+								<li class="empty"></li>
+								{% if article.category == "briefing" %}
+									<li><button class="toggled" value="briefing">설명회</button></li>
+								{% else %}
+									<li><button value="briefing">설명회</button></li>
+								{% endif %}
+								{% if article.category == "lecture" %}
+									<li><button class="toggled" value="lecture">강연</button></li>
+								{% else %}
+									<li><button value="lecture">강연</button></li>
+								{% endif %}
+								{% if article.category == "display" %}
+									<li><button class="toggled" value="display">전시</button></li>
+								{% else %}
+									<li><button value="display">전시</button></li>
+								{% endif %}
+								{% if article.category == "etc" %}
+									<li><button class="toggled" value="etc">기타</button></li>
+								{% else %}
+									<li><button value="etc">기타</button></li>
+								{% endif %}
+							</ul>
+						</div>
+					</div>
 					<div id="timeslot_container" class="sub-container">
 						<div class="sub-head">일시</div>
 						<div class="sub-content">
@@ -68,7 +111,7 @@
 									{% for t in article.timeslot.all %}
 										<tr timeslot-id="{{ t.id }}" mode="old">
 											<td class="timeslot-remove">
-												<div class="timeslot-remove-icon" src=""></div>
+												<div class="timeslot-remove-icon"></div>
 											</td>
 											<td class="timeslot-time">{{ t.start_time|date:"n월 j일 G시 i분" }}</td>
 											<td><button class="timeslot-label">{{ t.label }}</button></td>
@@ -76,7 +119,7 @@
 									{% endfor %}
 								</tbody>
 							</table>
-							<div style="height: 31px; margin-top: 5px;">
+							<div style="height: 31px; margin-top: 10px;">
 								<div id="timeslot_add_container" class="stress">
 									<img style="vertical-align: middle; padding-left: 5px"
 										src="{{ STATIC_URL }}/css/images/cross_red.png"></img>
@@ -89,8 +132,7 @@
 							<div id="timeslot_add_form" style="display: none;
 								background-color: #f4e5e2; position: absolute; border-radius: 5px;
 								font-family: 'Nanum Gothic'; font-size: 15px; color: #5d5454;
-								padding: 10px 10px 10px 20px; width: 650px;
-								">
+								padding: 10px 10px 10px 20px; width: 650px;">
 								<span>태그 :</span>
 								<input id="ts_label" type="text" style="width: 108px;"></input>
 								<input id="ts_year" type="text" style="width: 81px;"></input>
@@ -147,13 +189,33 @@
 					</div>
 					<div id="edit_button_container">
 						<button id="edit_button" class="button-large stress">업로드</button>
+						<button id="cancel_button" class="button-large">취소</button>
 					</div>
-					<br>
-					<br>
-					<br>
-					<br>
-					<br>
-					<div id="update_news" class="sub_container">{{ article.updated_date|date:"n월 j일 G시 i분 s초" }}</div>
+					<div id="update_news" class="sub_container">
+						<span id="update_time">{{ article.updated_date|date:"n월 j일 G시 i분 s초" }}</span>
+						<span>에 저장되었습니다.</span>
+					</div>
+				</div>
+				<div id="owner_container">
+					<ul>
+						{% for o in article.owner.all %}
+						<li>
+							<div class="timeslot-remove-icon"></div>
+							<img class="owner-profile-image" src="{{ o.profile.profile_image.url }}"></img>
+							<div class="owner-profile-text">{{ o.last_name }}{{ o.first_name}} 님이 관리합니다.</div>
+						</li>
+						{% endfor %}
+					</ul>
+					<div style="height: 31px;">
+						<div id="owner_add_container" class="stress">
+							<img style="vertical-align: middle; padding-left: 5px"
+								src="{{ STATIC_URL }}/css/images/cross_red.png"></img>
+							<span style="padding-right: 5px; color: #ffffff; font-size: 13px;
+								font-family: 'Nanum Gothic'; position: relative; top: -2px;">
+								관리자추가
+							</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
