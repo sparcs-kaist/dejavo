@@ -8,6 +8,14 @@ $(document).ready(function(){
 		'text-position' : {
 			'top' : -3
 		},
+		'updateCSS' : function() {
+			return {
+				'width' : this.element.width() + 40 + 'px',
+				'height' : this.element.height() - 12 + 'px',
+				'top' :  this.element.position().top - 6 + 'px',
+				'left' : this.element.position().left + 'px',
+			};
+		},
 	});
 
 	$('input#article_subtitle_input').editable({
@@ -17,6 +25,14 @@ $(document).ready(function(){
 		'font-family' : 'Nanum Barun Gothic',
 		'text-position' : {
 			'top' : -3
+		},
+		'updateCSS' : function() {
+			return {
+				'width' : this.element.width() + 24 + 'px',
+				'height' : this.element.height() - 12 + 'px',
+				'top' :  this.element.position().top - 6 + 'px',
+				'left' : this.element.position().left + 'px',
+			};
 		},
 	});
 
@@ -176,6 +192,10 @@ $(document).ready(function(){
 				var oldImage = $('img#host_image');
 				oldImage.remove();
 				toPrepend.prepend(newImage);
+				newImage.click(function (e){
+					e.preventDefault();
+					$('#host_image_input').click();
+				});
 				newImage.fadeIn('slow');
 			}
 			reader.readAsDataURL(this.files[0]);

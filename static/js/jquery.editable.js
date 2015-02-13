@@ -5,6 +5,7 @@
 		function Editable(element, options) {
 			var $this = this;
 			this.element = $(element);
+			this.updateCSS = options.updateCSS;
 			this.div = $(document.createElement('div')).css(options.div_css).css({
 				'font-family' : options['font-family'],
 				'font-size' : options['font-size'],
@@ -18,38 +19,42 @@
 			this.span.offset(options['text-position']);
 			this.div.append(this.span);
 
+			this.element.keyup(function (e) {
+				$this.update();
+			});
+
 			this.element.mouseenter(function (e) {
 				$this.element.css('background-color', 'transparent');
-				$this.setPosition();
+				$this.update();
 				$this.element.parent().append($this.div);
 			});
 			this.element.focus(function (e) {
 				$this.span.text('');
-				$this.div.remove();
 			});
 			this.element.focusout(function (e) {
 				if($this.element.val().trim() == ''){
 					$this.span.text(options.placeholder);
-					$this.setPosition();
+					$this.update();
 					$this.element.parent().append($this.div);
+				} else {
+					$this.div.remove();
 				}
 			});
 			this.element.mouseleave(function (e) {
 				if($this.element.val().trim() == ''){
 					return;
 				}
+
+				if($this.element.is(':focus')){
+					return;
+				}
 				$this.element.css('background-color', 'inherit');
 				$this.div.remove();
 			});
-		};
 
-		Editable.prototype.setPosition = function () {
-			this.div.css({
-				'width' : this.element.width() - 12 + 'px',
-				'height' : this.element.height() - 12 + 'px',
-				'top' :  this.element.position().top - 6 + 'px',
-				'left' : this.element.position().left - 6 + 'px',
-			});
+			Editable.prototype.update = function () {
+				this.div.css(this.updateCSS());
+			}
 		};
 
 		return Editable;
@@ -67,13 +72,21 @@
 	};
 
 	$.fn.editable.defaults = {
-		div_css : {
+		'div_css' : {
 			'position' : 'absolute',
 			'z-index' : -1,
 			'border' : '12px solid transparent',
 			'border-image' : 'url(/static/css/images/dot_square.png) 12 12 round',
 			'background-color' : 'transparent',
 			'border-image-width' : '12px',
+		},
+		'updateCSS' : function () {
+			return {
+				'width' : this.element.width() - 12 + 'px',
+				'height' : this.element.height() - 12 + 'px',
+				'top' :  this.element.position().top - 6 + 'px',
+				'left' : this.element.position().left - 6 + 'px',
+			};
 		},
 		'text-align' : 'center',
 		'placeholder' : '내용을 입력하세요',
