@@ -1,6 +1,29 @@
 $(document).ready(function(){
 
-	$('input#article_title_input').editable({
+	$('div#article_image_new').hover(function (){
+		var $this = $(this);
+		var div = $this.find('div.cross-large');
+		var span = $this.find('span');
+		div.animate({
+			backgroundColor: "#f15050",
+
+		}, 500);
+		span.animate({
+			color : "#f15050",
+		}, 500);
+	}, function () {
+		var $this = $(this);
+		var div = $this.find('div.cross-large');
+		var span = $this.find('span');
+		div.animate({
+			backgroundColor: "#f0795b",
+		}, 500);
+		span.animate({
+			color : "#f0795b",
+		}, 500);
+	});
+
+	var titleEditable = $('input#article_title_input').editable({
 		'placeholder' : '제목 입력',
 		'font-size' : '49px',
 		'line-height' : '49px',
@@ -13,12 +36,12 @@ $(document).ready(function(){
 				'width' : this.element.width() + 40 + 'px',
 				'height' : this.element.height() - 12 + 'px',
 				'top' :  this.element.position().top - 6 + 'px',
-				'left' : this.element.position().left + 'px',
+				'left' : this.element.position().left - 32 + 'px',
 			};
 		},
-	});
+	}).data('editable');
 
-	$('input#article_subtitle_input').editable({
+	var subtitleEditable = $('input#article_subtitle_input').editable({
 		'placeholder' : '부제목 입력',
 		'font-size' : '21px',
 		'line-height' : '21px',
@@ -31,12 +54,12 @@ $(document).ready(function(){
 				'width' : this.element.width() + 24 + 'px',
 				'height' : this.element.height() - 12 + 'px',
 				'top' :  this.element.position().top - 6 + 'px',
-				'left' : this.element.position().left + 'px',
+				'left' : this.element.position().left - 24 + 'px',
 			};
 		},
-	});
+	}).data('editable');
 
-	$('input#location_input').editable({
+	var locationEditable = $('input#location_input').editable({
 		'placeholder' : '장소 입력',
 		'font-size' : '25px',
 		'line-height' : '25px',
@@ -44,9 +67,9 @@ $(document).ready(function(){
 		'text-position' : {
 			'top' : 3
 		},
-	});
+	}).data('editable');
 
-	$('input#host_name_input').editable({
+	var hostnameEditable = $('input#host_name_input').editable({
 		'placeholder' : '주체 단체 명',
 		'font-size' : '25px',
 		'line-height' : '25px',
@@ -54,17 +77,26 @@ $(document).ready(function(){
 		'text-position' : {
 			'top' : 3
 		},
-	});
+	}).data('editable');
 
-	$('textarea#host_content_textarea').editable({
+	var hostcontentEditable = $('textarea#host_content_textarea').editable({
 		'placeholder' : '주체 단체 설명',
 		'line-height' : '68px',
-	});
+	}).data('editable');
 
-	$('textarea#notice_content_textarea').editable({
+	var noticeEditable = $('textarea#notice_content_textarea').editable({
 		'placeholder' : '공지사항 입력',
 		'line-height' : '68px',
 		'color' : '#beb7b7',
+	}).data('editable');
+
+	var editable_list = [titleEditable, subtitleEditable,
+		locationEditable, hostnameEditable, hostcontentEditable, noticeEditable];
+
+	$(window).resize(function () {
+			$.each(editable_list, function(i, e){
+			e.update();
+		})
 	});
 
 	$.each($('#timeslot_table tr'), function(i, v){

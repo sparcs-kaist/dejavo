@@ -31,12 +31,6 @@
     display: none;
 }
 
-.editable-input::-moz-placeholder
-{ /* Mozilla Firefox 19+ */
-    color:    #909;
-    opacity:  1;
-}
-
 /*
  * editable-img
  */
@@ -47,6 +41,11 @@
     border-image-width: 12px;
     text-align: center;
     color: #f0795b;
+}
+
+#article_image .editable-img img:hover
+{
+    opacity: 0.8;
 }
 
 /*

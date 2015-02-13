@@ -25,17 +25,17 @@
 		<div id="article_body_container">
 			<div id="article_main">
 				<div id="article_image">
-
 					{% if article.image %}
 					<div class="editable-img" onclick="getElementById('article_image_input').click();" style="border: 0px">
 						<img src={{ article.image.url }}></img>
 					</div>
 					{% else %}
-					<div class="editable-img" onclick="getElementById('article_image_input').click();">
+					<div id="article_image_new" class="editable-img"
+						onclick="getElementById('article_image_input').click();">
 						<div style="position:relative; top: 140px; min-height: 380px;">
 							<div class="cross-large"></div>
 							<div style="margin-top: 15px; font-size: 23px; font-family: 'Nanum Barun Gothic';">
-								메인 포스터 업로드
+								<span>메인 포스터 업로드</span>
 							</div>
 						</div>
 					</div>
@@ -76,7 +76,7 @@
 									{% endfor %}
 								</tbody>
 							</table>
-							<div style="height: 31px;">
+							<div style="height: 31px; margin-top: 5px;">
 								<div id="timeslot_add_container" class="stress">
 									<img style="vertical-align: middle; padding-left: 5px"
 										src="{{ STATIC_URL }}/css/images/cross_red.png"></img>
@@ -160,6 +160,7 @@
 {% endblock %}
 
 {% block aftercontent %}
+<script src="{{ STATIC_URL }}js/jquery.color.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.autosize.input.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.hotkeys.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap-wysiwyg.js"></script>
