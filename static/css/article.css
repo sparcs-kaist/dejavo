@@ -268,7 +268,7 @@ button.question-button
 
 .sub-container
 {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .sub-head
@@ -276,7 +276,7 @@ button.question-button
     font-family: 'Nanum Gothic';
     font-size: 15px;
     color: #5d5454;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .sub-content

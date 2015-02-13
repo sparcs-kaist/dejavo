@@ -271,6 +271,13 @@
     height: 70px;
 }
 
+#timeslot_add_container
+{
+    background-color: #f0795b;
+    border-radius: 5px;
+    float: left;
+}
+
 #timeslot_add_form input
 {
     border: 0px;
