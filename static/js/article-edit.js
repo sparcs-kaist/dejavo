@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
-	var $current_button = $('#category_list button.toggled');
-	$('#category_list button').click(function(){
+	var $current_button = $('#category_list li.toggled');
+	$('#category_list li').click(function(){
 		if($current_button) $current_button.removeClass('toggled');
 		($current_button = $(this)).addClass('toggled');
 	});
@@ -35,13 +35,13 @@ $(document).ready(function(){
 		'line-height' : '49px',
 		'font-family' : 'Nanum Barun Gothic',
 		'text-position' : {
-			'top' : -3
+			'top' : -0.5
 		},
 		'updateCSS' : function() {
 			return {
 				'width' : this.element.width() + 40 + 'px',
 				'height' : this.element.height() - 12 + 'px',
-				'top' :  this.element.position().top - 6 + 'px',
+				'top' :  this.element.position().top - 8 + 'px',
 				'left' : this.element.position().left - 32 + 'px',
 			};
 		},
@@ -53,13 +53,13 @@ $(document).ready(function(){
 		'line-height' : '21px',
 		'font-family' : 'Nanum Barun Gothic',
 		'text-position' : {
-			'top' : -3
+			'top' : -7
 		},
 		'updateCSS' : function() {
 			return {
 				'width' : this.element.width() + 24 + 'px',
-				'height' : this.element.height() - 12 + 'px',
-				'top' :  this.element.position().top - 6 + 'px',
+				'height' : this.element.height() - 18 + 'px',
+				'top' :  this.element.position().top - 3 + 'px',
 				'left' : this.element.position().left - 24 + 'px',
 			};
 		},
@@ -71,7 +71,7 @@ $(document).ready(function(){
 		'line-height' : '25px',
 		'font-family' : 'Nanum Barun Gothic',
 		'text-position' : {
-			'top' : 3
+			'top' : 1.5
 		},
 	}).data('editable');
 
@@ -81,7 +81,7 @@ $(document).ready(function(){
 		'line-height' : '25px',
 		'font-family' : 'Nanum Barun Gothic',
 		'text-position' : {
-			'top' : 3
+			'top' : 1.5
 		},
 	}).data('editable');
 
@@ -123,6 +123,7 @@ $(document).ready(function(){
 			'left' : position.left - 300,
 		});
 		ele.toggle();
+		$('#ts_label').empty().focus();
 	});
 
 	$('#timeslot_add_button').click(function(e){
@@ -158,6 +159,18 @@ $(document).ready(function(){
 		$('#timeslot_add_form input').val('');
 	});
 
+	$('#owner_add_container').click(function(e) {
+		var ele = $('#owner_add_form');
+		var $this = $(this);
+		var position = $this.position();
+		ele.css({
+			'top' : position.top + 40,
+			'left' : position.left - 125,
+		});
+		ele.toggle();
+		$('#owner_query').empty().focus();
+	});
+
 	var getNewTimeSlot = function() {
 		// TODO validation
 		var newDate = new Date();
@@ -173,10 +186,10 @@ $(document).ready(function(){
 			'type' : 'point',
 		};
 	};
-	var categoryButton = $('#category_list').datawrapper({
+	var categoryList = $('#category_list').datawrapper({
 		'trigger' : ['DOMSubtreeModified'],
 		'getData' : function() {
-			var toggledValue = this.element.find('button.toggled').val();
+			var toggledValue = this.element.find('li.toggled').attr('data-value');
 			return {
 				'field' : 'category',
 				'value' : toggledValue,
@@ -371,10 +384,24 @@ $(document).ready(function(){
 		},
 	}).data('datawrapper');
 
+	var ownerList = $('#owner_list').datawrapper({
+		'trigger' : ['DOMSubtreeModified'],
+		'getData' : function() {
+			var data = [];
+			$.each(this.element.find('.owner-profile'), function(i, v){
+				data.push($(v).attr('ownerid'));
+			});
+			return {
+				'field' : 'owner',
+				'value' : JSON.stringify(data),
+			};
+		},
+	}).data('datawrapper');
+
 	var checkList = [
 				titleInput,
 				subtitleInput,
-				categoryButton,
+				categoryList,
 				timeslotTable,
 				articleImageInput,
 				articleContent,
@@ -383,6 +410,7 @@ $(document).ready(function(){
 				hostnameInput,
 				hostdescTextarea,
 				noticeTextarea,
+				ownerList,
 			];
 
 	var update = function (forced) {

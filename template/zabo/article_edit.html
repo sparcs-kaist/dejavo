@@ -65,40 +65,40 @@
 						<div class="sub-content">
 							<ul id="category_list">
 								{% if article.category == "recruit" %}
-									<li><button class="toggled" value="recruit">리쿠르팅</button></li>
+									<li class="toggled" data-value="recruit">리쿠르팅</li>
 								{% else %}
-									<li><button value="recruit">리쿠르팅</button></li>
+									<li data-value="recruit">리쿠르팅</li>
 								{% endif %}
 								{% if article.category == "performance" %}
-									<li><button class="toggled" value="performance">공연</button></li>
+									<li class="toggled" data-value="performance">공연</li>
 								{% else %}
-									<li><button value="performance">공연</button></li>
+									<li data-value="performance">공연</li>
 								{% endif %}
 								{% if article.category == "competition" %}
-									<li><button class="toggled" value="competition">대회</button></li>
+									<li class="toggled" data-value="competition">대회</li>
 								{% else %}
-									<li><button value="competition">대회</button></li>
+									<li data-value="competition">대회</li>
 								{% endif %}
 								<li class="empty"></li>
 								{% if article.category == "briefing" %}
-									<li><button class="toggled" value="briefing">설명회</button></li>
+									<li class="toggled" data-value="briefing">설명회</li>
 								{% else %}
-									<li><button value="briefing">설명회</button></li>
+									<li data-value="briefing">설명회</li>
 								{% endif %}
 								{% if article.category == "lecture" %}
-									<li><button class="toggled" value="lecture">강연</button></li>
+									<li class="toggled" data-value="lecture">강연</li>
 								{% else %}
-									<li><button value="lecture">강연</button></li>
+									<li data-value="lecture">강연</li>
 								{% endif %}
 								{% if article.category == "display" %}
-									<li><button class="toggled" value="display">전시</button></li>
+									<li class="toggled" data-value="display">전시</li>
 								{% else %}
-									<li><button value="display">전시</button></li>
+									<li data-value="display">전시</li>
 								{% endif %}
 								{% if article.category == "etc" %}
-									<li><button class="toggled" value="etc">기타</button></li>
+									<li class="toggled" data-value="etc">기타</li>
 								{% else %}
-									<li><button value="etc">기타</button></li>
+									<li data-value="etc">기타</li>
 								{% endif %}
 							</ul>
 						</div>
@@ -145,7 +145,7 @@
 								<span>시</span>
 								<input id="ts_minute" type="text" style="width: 43px;"></input>
 								<span>분</span>
-								<button id="timeslot_add_button" 
+								<button id="timeslot_add_button" class="stress"
 									style="padding: 5px 6px; border-radius: 5px; margin-left: 20px;">추가</button>
 							</div>
 						</div>
@@ -197,12 +197,16 @@
 					</div>
 				</div>
 				<div id="owner_container">
-					<ul>
+					<ul id="owner_list">
 						{% for o in article.owner.all %}
 						<li>
 							<div class="timeslot-remove-icon"></div>
-							<img class="owner-profile-image" src="{{ o.profile.profile_image.url }}"></img>
-							<div class="owner-profile-text">{{ o.last_name }}{{ o.first_name}} 님이 관리합니다.</div>
+							<div class="owner-profile" ownerid="{{ o.id }}">
+								<img class="owner-profile-image" src="{{ o.profile.profile_image.url }}"></img>
+								<div class="owner-profile-text">
+									{{ o.last_name }}{{ o.first_name}} 님이 관리합니다.
+								</div>
+							</div>
 						</li>
 						{% endfor %}
 					</ul>
@@ -214,6 +218,26 @@
 								font-family: 'Nanum Gothic'; position: relative; top: -2px;">
 								관리자추가
 							</span>
+						</div>
+						<div id="owner_add_form" style="display: none;
+							background-color: #f4e5e2; position: absolute; border-radius: 5px;
+							font-family: 'Nanum Gothic'; font-size: 15px; color: #5d5454;
+							padding: 10px 10px 10px 10px; width: 330px;">
+							<div>
+								<span style="margin-left: 10px;">아이디 혹은 이름</span>
+								<input id="owner_query" type="text"></input>
+								<button id="owner_search_button" class="stress"
+									style="padding: 5px 6px; border-radius: 5px; float: right;">검색</button>
+							</div>
+							<div>
+								<ul id="owner_selection_list">
+									<li>
+										<img class="owner-small-profile-image" src="{{ request.user.profile.profile_image.url }}"></img>
+										<div class="owner-small-profile-name">{{ request.user.last_name }}{{ request.user.first_name }}</div>
+										<div class="owner-small-profile-id">{{ request.user.username }}</div>
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>

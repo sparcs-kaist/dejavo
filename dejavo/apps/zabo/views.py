@@ -108,13 +108,10 @@ def edit_article(request, article_id):
                 )
 
     model_fields = map(lambda f : f.name, Article._meta.local_fields)
+    print model_fields
     real_update_field = set(update_fields) & set(model_fields)
 
     try:
-        article.set_fields(real_update_field, request.POST, request.FILES)
-        article.clean()
-        article.save()
-
         if 'timeslot' in update_fields:
             post_timeslot_str = request.POST.get('timeslot')
             post_timeslot_list = json.loads(post_timeslot_str)
@@ -139,6 +136,17 @@ def edit_article(request, article_id):
                         label = ts['label'])
 
                 new_ts.save()
+
+        if 'owner' in update_fields:
+            post_owner_str = request.POST.get('owner')
+            post_owner_list = map(lambda x : int(x), json.loads(post_owner_str))
+
+            article.owner.clear()
+            article.owner.add(*post_owner_list)
+
+        article.set_fields(real_update_field, request.POST, request.FILES)
+        article.clean()
+        article.save()
 
         return JsonResponse(
                 status = 200,
