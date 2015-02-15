@@ -16,8 +16,7 @@ body
 {
     font-family: 'Nanum Barun Gothic';
     font-size: 49px;
-    height: 49px;
-    margin-bottom: 18px;
+    margin-bottom: 10px;
     color: #5c514e;
 }
 
@@ -268,7 +267,7 @@ button.question-button
 
 .sub-container
 {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .sub-head
@@ -396,13 +395,19 @@ button.timeslot-label
     border-radius: 50%;
 }
 
+#article_sub_share li#participate span
+{
+    position: relative;
+    top: 1px;
+}
+
 #article_sub_share li#facebook
 {
     background-color: #6184d4;
     border-radius: 50%;
     background-image: url('images/facebook_logo.png');
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: calc(50% - 0.5px) 50%;
 }
 
 #article_sub_share li#twitter
@@ -411,7 +416,7 @@ button.timeslot-label
     border-radius: 50%;
     background-image: url('images/twitter_logo.png');
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: calc(50% + 2px) calc(50% + 2px);
 }
 
 
