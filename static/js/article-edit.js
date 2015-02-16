@@ -233,7 +233,7 @@ $(document).ready(function(){
 				var newImage = $(document.createElement('img')).attr({
 					'src' : e.target.result,
 				}).hide();
-				var toAppend = $('#article_image div.editable-img');
+				var toAppend = $('#article_image div.editable-img').css('border', '0');
 				toAppend.empty().append(newImage);
 				newImage.fadeIn('slow');
 			}
@@ -265,8 +265,8 @@ $(document).ready(function(){
 
 	$('#edit_button').click(function(e){
 		e.preventDefault();
-		if (!update()) {
-			update(true);
+		if (!update(false, true)) {
+			update(true, true);
 		}
 	});
 
@@ -413,14 +413,14 @@ $(document).ready(function(){
 				ownerList,
 			];
 
-	var update = function (forced) {
+	var update = function (forced, to_publish) {
 		var _forced = forced || false;
 
 		var formData = new FormData();
 		var fieldsData = [];
 
 		$.each(checkList, function (i, d) {
-			if (_forced || d.isChanged()){
+			if (_forced || (d && d.isChanged())){
 				var dict = d.getData();
 				if (dict) {
 					fieldsData.push(dict['field']);
@@ -434,6 +434,7 @@ $(document).ready(function(){
 		}
 
 		formData.append('fields', fieldsData);
+		formData.append('is_published', to_publish);
 
 		$.ajax({
 			'type' : 'POST',
@@ -444,8 +445,10 @@ $(document).ready(function(){
 			'processData' : false,
 			'success' : function (data, textStatus, jqXHR) {
 				$.each(checkList, function (i, d) {
-					d.reset();
-					d.setData(data['article']);
+					if (d) {
+						d.reset();
+						d.setData(data['article']);
+					}
 				});
 				var dd = new Date(data['article']['updated_date']);
 				$("#update_time").text((dd.getMonth() + 1) + '월 ' + dd.getDate() + '일 ' +
@@ -458,4 +461,8 @@ $(document).ready(function(){
 
 		return true;
 	};
+
+	if (!is_published) {
+		setInterval(function () { update(false, false); }, 60 * 1000);
+	}
 });

@@ -1,6 +1,5 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
@@ -23,6 +22,29 @@ def main(request):
 @require_http_methods(['POST'])
 @auth_required
 def create(request):
+
+    draft = Article.objects.filter(owner__id = request.user.id, is_published = False)
+    if (len(draft) > 0):
+        draft_article = draft[0]
+        if request.ACCEPT_FORMAT == 'json':
+            response = JsonResponse(
+                    status = 200,
+                    data = {
+                        'title' : draft_article.title,
+                        'subtitle' :  draft_article.subtitle,
+                        'created_date' : draft_article.created_date,
+                        'updated_date' : draft_article.updated_date
+                    })
+            response['Location'] = '/article/' + str(draft_article.id) + '/edit/'
+            return response
+
+        elif request.ACCEPT_FORMAT == 'html':
+            response = HttpResponse(
+                    status = 307,
+                    content = 'User already have draft: ' + draft_article.title
+                    )
+            response['Location'] = '/article/' + str(draft_article.id) + '/edit/'
+            return response
 
     owner = set(request.POST.getlist('owner', [request.user.username]))
     new_article = Article(is_published = False)
@@ -74,7 +96,6 @@ def view_article(request, article_id):
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST', 'GET'])
 @auth_required
-@csrf_exempt
 def edit_article(request, article_id):
     try:
         article = Article.objects.get(id = article_id)
@@ -169,7 +190,6 @@ def edit_article(request, article_id):
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST'])
 @auth_required
-@csrf_exempt
 def create_timeslot(request, article_id):
     try:
         article = Article.objects.get(id = article_id)
@@ -207,7 +227,6 @@ def create_timeslot(request, article_id):
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST'])
 @auth_required
-@csrf_exempt
 def delete_timeslot(request, article_id, timeslot_id):
     try:
         timeslot = Timeslot.objects.get(id = timeslot_id)

@@ -194,9 +194,14 @@
 					</div>
 					<div id="update_news" class="sub_container">
 						<span id="update_time">{{ article.updated_date|date:"n월 j일 G시 i분 s초" }}</span>
+						{% if article.is_published %}
 						<span>에 저장되었습니다.</span>
+						{% else %}
+						<span>에 임시 저장되었습니다.</span>
+						{% endif %}
 					</div>
 				</div>
+				{% if article.is_pusblished %}
 				<div id="owner_container">
 					<ul id="owner_list">
 						{% for o in article.owner.all %}
@@ -242,18 +247,24 @@
 						</div>
 					</div>
 				</div>
+				{% endif %}
 			</div>
 		</div>
 {% endblock %}
 
 {% block aftercontent %}
+<script>
+	var articleID = {{ article.id }};
+	var is_published = {% if article.is_published %}true{% else %}false{% endif %};
+</script>
 <script src="{{ STATIC_URL }}js/jquery.color.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.autosize.input.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.hotkeys.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap-wysiwyg.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.editable.js"></script>
+<script src="{{ STATIC_URL }}js/jquery.data-wrapper.js"></script>
+<script src="{{ STATIC_URL }}js/article-edit.js"></script>
 <script>
-	var articleID = {{ article.id }};
 	$(document).ready(function(){
 		document.execCommand('defaultParagraphSeparator', false, 'p');
 		var editor = $("#article_content");
@@ -272,6 +283,4 @@
 		$(".editable-input").autosizeInput({ space : 3 });
 	});
 </script>
-<script src="{{ STATIC_URL }}js/jquery.data-wrapper.js"></script>
-<script src="{{ STATIC_URL }}js/article-edit.js"></script>
 {% endblock %}

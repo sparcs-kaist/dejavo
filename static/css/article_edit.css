@@ -82,6 +82,7 @@
     padding: 0px;
     font-size: 49px;
     min-width: 360px;
+    width: 360px;
     max-width: 90%;
     color: #5c514e;
 }
@@ -92,6 +93,7 @@
     height: 24px;
     font-size: 21px;
     min-width: 245px;
+    width: 245px;
     max-width: 90%;
     color: #6a6a6a;
 }

@@ -55,6 +55,14 @@
 			Editable.prototype.update = function () {
 				this.div.css(this.updateCSS());
 			}
+
+			// initialize
+			if(this.element.val().trim() == ''){
+				this.span.text(options.placeholder);
+				$this.element.css('background-color', 'transparent');
+				this.update();
+				this.element.parent().append(this.div);
+			}
 		};
 
 		return Editable;
