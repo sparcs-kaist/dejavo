@@ -129,7 +129,6 @@ def edit_article(request, article_id):
                 )
 
     model_fields = map(lambda f : f.name, Article._meta.local_fields)
-    print model_fields
     real_update_field = set(update_fields) & set(model_fields)
 
     try:
@@ -166,7 +165,8 @@ def edit_article(request, article_id):
             article.owner.add(*post_owner_list)
 
         article.set_fields(real_update_field, request.POST, request.FILES)
-        article.clean()
+        if article.is_published:
+            article.full_clean()
         article.save()
 
         return JsonResponse(
@@ -182,7 +182,7 @@ def edit_article(request, article_id):
                 status = 400,
                 data = {
                     'error' : 'Invalid format',
-                    'msg' : e
+                    'msg' : e.message_dict
                     },
                 )
 

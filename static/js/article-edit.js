@@ -421,10 +421,12 @@ $(document).ready(function(){
 
 		$.each(checkList, function (i, d) {
 			if (_forced || (d && d.isChanged())){
-				var dict = d.getData();
-				if (dict) {
-					fieldsData.push(dict['field']);
-					formData.append(dict['field'], dict['value']);
+				if (d) {
+					var dict = d.getData();
+					if (dict) {
+						fieldsData.push(dict['field']);
+						formData.append(dict['field'], dict['value']);
+					}
 				}
 			}
 		});
@@ -433,8 +435,9 @@ $(document).ready(function(){
 			return false;
 		}
 
-		formData.append('fields', fieldsData);
+		fieldsData.push('is_published');
 		formData.append('is_published', to_publish);
+		formData.append('fields', fieldsData);
 
 		$.ajax({
 			'type' : 'POST',
