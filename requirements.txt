@@ -2,4 +2,5 @@ Django==1.7.2
 Pillow==2.7.0
 PyJWT==0.4.1
 argparse==1.2.1
+pytz==2014.10
 wsgiref==0.1.2
