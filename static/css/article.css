@@ -318,13 +318,20 @@ button.timeslot-label
     padding-bottom: 10px;
 }
 
-#host_image
+#host_image_container
 {
     float: left;
-    border-radius: 50%;
     width: 40px;
     height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
     margin-right: 10px;
+    text-align: center;
+}
+
+#host_image
+{
+    width: 100%;
 }
 
 #host_name

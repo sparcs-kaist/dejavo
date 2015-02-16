@@ -147,7 +147,9 @@
 					<div id="host_container" class="sub-container">
 						<div class="sub-head">주최자</div>
 						<div id="host_head_container" class="sub-content">
-							<img id="host_image" src="{{ article.host_image.url }}"></img>
+							<div id="host_image_container">
+								<img id="host_image" src="{{ article.host_image.url }}"></img>
+							</div>
 							<div id="host_name">{{ article.host_name }}</div>
 						</div>
 						<div id="host_content" class="sub-content">{{ article.host_description }}</div>

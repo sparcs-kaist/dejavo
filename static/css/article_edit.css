@@ -130,13 +130,13 @@
     padding: 0px;
 }
 
-#host_image
+#host_image_container
 {
     cursor: pointer;
     transition: all 0.5s;
 }
 
-#host_image:hover
+#host_image_container:hover
 {
     opacity: 0.8;
 }

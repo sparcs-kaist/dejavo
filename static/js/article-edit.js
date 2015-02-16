@@ -249,7 +249,7 @@ $(document).ready(function(){
 					'src' : e.target.result,
 					'id' : 'host_image',
 				}).hide();
-				var toPrepend = $('#host_head_container');
+				var toPrepend = $('#host_image_container');
 				var oldImage = $('img#host_image');
 				oldImage.remove();
 				toPrepend.prepend(newImage);
