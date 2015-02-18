@@ -6,11 +6,12 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.db.models import Q
 
 from accept_checker.decorators import require_accept_formats, auth_required 
 from jwt_auth.token import generate_jwt, refresh_jwt
 
-import sys
+import json
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST', 'GET'])
@@ -278,6 +279,35 @@ def show_user(request, username):
                     status = 404,
                     data = {'error' : 'User does not exist'}
                     )
+
+@require_accept_formats(['application/json'])
+@require_http_methods(['GET'])
+@auth_required
+def search_user(request):
+
+    query = request.GET.get('q', None)
+    page = int(request.GET.get('page', 0))
+    count = int(request.GET.get('count', 10))
+
+    start = page * count
+    end = start + count
+
+    if not query:
+        return JsonResponse(
+                status = 400,
+                data = { 'error' : 'Parameter \'q\' should be given' }
+                )
+
+    _User = get_user_model()
+    user_list = _User.objects.filter(Q(username__icontains = query) |
+            Q(first_name__icontains = query) | Q(last_name__icontains = query))[start:end]
+    user_list_json = map(lambda x : x.as_json(), user_list)
+
+    return JsonResponse(
+        status = 200,
+        data = { 'result' : user_list_json }
+        )
+
 
 @require_accept_formats(['application/json'])
 @require_http_methods(['GET'])

@@ -94,7 +94,11 @@
 										<td>
 											{{ t.start_time|date:"n월 j일 G시 i분" }}
 										</td>
-										<td><button class="timeslot-label">{{ t.label }}</button></td>
+										{% ifequal t.label '' %}
+											<td><span class="timeslot-label"></span></td>
+										{% else %}
+											<td><button class="timeslot-label">{{ t.label }}</button></td>
+										{% endifequal %}
 										</tr>
 								{% endfor %}
 								</tbody>

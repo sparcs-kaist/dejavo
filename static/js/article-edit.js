@@ -1,5 +1,94 @@
 $(document).ready(function(){
 
+	$('#owner_list li').click(function(e){
+		e.preventDefault();
+		this.remove();
+	});
+
+	$('#owner_query').keyup(function(e){
+		if (e.which == 13) {
+			$('#owner_search_button').click();
+		}
+	});
+
+	$('#owner_search_button').click(function(e){
+		e.preventDefault();
+
+		var q = $('#owner_query');
+		var l = $('#owner_selection_list');
+		var ll = $('#owner_list');
+		$.ajax({
+			'method' : 'GET',
+			'url' : '/account/search/',
+			'data' : { 'q' : q.val() },
+			'dataType' : 'json',
+			'error' : function(req, textStatus, err) {
+				var li = $('<li></li>').css('text-align', 'center');
+				var div = $('<span></span>').css('line-height', '30px');
+				div.text('검색 결과가 없습니다.');
+				l.append(li.append(div));
+				return;
+			},
+			'success' : function (data, textStatus, jqXHR) {
+
+				var curr_list = [];
+				$.each(ll.find('li div.owner-profile'), function(i, profile){
+					curr_list.push(parseInt($(profile).attr('ownerid')));
+				});
+				
+				l.empty();
+
+				if (data.result.length == 0) {
+					var li = $('<li></li>').css('text-align', 'center');
+					var div = $('<span></span>').css('line-height', '30px');
+					div.text('검색 결과가 없습니다.');
+					l.append(li.append(div));
+					return;
+				}
+
+				$.each(data.result, function(i, user){
+					var li = $('<li></li>');
+					var user_image = $('<img></img>').addClass('owner-small-profile-image')
+						.attr('src', user.profile_image);
+					var user_name = $('<div></div>').addClass('owner-small-profile-name')
+						.text(user.last_name + user.first_name);
+					var user_id = $('<div></div>').addClass('owner-small-profile-id')
+						.text(user.username);
+
+					li.append(user_image).append(user_name).append(user_id);
+					l.append(li);
+
+					// check if owner is included.
+					if ($.inArray(user.id, curr_list) != -1){
+						li.css('background-color', '#eeeeee');
+						return;
+					}
+
+					li.click(function(e){
+						var owner_li = $('<li></li>');
+						var remove_icon = $('<div></div>').addClass('timeslot-remove-icon');
+						var profile_div = $('<div></div>').addClass('owner-profile').attr('ownerid', user.id);
+						var profile_img = $('<img></img>').addClass('owner-profile-image')
+											.attr('src', user.profile_image);
+						var profile_text = $('<div></div>').addClass('owner-profile-text')
+											.text(user.last_name + user.first_name + ' 님이 관리합니다.');
+
+						remove_icon.click(function(e){
+							e.preventDefault();
+							owner_li.remove();
+						});
+						profile_div.append(profile_img).append(profile_text);
+						owner_li.append(remove_icon).append(profile_div);
+						ll.append(owner_li);
+
+						$('#owner_add_form').hide();
+						q.val('');
+					});
+				});
+			},
+		});
+	});
+
 	var $current_button = $('#category_list li.toggled');
 	$('#category_list li').click(function(){
 		if($current_button) $current_button.removeClass('toggled');
@@ -171,8 +260,9 @@ $(document).ready(function(){
 			'top' : position.top + 40,
 			'left' : position.left - 125,
 		});
+		$('#owner_selection_list').empty();
 		ele.toggle();
-		$('#owner_query').empty().focus();
+		$('#owner_query').val('').focus();
 	});
 
 	var getNewTimeSlot = function() {

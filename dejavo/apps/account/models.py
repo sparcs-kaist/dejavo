@@ -22,10 +22,14 @@ post_save.connect(post_save_user, sender=settings.AUTH_USER_MODEL)
 
 def user_to_json(self):
     return {
+            'id' : self.id,
             'username' : self.username,
+            'first_name' : self.first_name,
+            'last_name' : self.last_name,
             'email' : self.email,
             'phone' : self.profile.phone,
             'bio' : self.profile.bio,
+            'profile_image' : self.profile.profile_image.url,
             }
 
 # Add profile property to User model to create and read UserProfile easily

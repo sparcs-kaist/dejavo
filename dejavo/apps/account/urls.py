@@ -6,6 +6,7 @@ urlpatterns = patterns('',
     url(r'^create/$', views.create),
     url(r'^edit/$', views.edit),
     url(r'^show/(?P<username>\w+)/$', views.show_user),
+    url(r'^search/$', views.search_user),
     url(r'^participate/(?P<article_id>\d+)/$', views.participate),
     url(r'^unparticipate/(?P<article_id>\d+)/$', views.unparticipate),
 )
