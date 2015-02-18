@@ -54,6 +54,11 @@
     opacity: 0.8;
 }
 
+#article_image_new
+{
+    min-height: 386px;
+}
+
 /*
  * Specific CSS
  */

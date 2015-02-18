@@ -169,13 +169,15 @@ def edit_article(request, article_id):
             article.full_clean()
         article.save()
 
-        return JsonResponse(
+        response = JsonResponse(
                 status = 200,
                 data = {
                     'updated_fields' : list(real_update_field), 
                     'article' : article.as_json()
                     }
                 )
+        response['Location'] = '/article/' + str(article.id) + '/'
+        return response
 
     except ValidationError as e:
         return JsonResponse(

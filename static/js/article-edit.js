@@ -146,7 +146,11 @@ $(document).ready(function(){
 						'time-minute' : stime.getMinutes(),
 					});
 		var labelTD = $('<td></td>');
-		labelTD.append('<button class="timeslot-label">' + data.label + '</button>');;
+		if (data.label.trim() == '') {
+			labelTD.append('<span class="timeslot-label"></span>');;
+		} else {
+			labelTD.append('<button class="timeslot-label">' + data.label + '</button>');;
+		}
 
 		tr.append(removeTD).append(dateTD).append(labelTD);
 		$('#timeslot_table tbody').append(tr);
@@ -456,6 +460,10 @@ $(document).ready(function(){
 				var dd = new Date(data['article']['updated_date']);
 				$("#update_time").text((dd.getMonth() + 1) + '월 ' + dd.getDate() + '일 ' +
 					dd.getHours() + '시 ' + dd.getMinutes() + '분 ' + dd.getSeconds() + '초');
+
+				if (to_publish) {
+					window.location.replace(jqXHR.getResponseHeader('Location'));
+				}
 			},
 			'error' : function(req, textStatus, err) {
 				console.log(textStatus);

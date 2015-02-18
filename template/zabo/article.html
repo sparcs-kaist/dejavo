@@ -10,37 +10,6 @@
 		<meta property="og:url" content="{{ request.build_absolute_uri }}">
 		<meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{{ article.image.url }}" />
         <meta property="og:type" content="article" /> <!-- article? website? -->
-
-        <script>
-        function popupwindow(url, title, w, h) {
-            wLeft = window.screenLeft ? window.screenLeft : window.screenX;
-            wTop = window.screenTop ? window.screenTop : window.screenY;
-
-            var left = wLeft + (window.innerWidth / 2) - (w / 2);
-            var top = wTop + (window.innerHeight / 2) - (h / 2);
-            var new_w = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
-            new_w.focus();
-        }
-
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId   : '274526142597066',
-                xfbml   : true,
-                status  : true,
-                cookie  : true,
-                version : 'v2.2'
-            });
-        };
-
-        (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         js.src = "//connect.facebook.net/en_US/sdk.js";
-         fjs.parentNode.insertBefore(js, fjs);
-         }(document, 'script', 'facebook-jssdk'));
-
-        </script>
 {% endblock %}
 
 {% block css %}
@@ -134,9 +103,7 @@
 					</div>
 					<div id="location_container" class="sub-container">
 						<div class="sub-head">장소</div>
-						<div class="sub-content">
-							<span>{{ article.location }}</span>
-						</div>
+						<div class="sub-content"><span>{{ article.location }}</span></div>
 					</div>
 					<div id="participant_container" class="sub-container">
 						<div class="sub-head">참여자</div>
@@ -156,9 +123,7 @@
 					</div>
 					<div id="notice_container" class="sub-container">
 						<div class="sub-head">공지사항</div>
-						<div id="notice_content" class="sub-content">
-							<span>{{ article.announcement }}</span>
-						</div>
+						<div id="notice_content" class="sub-content"><span>{{ article.announcement }}</span></div>
 					</div>
 				</div>
 				<div id="article_sub_share">
@@ -204,5 +169,34 @@
 					popupwindow('https://twitter.com/intent/tweet?text={{ article.title }}-{{ article.subtitle }}&url={{ request.build_absolute_uri }}', 'Tweet Article', 600, 260);
 				});
 		});
+
+        function popupwindow(url, title, w, h) {
+            wLeft = window.screenLeft ? window.screenLeft : window.screenX;
+            wTop = window.screenTop ? window.screenTop : window.screenY;
+
+            var left = wLeft + (window.innerWidth / 2) - (w / 2);
+            var top = wTop + (window.innerHeight / 2) - (h / 2);
+            var new_w = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+            new_w.focus();
+        }
+
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId   : '274526142597066',
+                xfbml   : true,
+                status  : true,
+                cookie  : true,
+                version : 'v2.2'
+            });
+        };
+
+        (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+         }(document, 'script', 'facebook-jssdk'));
+
 		</script>
 {% endblock %}

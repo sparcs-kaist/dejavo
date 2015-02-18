@@ -32,7 +32,7 @@
 					{% else %}
 					<div id="article_image_new" class="editable-img"
 						onclick="getElementById('article_image_input').click();">
-						<div style="position:relative; top: 140px; min-height: 380px;">
+						<div style="position:relative; top: 140px;">
 							<div class="cross-large"></div>
 							<div style="margin-top: 15px; font-size: 23px; font-family: 'Nanum Barun Gothic';">
 								<span>메인 포스터 업로드</span>
@@ -114,7 +114,11 @@
 												<div class="timeslot-remove-icon"></div>
 											</td>
 											<td class="timeslot-time">{{ t.start_time|date:"n월 j일 G시 i분" }}</td>
-											<td><button class="timeslot-label">{{ t.label }}</button></td>
+											{% ifequal t.label '' %}
+												<td><span class="timeslot-label"></span></td>
+											{% else %}
+												<td><button class="timeslot-label">{{ t.label }}</button></td>
+											{% endifequal %}
 										</tr>
 									{% endfor %}
 								</tbody>
@@ -161,7 +165,6 @@
 					<div id="host_container" class="sub-container">
 						<div class="sub-head">주최자</div>
 						<div id="host_head_container" class="sub-content">
-
 							<div id="host_image_container">
 								{% if article.host_image %}
 								<img id="host_image" src="{{ article.host_image.url }}"
@@ -177,16 +180,11 @@
 									type="text" value="{{ article.host_name }}">
 							</input>
 						</div>
-						<div id="host_content" class="sub-content">
-							<textarea class="editable editable-textarea"
-								id="host_content_textarea">{{ article.host_description }}</textarea>
-						</div>
+						<div id="host_content" class="sub-content"><textarea class="editable editable-textarea" id="host_content_textarea">{{ article.host_description }}</textarea></div>
 					</div>
 					<div id="notice_container" class="sub-container">
 						<div class="sub-head">공지사항</div>
-						<div id="notice_content" class="sub-content">
-							<textarea class="editable editable-textarea" id="notice_content_textarea">{{ article.announcement }}</textarea>
-						</div>
+						<div id="notice_content" class="sub-content"><textarea class="editable editable-textarea" id="notice_content_textarea">{{ article.announcement }}</textarea></div>
 					</div>
 					<div id="edit_button_container">
 						<button id="edit_button" class="button-large stress">업로드</button>
@@ -201,7 +199,7 @@
 						{% endif %}
 					</div>
 				</div>
-				{% if article.is_pusblished %}
+				{% if article.is_published %}
 				<div id="owner_container">
 					<ul id="owner_list">
 						{% for o in article.owner.all %}
