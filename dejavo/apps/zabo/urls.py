@@ -16,8 +16,4 @@ urlpatterns = patterns('',
 
     url(r'^(?P<article_id>\d+)/qna/(?P<question_id>\d+)/create/$', views.create_answer),
     url(r'^(?P<article_id>\d+)/qna/(?P<question_id>\d+)/delete/(?P<answer_id>\d+)/$', views.delete_answer),
-
-    # When updating annoucement (not in editting page), changer can choose 
-    # to notify participants
-    url(r'^(?P<article_id>\d+)/announcement/edit/$', views.edit_announcement),
 )

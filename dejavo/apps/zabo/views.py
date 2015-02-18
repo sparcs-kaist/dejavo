@@ -8,7 +8,6 @@ from accept_checker.decorators import require_accept_formats, auth_required
 from dejavo.apps.zabo.models import Article, Timeslot, Question, Answer
 from dejavo.apps.account.models import UserProfile
 
-import sys
 import json
 
 
@@ -440,10 +439,6 @@ def delete_answer(request, article_id, question_id, answer_id):
                     'error' : 'answer(' + answer_id + ') does not exist'
                     },
                 )
-
-
-def edit_announcement(request, article_id, announcement_id):
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name)
 
 
 @require_accept_formats(['text/html', 'application/json'])
