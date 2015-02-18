@@ -329,6 +329,11 @@ button.timeslot-label
     text-align: center;
 }
 
+#location_container .sub-content span
+{
+    white-space: nowrap;
+}
+
 #host_image
 {
     width: 100%;
@@ -349,6 +354,7 @@ button.timeslot-label
     font-family: 'Nanum Gothic';
     font-size: 15px;
     color: #443333;
+    white-space: pre-line;
 }
 
 #notice_content
@@ -358,6 +364,7 @@ button.timeslot-label
     padding-top: 8px;
     padding-bottom: 8px;
     color: #f0795b;
+    white-space: pre-line;
 }
 
 /*
