@@ -205,6 +205,12 @@
     max-width: 560px;
 }
 
+#article_content.editable-textarea iframe
+{
+    width: 560px;
+    height: 341.2px;
+}
+
 [contentEditable=true]:empty:not(:focus):before
 {
     content:attr(placeholder);

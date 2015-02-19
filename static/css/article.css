@@ -72,6 +72,12 @@ body
     margin-bottom: 20px;
 }
 
+#article_content iframe
+{
+    width: 600px;
+    height: 365.6px;
+}
+
 /*
  * 댓글
  */

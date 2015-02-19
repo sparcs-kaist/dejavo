@@ -118,6 +118,31 @@ $(document).ready(function(){
 		}, 500);
 	});
 
+	$('#insert_video').click(function(e){
+		var ele = $('#insert_video_form');
+		var $this = $(this);
+		var position = $this.position();
+		ele.css({
+			'top' : position.top - 50,
+			'left' : position.left - 180,
+		});
+		ele.toggle();
+		$('#video_url_input').val('').focus();
+	});
+
+	$('#video_url_input').keyup(function(e){
+		if (e.which == 13) {
+			$('#video_add_button').click();
+		}
+	});
+
+	$('#video_add_button').click(function(e){
+		var input = $('#video_url_input');
+		$('#editor_youtube_input').val(input.val()).change();
+		$('#insert_video_form').toggle();
+		input.val('');
+	});
+
 	var titleEditable = $('input#article_title_input').editable({
 		'placeholder' : '제목 입력',
 		'font-size' : '49px',
@@ -209,7 +234,7 @@ $(document).ready(function(){
 		var position = $this.position();
 		ele.css({
 			'top' : position.top + 40,
-			'left' : position.left - 300,
+			'left' : position.left - 380,
 		});
 		ele.toggle();
 		$('#ts_label').empty().focus();
@@ -355,6 +380,10 @@ $(document).ready(function(){
 			}
 			reader.readAsDataURL(this.files[0]);
 		}
+	});
+
+	$('#cancel_button').click(function(e){
+		// TODO canel if published, remove if not
 	});
 
 	$('#edit_button').click(function(e){

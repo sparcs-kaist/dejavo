@@ -112,6 +112,15 @@
 					}
 				});
 			},
+			insertYoutube = function(video_link) {
+				editor.focus();
+				var urlReplace = video_link.replace('watch?v=', 'embed/');
+				var embed = '<iframe title="YouTube video player" src="'
+					+ urlReplace +'" allowfullscreen="true" frameborder="0">';
+				if(embed != null){
+					document.execCommand("insertHtml", false, embed);
+				}
+			},
 			markSelection = function (input, color) {
 				restoreSelection();
 				if (document.queryCommandSupported('hiliteColor')) {
@@ -129,27 +138,13 @@
 				});
 				toolbar.find('[data-toggle=dropdown]').click(restoreSelection);
 
-				toolbar.find('input[type=text][data-' + options.commandRole + ']').on('webkitspeechchange change', function () {
-					var newValue = this.value; /* ugly but prevents fake double-calls due to selection restoration */
-					this.value = '';
+				toolbar.find('input[type=text][data-' + options.commandRole + '=insertYoutube]').change(function () {
 					restoreSelection();
-					if (newValue) {
-						editor.focus();
-						execCommand($(this).data(options.commandRole), newValue);
-					}
+					insertYoutube(this.value);
 					saveSelection();
-				}).on('focus', function () {
-					var input = $(this);
-					if (!input.data(options.selectionMarker)) {
-						markSelection(input, options.selectionColor);
-						input.focus();
-					}
-				}).on('blur', function () {
-					var input = $(this);
-					if (input.data(options.selectionMarker)) {
-						markSelection(input, false);
-					}
+					this.value = '';
 				});
+
 				toolbar.find('input[type=file][data-' + options.commandRole + ']').change(function () {
 					restoreSelection();
 					if (this.type === 'file' && this.files && this.files.length > 0) {
