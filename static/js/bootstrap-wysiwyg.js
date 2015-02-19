@@ -112,12 +112,13 @@
 					}
 				});
 			},
-			insertYoutube = function(video_link) {
+			insertYoutube = function(url) {
 				editor.focus();
-				var urlReplace = video_link.replace('watch?v=', 'embed/');
-				var embed = '<iframe title="YouTube video player" src="'
-					+ urlReplace +'" allowfullscreen="true" frameborder="0">';
-				if(embed != null){
+				var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+				var valid = (url.match(p)) ? RegExp.$1 : false;
+				if (valid) {
+					var embed = '<iframe title="YouTube video player" src="https://www.youtube.com/embed/'
+						+ valid +'" allowfullscreen="true" frameborder="0">';
 					document.execCommand("insertHtml", false, embed);
 				}
 			},
