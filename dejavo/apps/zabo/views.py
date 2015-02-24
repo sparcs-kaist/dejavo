@@ -9,12 +9,20 @@ from dejavo.apps.zabo.models import Article, Timeslot, Question, Answer
 from dejavo.apps.account.models import UserProfile
 
 import json
+import datetime
 
 
 @require_accept_formats(['text/html'])
 @require_http_methods(['GET'])
 def main(request):
-    return render(request, 'zabo/main.html', {})
+    articles = []
+    dday = []
+    articlesQ = Article.objects.filter(timeslot__start_time__gte=datetime.datetime.now())
+    for aq in articlesQ:
+        if not articles or not articles[-1].get("id") == aq.id:
+            articles.append(aq.as_json())
+
+    return render(request, 'zabo/main.html', {'articles': articles, 'days': dday})
 
 
 @require_accept_formats(['text/html', 'application/json'])

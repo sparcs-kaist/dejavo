@@ -1,21 +1,25 @@
+# -*- coding: utf-8
+
 from django.db import models
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 
 import os
+import datetime
+
 
 class Article(models.Model):
 
     CATEGORY_TYPE = (
-            ('recruit', 'Recruit'),
-            ('performance', 'Performance'),
-            ('competition', 'Competition'),
-            ('display', 'Display'),
-            ('briefing', 'Briefing'),
-            ('lecture', 'Lecture'),
-            ('event', 'Event'),
-            ('etc', 'Etc'),
+            ('recruit', '리쿠르팅'),
+            ('performance', '공연'),
+            ('competition', '대회'),
+            ('display', '전시'),
+            ('briefing', '설명회'),
+            ('lecture', '강연'),
+            ('event', '행사'),
+            ('etc', '기타'),
             )
 
     owner = models.ManyToManyField(settings.AUTH_USER_MODEL)
@@ -89,13 +93,23 @@ class Article(models.Model):
                 })
 
         timeslot_list = []
-        for timeslot in list(Timeslot.objects.filter(article = self)):
+        timeslot_q_list = list(Timeslot.objects.filter(article = self))
+        for timeslot in timeslot_q_list:
             timeslot_list.append({
                 'timeslot_type' : timeslot.timeslot_type,
                 'start_time' : timeslot.start_time,
                 'end_time' : timeslot.end_time,
                 'label' : timeslot.label,
                 })
+
+        d_day = 999
+        day = ""
+        for timeslot in timeslot_q_list:
+            delta = timeslot.start_time.replace(tzinfo=None) - datetime.datetime.now()
+            if delta.days > 0:
+                day = timeslot.start_time.strftime("%m월 %d일")
+                d_day = delta.days
+                pass
 
         attach_list = []
         for attach in list(Attachment.objects.filter(article = self)):
@@ -109,7 +123,7 @@ class Article(models.Model):
                 'title' : self.title,
                 'subtitle' : self.subtitle,
                 'owner' : owner_list,
-                'category' : self.category,
+                'category' : self.get_category_display(),
                 'location' : self.location,
                 'announcement' : self.announcement,
                 'created_date' : self.created_date,
@@ -124,6 +138,8 @@ class Article(models.Model):
                     'description' : self.host_description,
                     },
                 'attachment' : attach_list,
+                'd_day': d_day,
+                'day': day,
                 }
 
     def __unicode__(self):

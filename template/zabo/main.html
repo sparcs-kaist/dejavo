@@ -13,58 +13,35 @@
 		<div id="main_head_container">	
 		</div>
 		<div id="main_list_container">
-			<div id="main_list_title">Project of this week</div>
+			<div id="main_list_title">Upcoming Events</div>
 			<ol id="main_list">
+				{% for article in articles %}
 				<li class="event_elem">
 					<div class="event_container">
 						<div class="poster">
-							<img src="/media/poster/공간위_포스터.PNG" />
+							<img src="{{ article.poster }}" />
 						</div>
 						<div class="event_info">
 							<div class="info">
-								<div class="info_title">리쿠르팅</div>
-								<div class="info_content">전자과 야구팀</div>
+								<div class="info_title">{{ article.category }}</div>
+								<div class="info_content">{{ article.host.name }}</div>
 							</div>
 							<div class="info">
 								<div class="info_title">일시</div>
-								<div class="info_content">2월 24일</div>
+								<div class="info_content">{{ article.day }}</div>
 							</div>
 							<div class="info">
 								<div class="info_title">장소</div>
-								<div class="info_content">전자과 과방</div>
+								<div class="info_content">{{ article.location }}</div>
 							</div>
 						</div>
 						<div class="event_desc">
-							<pre>2014년 뮤지컬 수업을 마치며... 안녕하세요, 저희는 뮤지컬 수업을 들은 12학번 뿌잉이들 입니다. 노경해 교수 님과 함께 한 지난 한 학기 수업의 결실을 마치며 공연을 하려고 합니다. 하하하하 이제 더 이상 쓸 말이 딱히 생각나지는 않는군요. 좋습니다. 스팍스 자보프로젝트 하하하 디자인 하하하 오버플로우때문에 아죽 죽을것 같습니다.</pre>
+							<pre>{{ article.content }}</pre>
 						</div>
-						<div class="d_day">D-2</div>
+						<div class="d_day">D-{{ article.d_day }}</div>
 					</div>
 				</li>
-				<li class="event_elem">
-					<div class="event_container">
-						<div class="poster">
-							<img src="/media/poster/모카포스터_eng.jpg" />
-						</div>
-						<div class="event_info">
-							<div class="info">
-								<div class="info_title">리쿠르팅</div>
-								<div class="info_content">전자과 야구팀</div>
-							</div>
-							<div class="info">
-								<div class="info_title">일시</div>
-								<div class="info_content">2월 24일</div>
-							</div>
-							<div class="info">
-								<div class="info_title">장소</div>
-								<div class="info_content">전자과 과방</div>
-							</div>
-						</div>
-						<div class="event_desc">
-							<pre>2014년 뮤지컬 수업을 마치며... 안녕하세요, 저희는 뮤지컬 수업을 들은 12학번 뿌잉이들 입니다. 노경해 교수 님과 함께 한 지난 한 학기 수업의 결실을 마치며 공연을 하려고 합니다. 하하하하 이제 더 이상 쓸 말이 딱히 생각나지는 않는군요. 좋습니다. 스팍스 자보프로젝트 하하하 디자인 하하하 오버플로우때문에 아죽 죽을것 같습니다.</pre>
-						</div>
-						<div class="d_day">D-7</div>
-					</div>
-				</li>
+				{% endfor %}
 			</ol>
 		</div>
         <div id="fb-root"></div>
