@@ -65,11 +65,6 @@ button
     overflow-y: hidden;
 }
 
-#head_bar div
-{
-    line-height: 80px;
-}
-
 #home
 {
     margin-left: 20px;
@@ -77,6 +72,7 @@ button
     float: left;
     font-family: 'Nanum Barun Gothic';
     font-size: 24px;
+    line-height: 80px;
 }
 
 .menu span
@@ -85,6 +81,7 @@ button
     font-size: 19px;
     font-weight: 700;
     color: #9d9796;
+    line-height: 80px;
 }
 
 .menu_left
@@ -98,19 +95,45 @@ button
     float: right;
 }
 
-#name
+#profile_container
 {
     margin-right: 20px;
 }
 
-.profile_img
+#profile_container .profile
 {
-    margin: 20px 15px 20px 0px;
+    float: right;
+}
+
+#profile_container .profile_img_container
+{
+    float: right;
+    width: 40px;
+    height: 80px;
+    margin-left: 10px;
+    position: relative;
+}
+
+#profile_container .profile_img_container .profile_img
+{
     width: 40px;
     height: 40px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
     border-radius: 40px;
-    -webkit-border-radius: 40px;
-    -moz-border-radius: 40px;
+    overflow: hidden;
+}
+
+#profile_container .profile_img img
+{
+    position:absolute;
+    top:0;
+    bottom:0;
+    margin:auto;
+    max-width: 40px;
+    max-height: 40px;
 }
 
 /*

@@ -43,17 +43,23 @@
 							<span>자보 붙이기</span>
 						</a>
 					</div>
-					<div class="menu menu_right" id="name">
-						{% if not request.user.is_authenticated %}
-						<a id="login_button" href="#">
-							<span>로그인</span>
-						</a>
-						{% else %}
-						<a href="#">
-							<span>{{ request.user.last_name }} {{ request.user.first_name }}</span>
-						</a>
-						<img class="menu_right profile_img" src="{{ request.user.profile.profile_image.url }}"></img>
-						{% endif %}
+					<div class="menu menu_right" id="profile_container">
+						<div class="profile_img_container">
+							<div class="profile_img">
+								<img src="{{ request.user.profile.profile_image.url }}"></img>
+							</div>
+						</div>
+						<div class="profile">
+							{% if not request.user.is_authenticated %}
+							<a id="login_button" href="#">
+								<span>로그인</span>
+							</a>
+							{% else %}
+							<a href="#">
+								<span>{{ request.user.last_name }} {{ request.user.first_name }}</span>
+							</a>
+							{% endif %}
+						</div>
 					</div>
 				</div>
             </div>

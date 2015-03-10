@@ -57,13 +57,12 @@ $(document).ready(function(){
 	}
 
 	function updateLoginInfo(userinfo) {
-		var name_div = $('#head_container #name');
-		var n = $(document.createElement('a'));
-		var n_s = $(document.createElement('span')).text(userinfo.last_name + ' ' + userinfo.first_name);
-		n.append(n_s)
-		var p = $(document.createElement('img')).
-				attr('src', userinfo.profile_image).addClass('menu_right profile_img');
-		name_div.empty().append(n).append(p);
+		var profile = $('#head_container .profile');
+		var a = $(document.createElement('a'));
+		var a_s = $(document.createElement('span')).text(userinfo.last_name + ' ' + userinfo.first_name);
+		a.append(a_s);
+		$('#head_container .profile_img img').attr('src', userinfo.profile_image);
+		profile.empty().append(a);
 	}
 
 	function registerOrLogin(accessToken) {
