@@ -111,5 +111,101 @@ button
     border-radius: 40px;
     -webkit-border-radius: 40px;
     -moz-border-radius: 40px;
-    background-color: #000000;
+}
+
+/*
+ * Login Form CSS
+ */
+
+.login_form
+{
+    width: 320px;
+    padding: 40px;
+    background-color: #f4e5e2;
+    border-radius: 10px;
+}
+
+.login_form#login_id_pw
+{
+    padding-bottom: 25px;
+    border-radius: 10px 10px 0px 0px;
+    border-bottom: 2px solid #ecdede;
+}
+
+.login_form#login_sns
+{
+    padding-top: 25px;
+    padding-bottom: 25px;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.login_form input
+{
+    width: 280px;
+    height: 20px;
+    font-size: 18px;
+    font-family: 'Nanum Gothic';
+    border: 0px;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border-radius: 5px;
+}
+
+.login_form input::-webkit-input-placeholder { /* WebKit browsers */
+    color: #f0795b;
+    font-weight: bold;
+}
+.login_form input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #f0795b;
+    font-weight: bold;
+    opacity:  1;
+}
+.login_form input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #f0795b;
+    font-weight: bold;
+    opacity:  1;
+}
+.login_form input:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #f0795b;
+    font-weight: bold;
+}
+
+#login_id_pw div#link_list
+{
+    margin-left: 20px;
+    float: left;
+}
+
+#login_id_pw div#link_list a
+{
+    color: #af8b82;
+    font-size: 13px;
+    font-family: 'Nanum Gothic';
+    font-weight: bold;
+}
+
+#login_id_pw div#action_container
+{
+    height: 40px;
+}
+
+#login_id_pw div#login_button
+{
+    float: right;
+}
+
+#login_id_pw div#login_button button
+{
+    height: 40px;
+    font-size: 15.2px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#login_sns #facebook_login
+{
+    border-radius: 5px;
+    background-color: #6184d4;
+    height: 50px;
+    cursor: pointer;
 }

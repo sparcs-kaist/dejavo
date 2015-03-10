@@ -198,6 +198,7 @@
     font-family: 'Nanum Gothic';
     border: solid 2px #beb7b7;
     border-radius: 5px;
+    outline: none;
 }
 
 #article_content.editable-textarea img
