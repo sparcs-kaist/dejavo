@@ -10,6 +10,7 @@ from django.db.models import Q
 
 from accept_checker.decorators import require_accept_formats, auth_required 
 from jwt_auth.token import generate_jwt, refresh_jwt
+from social.apps.django_app.utils import psa
 
 import json
 
@@ -146,6 +147,26 @@ def jwt_refresh(request):
         return JsonResponse(status = 200, data = new_user_token)
     except:
         return JsonReponse(status = 500, data = {'error' : 'Internal server error'})
+
+
+@require_accept_formats(['application/json'])
+@psa()
+def auth_by_access_token(request, backend):
+    # This view expects an access_token GET parameter, if it's needed,
+    # request.backend and request.strategy will be loaded with the current
+    # backend and strategy.
+    token = request.GET.get('access_token')
+    user = request.backend.do_auth(request.GET.get('access_token'))
+
+    if user:
+        login(request, user)
+        return JsonResponse(status = 200, data = user.as_json())
+    else:
+        return JsonResponse(
+                status = 401,
+                data = { 'error' : 'User cannot be authorized' }
+                )
+
 
 @require_accept_formats(['text/html'])
 @require_http_methods(['GET'])

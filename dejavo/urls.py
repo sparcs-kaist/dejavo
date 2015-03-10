@@ -18,6 +18,9 @@ urlpatterns = patterns('',
     url(r'^jwt/login/$', 'dejavo.apps.account.views.jwt_login'),
     url(r'^jwt/refresh/$', 'dejavo.apps.account.views.jwt_refresh'),
 
+    url(r'^social/auth/(?P<backend>[^/]+)/$', 'dejavo.apps.account.views.auth_by_access_token'),
+    url(r'^social/disconnect/(?P<backend>[^/]+)/$', 'social.apps.django_app.views.disconnect'),
+
     url(r'^category/$', 'dejavo.apps.zabo.views.view_category'),
     url(r'^category/(?P<category>\D+)/$', 'dejavo.apps.zabo.views.get_category'),
 

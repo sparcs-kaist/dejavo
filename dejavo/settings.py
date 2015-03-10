@@ -26,6 +26,11 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTHENTICATION_BACKENDS = (
+    'social.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 
 # Application definition
 
@@ -36,6 +41,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'social.apps.django_app.default',
 
     'dejavo.apps.account',
     'dejavo.apps.manage',
@@ -114,3 +121,9 @@ ACCEPT_CHECKER = {
 }
 
 LOGIN_URL = '/login/'
+
+# Python Social Auth
+SOCIAL_AUTH_FACEBOOK_KEY = '274526142597066'
+SOCIAL_AUTH_FACEBOOK_SECRET = '63e9bbffa1f56ee0f049a51df317c0cd'
+
+SOCIAL_AUTH_FORCE_POST_DISCONNECT = True
