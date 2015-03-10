@@ -126,4 +126,17 @@ LOGIN_URL = '/login/'
 SOCIAL_AUTH_FACEBOOK_KEY = '274526142597066'
 SOCIAL_AUTH_FACEBOOK_SECRET = '63e9bbffa1f56ee0f049a51df317c0cd'
 
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
+    'dejavo.apps.account.pipeline.save_profile_picture',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details'
+)
+
 SOCIAL_AUTH_FORCE_POST_DISCONNECT = True
