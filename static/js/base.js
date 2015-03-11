@@ -6,4 +6,14 @@ $(document).ready(function(){
 		js.src = "//connect.facebook.net/en_US/sdk.js";
 		fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
+
+	window.fbAsyncInit = function() {
+		FB.init({
+			appId   : '274526142597066',
+			xfbml   : true,
+			status  : true,
+			cookie  : true,
+			version : 'v2.2'
+		});
+	};
 });
