@@ -46,17 +46,17 @@
 					<div class="menu menu_right" id="profile_container">
 						<div class="profile_img_container">
 							<div class="profile_img">
-								<img src="{{ request.user.profile.profile_image.url }}"></img>
+								<img src="{{ user.profile.profile_image.url }}"></img>
 							</div>
 						</div>
 						<div class="profile">
-							{% if not request.user.is_authenticated %}
+							{% if not user.is_authenticated %}
 							<a id="login_button" href="#">
 								<span>로그인</span>
 							</a>
 							{% else %}
 							<a href="#">
-								<span>{{ request.user.last_name }} {{ request.user.first_name }}</span>
+								<span>{{ user.last_name }} {{ user.first_name }}</span>
 							</a>
 							{% endif %}
 						</div>
@@ -100,7 +100,7 @@
 		<script src="{{ STATIC_URL }}js/base.js"></script>
 		<script src="{{ STATIC_URL }}js/jquery.simplemodal.js"></script>
 		<script src="{{ STATIC_URL }}js/layout.js"></script>
-		{% if not request.user.is_authenticated %}
+		{% if not user.is_authenticated %}
 		<script src="{{ STATIC_URL }}js/auth.js"></script>
 		{% endif %}
 		{% block aftercontent %}

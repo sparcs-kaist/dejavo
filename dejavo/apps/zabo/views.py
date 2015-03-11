@@ -123,7 +123,6 @@ def edit_article(request, article_id):
     if request.ACCEPT_FORMAT == 'html':
         return render(request, 'zabo/article_edit.html', {
             'article' : article,
-            'request' : request,
             })
 
     update_fields = request.POST.get('fields', '').split(',')

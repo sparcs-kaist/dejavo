@@ -181,7 +181,7 @@
 								<img id="host_image" src="{{ article.host_image.url }}"
 									onclick="getElementById('host_image_input').click();"></img>
 								{% else %}
-								<img id="host_image" src="{{ request.user.profile.profile_image.url }}"
+								<img id="host_image" src="{{ user.profile.profile_image.url }}"
 									onclick="getElementById('host_image_input').click();"></img>
 								{% endif %}
 								<input id="host_image_input" name="host_image" type="file"
