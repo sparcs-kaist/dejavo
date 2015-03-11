@@ -12,7 +12,7 @@ def save_profile_picture(backend, user, response, details,
         url = 'https://graph.facebook.com/{0}/picture'.format(response['id'])
 
         try:
-            response = request('GET', url, params={'type': 'large'})
+            response = request('GET', url, params={'width': '320', 'height' : '320'})
             response.raise_for_status()
         except HTTPError:
             pass
