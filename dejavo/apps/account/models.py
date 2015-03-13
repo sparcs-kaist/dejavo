@@ -26,9 +26,6 @@ def user_to_json(self):
             'username' : self.username,
             'first_name' : self.first_name,
             'last_name' : self.last_name,
-            'email' : self.email,
-            'phone' : self.profile.phone,
-            'bio' : self.profile.bio,
             'profile_image' : self.profile.profile_image.url,
             }
 

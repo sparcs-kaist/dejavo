@@ -131,7 +131,17 @@ textarea.question-box
     z-index: -1;
 }
 
-button.question-button
+span#add_question_notice
+{
+    line-height: 42px;
+    float: right;
+    font-size: 15px;
+    font-family: 'Nanum Gothic';
+    color: #f0795b;
+    margin-right: 15px;
+}
+
+button#add_question_button
 {
     font-size: 17px;
     height: 42px;

@@ -41,43 +41,48 @@
 							<div class="question-box-container">
 								<div class="question-textbox">
 									<div class="arrow-left"></div>
-									<textarea class="question-box" placeholder="댓글을 입력하세요"></textarea>
+									<textarea id="question_textbox" class="question-box" placeholder="댓글을 입력하세요"></textarea>
 								</div>
-								<button class="question-button">댓글달기</button>
+								<div>
+									<button id="add_question_button" class="question-button stress">댓글달기</button>
+									<span id="add_question_notice"></span>
+								</div>
 							</div>
 						</div>
-						{% for q in article.question_set.all %}
-						<div class="question">
-							<div class="question-profile-image-container">
-								<img src="{{ q.writer.profile.profile_image.url}}" class="question-profile-image"></img>
-							</div>
-							<div class="question-content-container">
-								<div class="question-meta">
-									<span class="question-profile-name">{{ q.writer.last_name }}{{ q.writer.first_name }}</span>
-									<span class="question-time">{{ q.created_date|date:"n월 j일 G시 i분" }}</span>
+						<div id="question_list">
+							{% for q in article.question_set.all %}
+							<div class="question" question-id="{{ q.id }}">
+								<div class="question-profile-image-container">
+									<img src="{{ q.writer.profile.profile_image.url}}" class="question-profile-image"></img>
 								</div>
-								<div class="question-content">
-									{{ q.content }}
-								</div>
-								{% for a in q.answer_set.all %}
-								<div class="answer">
-									<div class="answer-profile-image-container">
-										<img src="{{ a.writer.profile.profile_image.url }}" class="answer-profile-image"></img>
+								<div class="question-content-container">
+									<div class="question-meta">
+										<span class="question-profile-name">{{ q.writer.last_name }} {{ q.writer.first_name }}</span>
+										<span class="question-time">{{ q.created_date|date:"n월 j일 G시 i분" }}</span>
 									</div>
-									<div class="answer-content-container">
-										<div class="answer-meta">
-											<span class="answer-profile-name">{{ a.writer.last_name }}{{ a.writer.first_name }}</span>
-											<span class="answer-time">{{ a.created_date|date:"n월 j일 G시 i분" }}</span>
+									<div class="question-content">
+										{{ q.content }}
+									</div>
+									{% for a in q.answer_set.all %}
+									<div class="answer" answer-id="{{ a.id }}">
+										<div class="answer-profile-image-container">
+											<img src="{{ a.writer.profile.profile_image.url }}" class="answer-profile-image"></img>
 										</div>
-										<div class="answer-content">
-											{{ a.content }}
+										<div class="answer-content-container">
+											<div class="answer-meta">
+												<span class="answer-profile-name">{{ a.writer.last_name }}{{ a.writer.first_name }}</span>
+												<span class="answer-time">{{ a.created_date|date:"n월 j일 G시 i분" }}</span>
+											</div>
+											<div class="answer-content">
+												{{ a.content }}
+											</div>
 										</div>
 									</div>
+									{% endfor %}
 								</div>
-								{% endfor %}
 							</div>
+							{% endfor %}
 						</div>
-						{% endfor %}
 					</div>
 				</div>
 
@@ -157,6 +162,7 @@
 {% endblock %}
 
 {% block aftercontent %}
+		<script src="{{ STATIC_URL }}js/article-view.js"></script>
 		<script>
 		$(document).ready(function(){
 			$("li#facebook").click(function(e){

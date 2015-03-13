@@ -212,12 +212,22 @@ class Question(models.Model):
                 'writer' : {
                     'username' : answer.writer.username,
                     'image_url' : answer.writer.profile.profile_image.url,
+                    'first_name' : self.writer.first_name,
+                    'last_name' : self.writer.last_name,
                     },
                 'created_date' : answer.created_date,
                 'content' : answer.content,
+                'id' : answer.id,
                 })
 
         return {
+                'id' : self.id,
+                'writer' : {
+                    'username' : self.writer.username,
+                    'first_name' : self.writer.first_name,
+                    'last_name' : self.writer.last_name,
+                    'image_url' : self.writer.profile.profile_image.url,
+                    },
                 'content' : self.content,
                 'created_date' : self.created_date,
                 'answer' : answer_list,
@@ -245,7 +255,10 @@ class Answer(models.Model):
                 'writer' : {
                     'username' : self.writer.username,
                     'image_url' : self.writer.profile.profile_image.url,
+                    'first_name' : self.writer.first_name,
+                    'last_name' : self.writer.last_name,
                     },
                 'created_date' : self.created_date,
                 'content' : self.content,
+                'id': self.id,
             }
