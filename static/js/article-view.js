@@ -32,7 +32,7 @@ $(document).ready(function(){
 
 		$.ajax({
 			'method' : 'POST',
-			'url' : '/article/13/qna/create/',
+			'url' : '/article/' + articleID + '/qna/create/',
 			'dataType' : 'json',
 			'data' : {
 				'content' : question_textbox.val(),

@@ -162,6 +162,9 @@
 {% endblock %}
 
 {% block aftercontent %}
+<script>
+	var articleID = {{ article.id }};
+</script>
 		<script src="{{ STATIC_URL }}js/article-view.js"></script>
 		<script>
 		$(document).ready(function(){
