@@ -65,6 +65,8 @@ $(document).ready(function(){
 
 	var update_participants_list = function(user, action) {
 		var list = $('#participant_list');
+		var counter = $('span#participant_count');
+		var count = parseInt(counter.text());
 
 		if (action == 'participate'){
 			var li = $(document.createElement('li')).attr('user-id', user.id);
@@ -74,12 +76,14 @@ $(document).ready(function(){
 			li.append(img).append(span);
 			li.hide();
 			list.prepend(li);
+			counter.text(count + 1);
 			li.fadeIn('fast');
 		} else {
 			$.each(list.find('li'), function(i, v) {
 				var element = $(v);
 				if (element.attr('user-id') == user.id ) {
 					element.fadeOut('fast', function() { element.remove(); });
+					counter.text(count - 1);
 					return;
 				}
 			});
