@@ -58,4 +58,55 @@ $(document).ready(function(){
 			},
 		});
 	});
+
+	var update_participants_list = function(user, action) {
+		var list = $('#participant_list');
+
+		if (action == 'participate'){
+			var li = $(document.createElement('li')).attr('user-id', user.id);
+			var img = $(document.createElement('img')).addClass('participant-profile-image').attr('src', user.profile_image);
+			var span = $(document.createElement('span')).addClass('participant-profile-text').
+				text(user.last_name + ' ' + user.first_name + ' 님이 참여합니다.');
+			li.append(img).append(span);
+			list.prepend(li);
+		} else {
+			$.each(list.find('li'), function(i, v) {
+				var element = $(v);
+				if (element.attr('user-id') == user.id ) {
+					element.remove();
+					return;
+				}
+			});
+		}
+	};
+
+	$('li#participate').click(function(e){
+		button = $(this);
+		action = button.attr('data-action');
+		span = button.find('div.share span');
+
+		$.ajax({
+			'method' : 'GET',
+			'url' : '/account/' + action + '/' + articleID + '/',
+			'dataType' : 'json',
+			'beforeSend' : function(jqXHR, settings) {
+				button.prop('disabled', true).css('opacity', 0.5);
+			},
+			'success' : function(data, textStatus, jqXHR) {
+				if (action == 'participate') {
+					span.text('나가기');
+					button.attr('data-action', 'unparticipate');
+				} else {
+					span.text('참여');
+					button.attr('data-action', 'participate');
+				}
+				update_participants_list(data, action);
+			},
+			'error' : function(jqXHR, textStatus, errorThrown) {
+			},
+			'complete' : function(jqXHR, textStatus) {
+				button.prop('disabled', false).css('opacity', 1);
+			},
+		});
+	});
 });

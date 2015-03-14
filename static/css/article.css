@@ -147,6 +147,7 @@ button#add_question_button
     height: 42px;
     width: 135px;
     float: right;
+    cursor: pointer;
 }
 
 .question-box-container
@@ -416,6 +417,7 @@ button.timeslot-label
     font-family: 'Nanum Barun Gothic';
     font-size: 21px;
     color: #ffffff;
+    cursor: pointer;
 }
 
 
@@ -463,6 +465,7 @@ button.timeslot-label
     height: 48px;
     margin-bottom: 16px;
     float: left;
+    white-space: nowrap;
 }
 
 #article_sub_participants ul li img.participant-profile-image
@@ -474,12 +477,10 @@ button.timeslot-label
     float: inherit;
 }
 
-#article_sub_participants ul li div.participant-profile-text
+#article_sub_participants ul li span.participant-profile-text
 {
     font-family: 'Nanum Gothic';
     font-size: 17px;
-    height: inherit;
     line-height: 48px;
     color: #696060;
-    float: inherit;
 }

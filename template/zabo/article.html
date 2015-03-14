@@ -137,7 +137,15 @@
 				</div>
 				<div id="article_sub_share">
 					<ul>
-						<li id="participate"><div class="share"><span>참여</span></div></li>
+						{% if is_participating %}
+							<li id="participate" data-action='unparticipate'>
+								<div class="share"><span>나가기</span></div>
+							</li>
+						{% else %}
+							<li id="participate" data-action='participate'>
+								<div class="share"><span>참여</span></div>
+							</li>
+						{% endif %}
 						<li id="facebook"><div class="share"></div></li>
 						<li id="twitter"><div class="share"></div></li>
 					</ul>
@@ -145,13 +153,13 @@
 					<!-- http://urls.api.twitter.com/1/urls/count.json?url=http://www.naver.com -->
 				</div>
 				<div id="article_sub_participants">
-					<ul>
+					<ul id="participant_list">
 						{% for p in participant %}
-						<li>
+						<li user-id="{{ p.id }}">
 							<img class="participant-profile-image" src="{{ p.profile_image.url }}"></img>
-							<div class="participant-profile-text">
+							<span class="participant-profile-text">
 								{{ p.user.last_name }}{{ p.user.first_name}} 님이 참여합니다.
-							</div>
+							</span>
 						</li>
 						{% endfor %}
 					</ul>

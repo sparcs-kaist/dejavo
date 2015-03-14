@@ -12,6 +12,9 @@ from accept_checker.decorators import require_accept_formats, auth_required
 from jwt_auth.token import generate_jwt, refresh_jwt
 from social.apps.django_app.utils import psa
 
+from dejavo.apps.account.models import UserProfile
+from dejavo.apps.zabo.models import Article
+
 import json
 
 @require_accept_formats(['text/html', 'application/json'])
@@ -332,10 +335,49 @@ def search_user(request):
 
 @require_accept_formats(['application/json'])
 @require_http_methods(['GET'])
+@auth_required
 def participate(request, article_id):
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name) 
+
+    try:
+        article = Article.objects.get(id = article_id)
+        check = UserProfile.objects.filter(user = request.user,
+                participation__exact = article).exists()
+
+        if check:
+            return JsonResponse(status = 400,
+                    data = { 'error' : 'User already participate the article' }
+                    )
+
+        request.user.profile.participation.add(article)
+        request.user.profile.save()
+        return JsonResponse(status = 200, data = request.user.as_json())
+
+    except Article.DoesNotExist:
+        return JsonResponse(
+            status = 400,
+            data = { 'error' : 'Article does not exist' }
+            )
 
 @require_accept_formats(['application/json'])
 @require_http_methods(['GET'])
+@auth_required
 def unparticipate(request, article_id):
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name) 
+    try:
+        article = Article.objects.get(id = article_id)
+        check = UserProfile.objects.filter(user = request.user,
+                participation__exact = article).exists()
+
+        if check:
+            request.user.profile.participation.remove(article)
+            request.user.profile.save()
+            return JsonResponse(status = 200, data = request.user.as_json())
+
+        return JsonResponse(status = 400,
+                data = { 'error' : 'User is not participating the article' }
+                )
+
+    except Article.DoesNotExist:
+        return JsonResponse(
+            status = 400,
+            data = { 'error' : 'Article does not exist' }
+            )
