@@ -85,7 +85,7 @@ def view_article(request, article_id):
             return render(request, 'zabo/article.html', {
                 'article' : article,
                 'participant' : UserProfile.objects.filter(participation = article),
-                'is_participating' : UserProfile.objects.filter(user = request.user,
+                'is_participating' : UserProfile.objects.filter(user = request.user.id,
                     participation__exact = article).exists(),
                 'request' : request,
                 })
