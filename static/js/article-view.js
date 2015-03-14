@@ -51,7 +51,11 @@ $(document).ready(function(){
 				}, 'normal');
 			},
 			'error' : function(jqXHR, textStatus, errorThrown) {
-				error_span.text('댓글이 정상적으로 작성되지 않았습니다.')
+				if (jqXHR.status == 401) {
+					ZB.login();
+				} else {
+					error_span.text('댓글이 정상적으로 작성되지 않았습니다.')
+				}
 			},
 			'complete' : function(jqXHR, textStatus) {
 				button.prop('disabled', false).css('opacity', 1);
@@ -68,12 +72,14 @@ $(document).ready(function(){
 			var span = $(document.createElement('span')).addClass('participant-profile-text').
 				text(user.last_name + ' ' + user.first_name + ' 님이 참여합니다.');
 			li.append(img).append(span);
+			li.hide();
 			list.prepend(li);
+			li.fadeIn('fast');
 		} else {
 			$.each(list.find('li'), function(i, v) {
 				var element = $(v);
 				if (element.attr('user-id') == user.id ) {
-					element.remove();
+					element.fadeOut('fast', function() { element.remove(); });
 					return;
 				}
 			});
@@ -103,6 +109,9 @@ $(document).ready(function(){
 				update_participants_list(data, action);
 			},
 			'error' : function(jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status == 401) {
+					ZB.login();
+				}
 			},
 			'complete' : function(jqXHR, textStatus) {
 				button.prop('disabled', false).css('opacity', 1);
