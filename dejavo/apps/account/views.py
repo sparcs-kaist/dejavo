@@ -335,6 +335,27 @@ def search_user(request):
 
 @require_accept_formats(['application/json'])
 @require_http_methods(['GET'])
+def check_participate(request, article_id):
+
+    try:
+        article = Article.objects.get(id = article_id)
+        check = False
+        if request.user.is_authenticated:
+            check = UserProfile.objects.filter(user = request.user,
+                    participation__exact = article).exists()
+
+        return JsonResponse(status = 200,
+                data = { 'check' : check }
+                )
+
+    except Article.DoesNotExist:
+        return JsonResponse(
+            status = 400,
+            data = { 'error' : 'Article does not exist' }
+            )
+
+@require_accept_formats(['application/json'])
+@require_http_methods(['GET'])
 @auth_required
 def participate(request, article_id):
 

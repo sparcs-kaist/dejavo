@@ -26,6 +26,26 @@ ZB.updateLoginInfo = function(userinfo) {
 	a.append(a_s);
 	$('img.profile-user-image').attr('src', userinfo.profile_image);
 	profile.empty().append(a);
+
+	var url = window.location.href;
+	var article_view_regex = new RegExp('^(http[s]?:\\/\\/)' + window.location.host + '\\/article\\/([0-9]+)\\/$');
+
+	// if current page if article view page, check whether the user is participating this article or not.
+	if (article_view_regex.test(url)){
+		var a_id = article_view_regex.exec(url)[2];
+		$.ajax({
+			'url' : '/account/check_participate/' + a_id + '/',
+			'dataType' : 'json',
+			'method' : 'GET',
+			'success' :  function(response){
+				if (response.check) {
+					$('li#participate').attr('data-action', 'unparticipate');
+					$('li#participate span').text('취소');
+				}
+			},
+		});
+	}
+
 }
 
 ZB.registerOrLogin = function(accessToken) {

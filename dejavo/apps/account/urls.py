@@ -8,5 +8,6 @@ urlpatterns = patterns('',
     url(r'^show/(?P<username>\w+)/$', views.show_user),
     url(r'^search/$', views.search_user),
     url(r'^participate/(?P<article_id>\d+)/$', views.participate),
+    url(r'^check_participate/(?P<article_id>\d+)/$', views.check_participate),
     url(r'^unparticipate/(?P<article_id>\d+)/$', views.unparticipate),
 )
