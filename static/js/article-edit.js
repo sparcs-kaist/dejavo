@@ -65,20 +65,18 @@ $(document).ready(function(){
 					}
 
 					li.click(function(e){
-						var owner_li = $('<li></li>');
+						var owner_li = $('<li></li>').attr('ownerid', user.id);
 						var remove_icon = $('<div></div>').addClass('timeslot-remove-icon');
-						var profile_div = $('<div></div>').addClass('owner-profile').attr('ownerid', user.id);
 						var profile_img = $('<img></img>').addClass('owner-profile-image')
 											.attr('src', user.profile_image);
-						var profile_text = $('<div></div>').addClass('owner-profile-text')
+						var profile_text = $('<span></span>').addClass('owner-profile-text')
 											.text(user.last_name + user.first_name + ' 님이 관리합니다.');
 
 						remove_icon.click(function(e){
 							e.preventDefault();
 							owner_li.remove();
 						});
-						profile_div.append(profile_img).append(profile_text);
-						owner_li.append(remove_icon).append(profile_div);
+						owner_li.append(remove_icon).append(profile_img).append(profile_text);
 						ll.append(owner_li);
 
 						$('#owner_add_form').hide();
@@ -511,7 +509,7 @@ $(document).ready(function(){
 		'trigger' : ['DOMSubtreeModified'],
 		'getData' : function() {
 			var data = [];
-			$.each(this.element.find('.owner-profile'), function(i, v){
+			$.each(this.element.find('li'), function(i, v){
 				data.push($(v).attr('ownerid'));
 			});
 			return {
@@ -562,6 +560,8 @@ $(document).ready(function(){
 		formData.append('is_published', to_publish);
 		formData.append('fields', fieldsData);
 
+		var button = $('button#edit_button');
+
 		$.ajax({
 			'type' : 'POST',
 			'url' : document.URL,
@@ -569,6 +569,9 @@ $(document).ready(function(){
 			'dataType' : 'json',
 			'contentType' : false,
 			'processData' : false,
+			'beforeSend' : function(jqXHR, settings) {
+				button.prop('disabled', true).css('opacity', 0.5);
+			},
 			'success' : function (data, textStatus, jqXHR) {
 				$.each(checkList, function (i, d) {
 					if (d) {
@@ -588,6 +591,9 @@ $(document).ready(function(){
 			},
 			'error' : function(req, textStatus, err) {
 				console.log(textStatus);
+			},
+			'complete' : function(jqXHR, textStatus) {
+				button.prop('disabled', false).css('opacity', 1);
 			},
 		});
 

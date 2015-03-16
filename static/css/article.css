@@ -49,9 +49,20 @@ body
     width: 300px;
 }
 
+#article_image
+{
+    min-height: 386px;
+    position: relative;
+}
+
 #article_image img
 {
     width: 600px;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0px;
 }
 
 #article_content
