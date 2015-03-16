@@ -173,6 +173,23 @@ button
     border-radius: 5px;
 }
 
+.login_form input#login_password
+{
+    margin-bottom: 5px;
+}
+
+div#login_error_container
+{
+    height: 20px;
+    color: #f0795b;
+    font-family: 'Nanum Gothic';
+    font-size: 13px;
+}
+
+#login_error {
+    float:right;
+}
+
 .login_form input::-webkit-input-placeholder { /* WebKit browsers */
     color: #f0795b;
     font-weight: bold;

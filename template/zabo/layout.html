@@ -46,7 +46,7 @@
 					<div class="menu menu_right" id="profile_container">
 						<div class="profile_img_container">
 							<div class="profile_img">
-								<img class="profile-image" src="{{ user.profile.profile_image.url }}"></img>
+								<img class="profile-user-image" src="{{ user.profile.profile_image.url }}"></img>
 							</div>
 						</div>
 						<div class="profile">
@@ -71,6 +71,9 @@
 			<div>
 				<input id="login_username" type="text" placeholder="아이디"></input>
 				<input id="login_password" type="password" placeholder="비밀번호"></input>
+				<div id="login_error_container">
+					<span id="login_error"></span>
+				</div>
 			</div>
 			<div id="action_container">
 				<div id="link_list">

@@ -24,7 +24,7 @@ ZB.updateLoginInfo = function(userinfo) {
 	var a = $(document.createElement('a'));
 	var a_s = $(document.createElement('span')).text(userinfo.last_name + ' ' + userinfo.first_name);
 	a.append(a_s);
-	$('img.profile-image').attr('src', userinfo.profile_image);
+	$('img.profile-user-image').attr('src', userinfo.profile_image);
 	profile.empty().append(a);
 }
 
@@ -61,6 +61,41 @@ ZB.login = function (){
 						ZB.registerOrLogin(response.authResponse.accessToken);
 					}, {
 						scope : 'email',
+					});
+				});
+
+				var login_button = dialog.data.find('#login_button button');
+				var username = dialog.data.find('input#login_username');
+				var password = dialog.data.find('input#login_password');
+				$.each([password, username], function(i, v) {
+					v.on('keypress', function (e) {
+						if (e.which == 13) {
+							login_button.click();
+						}
+					});
+				});
+
+				login_button.click(function(e){
+					e.preventDefault();
+					$.ajax({
+						'method' : 'POST',
+						'dataType' : 'json',
+						'url' : '/login/',
+						'data' : {
+							'username' : username.val(),
+							'password' : password.val(),
+						},
+						'success' : function(response) {
+							$.modal.close();
+							username.val('');
+							password.val('');
+							ZB.updateLoginInfo(response);
+						},
+						'error' : function(jqXHR) {
+							dialog.data.find('span#login_error').text('아이디 혹은 비밀번호가 틀렸습니다.');
+							username.focus();
+							password.val('');
+						},
 					});
 				});
 			});
