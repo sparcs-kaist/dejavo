@@ -75,14 +75,18 @@ $(document).ready(function(){
 				text(user.last_name + ' ' + user.first_name + ' 님이 참여합니다.');
 			li.append(img).append(span);
 			li.hide();
-			list.prepend(li);
 			counter.text(count + 1);
+			list.prepend(li);
+			li.show('fast');
 			li.fadeIn('fast');
 		} else {
 			$.each(list.find('li'), function(i, v) {
 				var element = $(v);
 				if (element.attr('user-id') == user.id ) {
-					element.fadeOut('fast', function() { element.remove(); });
+					element.hide('fast');
+					element.fadeOut('fast', function() {
+							element.remove();
+					});
 					counter.text(count - 1);
 					return;
 				}
@@ -104,7 +108,7 @@ $(document).ready(function(){
 			},
 			'success' : function(data, textStatus, jqXHR) {
 				if (action == 'participate') {
-					span.text('나가기');
+					span.text('취소');
 					button.attr('data-action', 'unparticipate');
 				} else {
 					span.text('참여');
