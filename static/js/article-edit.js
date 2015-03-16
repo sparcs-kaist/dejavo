@@ -578,7 +578,9 @@ $(document).ready(function(){
 				});
 				var dd = new Date(data['article']['updated_date']);
 				$("#update_time").text((dd.getMonth() + 1) + '월 ' + dd.getDate() + '일 ' +
-					dd.getHours() + '시 ' + dd.getMinutes() + '분 ' + dd.getSeconds() + '초');
+					dd.getHours() + '시 ' +
+					((dd.getMinutes()<10?'0':'') + dd.getMinutes()) + '분 ' +
+					((dd.getSeconds()<10?'0':'') + dd.getSeconds()) + '초 ');
 
 				if (to_publish) {
 					window.location.replace(jqXHR.getResponseHeader('Location'));
