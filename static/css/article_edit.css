@@ -56,7 +56,9 @@
 
 #article_image_new
 {
-    min-height: 380px;
+    display: table-cell;
+    vertical-align: middle;
+    height: 380px;
     width: 594px;
 }
 

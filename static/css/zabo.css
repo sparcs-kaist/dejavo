@@ -248,3 +248,14 @@ div#login_error_container
     height: 50px;
     cursor: pointer;
 }
+
+#simplemodal-container div::-webkit-scrollbar
+{
+    width: 0 !important;
+}
+
+#simplemodal-container div
+{
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+}
