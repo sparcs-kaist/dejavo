@@ -13,9 +13,19 @@ ZB.statusChangeCallback = function(response) {
 		//FB.login(function(response) {
 		//	console.log(response);
 		//}, { scope : 'email'});
+		FB.login(function(response) {
+			ZB.registerOrLogin(response.authResponse.accessToken);
+		}, {
+			scope : 'email',
+		});
 	} else {
 		// The person is not logged into Facebook,
 		// so we're not sure if they are logged into this app or not.
+		FB.login(function(response) {
+			ZB.registerOrLogin(response.authResponse.accessToken);
+		}, {
+			scope : 'email',
+		});
 	}
 }
 
@@ -77,10 +87,8 @@ ZB.login = function (){
 				dialog.data.find('input#login_username').focus();
 				dialog.data.find('#facebook_login').click(function(e){
 					e.preventDefault();
-					FB.login(function(response) {
-						ZB.registerOrLogin(response.authResponse.accessToken);
-					}, {
-						scope : 'email',
+					FB.getLoginStatus(function(response) {
+						ZB.statusChangeCallback(response);
 					});
 				});
 

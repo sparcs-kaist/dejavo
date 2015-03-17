@@ -104,7 +104,14 @@
 		<script src="{{ STATIC_URL }}js/jquery.simplemodal.js"></script>
 		<script src="{{ STATIC_URL }}js/layout.js"></script>
 		{% if not user.is_authenticated %}
-		<script src="{{ STATIC_URL }}js/auth.js"></script>
+		<script>
+		$(document).ready(function(){
+		    $("a#login_button").click(function(e){
+				e.preventDefault();
+				ZB.login();
+				});
+			});
+		</script>
 		{% endif %}
 		{% block aftercontent %}
 		{% endblock %}
