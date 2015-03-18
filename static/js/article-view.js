@@ -3,9 +3,11 @@ $(document).ready(function(){
 	var createQuestion = function(q) {
 		var q_div = $(document.createElement('div')).addClass('question').attr('question-id', q.id);
 
-		var q_profile = $(document.createElement('div')).addClass('question-profile-image-container');
-		var q_p_img = $(document.createElement('img')).attr('src', q.writer.image_url).addClass('question-profile-image');
+		var q_profile = $(document.createElement('div')).addClass('question-profile-image-container vhmiddle').
+							attr('data-width', '60').attr('data-height', '60');
+		var q_p_img = $(document.createElement('img')).attr('src', q.writer.image_url);
 		q_profile.append(q_p_img);
+		q_profile.vhmiddle();
 
 		var q_c_container = $(document.createElement('div')).addClass('question-content-container');
 		var q_meta = $(document.createElement('div')).addClass('question-meta');
@@ -89,7 +91,7 @@ $(document).ready(function(){
 				question_textbox.val('');
 				var new_q = createQuestion(data).hide();
 				question_list.append(new_q);
-				new_q.show('normal');
+				new_q.fadeIn('normal');
 
 				$('html,body').animate({
 					scrollTop: new_q.offset().top
