@@ -126,15 +126,6 @@ button
     overflow: hidden;
 }
 
-#profile_container .profile_img img
-{
-    position:absolute;
-    top:0;
-    bottom:0;
-    margin:auto;
-    max-width: 40px;
-}
-
 /*
  * Login Form CSS
  */

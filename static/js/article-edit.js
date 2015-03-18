@@ -1,9 +1,13 @@
 $(document).ready(function(){
 
-	$('#owner_list li').click(function(e){
-		e.preventDefault();
-		this.remove();
+	$.each($('#owner_list li'), function(i, v) {
+		var $v = $(v);
+		$v.find('span.timeslot-remove-icon').click(function(e){
+			e.preventDefault();
+			$v.remove();
+		});
 	});
+
 
 	$('#owner_query').keyup(function(e){
 		if (e.which == 13) {
@@ -32,7 +36,7 @@ $(document).ready(function(){
 			'success' : function (data, textStatus, jqXHR) {
 
 				var curr_list = [];
-				$.each(ll.find('li div.owner-profile'), function(i, profile){
+				$.each(ll.find('li'), function(i, profile){
 					curr_list.push(parseInt($(profile).attr('ownerid')));
 				});
 				
@@ -66,9 +70,10 @@ $(document).ready(function(){
 
 					li.click(function(e){
 						var owner_li = $('<li></li>').attr('ownerid', user.id);
-						var remove_icon = $('<div></div>').addClass('timeslot-remove-icon');
-						var profile_img = $('<img></img>').addClass('owner-profile-image')
-											.attr('src', user.profile_image);
+						var remove_icon = $('<span></span>').addClass('timeslot-remove-icon');
+						var profile_img_div = $('<div></div>').addClass('owner-profile-image vhmiddle').
+								attr('data-width', '48').attr('data-height', '48');
+						var profile_img = $('<img></img>').attr('src', user.profile_image);
 						var profile_text = $('<span></span>').addClass('owner-profile-text')
 											.text(user.last_name + user.first_name + ' 님이 관리합니다.');
 
@@ -76,7 +81,8 @@ $(document).ready(function(){
 							e.preventDefault();
 							owner_li.remove();
 						});
-						owner_li.append(remove_icon).append(profile_img).append(profile_text);
+						profile_img_div.append(profile_img).vhmiddle();
+						owner_li.append(remove_icon).append(profile_img_div).append(profile_text);
 						ll.append(owner_li);
 
 						$('#owner_add_form').hide();
@@ -359,22 +365,11 @@ $(document).ready(function(){
 	});
 
 	$('#host_image_input').change(function() {
+		var host_image = $('#host_image_container');
 		if (this.files && this.files[0]) {
 			var reader = new FileReader();
 			reader.onload = function (e) {
-				var newImage = $('<img></img>').attr({
-					'src' : e.target.result,
-					'id' : 'host_image',
-				}).hide();
-				var toPrepend = $('#host_image_container');
-				var oldImage = $('img#host_image');
-				oldImage.remove();
-				toPrepend.prepend(newImage);
-				newImage.click(function (e){
-					e.preventDefault();
-					$('#host_image_input').click();
-				});
-				newImage.fadeIn('slow');
+				host_image.data('vhmiddle').updateImage(e.target.result);
 			}
 			reader.readAsDataURL(this.files[0]);
 		}

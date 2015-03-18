@@ -173,13 +173,6 @@ button#add_question_button
 .question-profile-image-container
 {
     float: left;
-    width: 80px;
-}
-
-.question-profile-image
-{
-    width: 60px;
-    height: 60px;
     border-radius: 50%;
 }
 
@@ -345,22 +338,13 @@ button.timeslot-label
 #host_image_container
 {
     float: left;
-    width: 40px;
-    height: 40px;
     border-radius: 50%;
-    overflow: hidden;
     margin-right: 10px;
-    text-align: center;
 }
 
 #location_container .sub-content span
 {
     white-space: nowrap;
-}
-
-#host_image
-{
-    width: 100%;
 }
 
 #host_name
@@ -475,10 +459,8 @@ button.timeslot-label
     white-space: nowrap;
 }
 
-#article_sub_participants ul li img.participant-profile-image
+#article_sub_participants ul li div.participant-profile-image
 {
-    width: 48px;
-    height: inherit;
     border-radius: 50%;
     margin-right: 25px;
     float: inherit;

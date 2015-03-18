@@ -35,8 +35,8 @@
 					<div id="qanda_container">
 						<div id="qanda_head_container">댓글</div>
 						<div class="question-write">
-							<div class="question-profile-image-container">
-								<img src="{{ user.profile.profile_image.url }}" class="question-profile-image profile-user-image"></img>
+							<div class="question-profile-image-container vhmiddle profile-image vhmiddle-update" data-width="60" data-height="60">
+								<img src="{{ user.profile.profile_image.url }}"></img>
 							</div>
 							<div class="question-box-container">
 								<div class="question-textbox">
@@ -52,8 +52,8 @@
 						<div id="question_list">
 							{% for q in article.question_set.all %}
 							<div class="question" question-id="{{ q.id }}">
-								<div class="question-profile-image-container">
-									<img src="{{ q.writer.profile.profile_image.url}}" class="question-profile-image"></img>
+								<div class="question-profile-image-container vhmiddle" data-width="60" data-height="60">
+									<img src="{{ q.writer.profile.profile_image.url}}">
 								</div>
 								<div class="question-content-container">
 									<div class="question-meta">
@@ -123,7 +123,7 @@
 					<div id="host_container" class="sub-container">
 						<div class="sub-head">주최자</div>
 						<div id="host_head_container" class="sub-content">
-							<div id="host_image_container">
+							<div id="host_image_container" class="vhmiddle" data-width="40" data-height="40">
 								<img id="host_image" src="{{ article.host_image.url }}"></img>
 							</div>
 							<div id="host_name">{{ article.host_name }}</div>
@@ -156,7 +156,9 @@
 					<ul id="participant_list">
 						{% for p in participant reversed %}
 						<li user-id="{{ p.id }}">
-							<img class="participant-profile-image profile-image" src="{{ p.profile_image.url }}"></img>
+							<div class="participant-profile-image vhmiddle" data-width="48" data-height="48">
+								<img src="{{ p.profile_image.url }}"></img>
+							</div>
 							<span class="participant-profile-text">
 								{{ p.user.last_name }}{{ p.user.first_name}} 님이 참여합니다.
 							</span>

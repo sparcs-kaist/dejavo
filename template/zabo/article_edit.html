@@ -176,7 +176,7 @@
 					<div id="host_container" class="sub-container">
 						<div class="sub-head">주최자</div>
 						<div id="host_head_container" class="sub-content">
-							<div id="host_image_container">
+							<div id="host_image_container" class="vhmiddle" data-width="40" data-height="40">
 								{% if article.host_image %}
 								<img id="host_image" src="{{ article.host_image.url }}"
 									onclick="getElementById('host_image_input').click();"></img>
@@ -215,8 +215,10 @@
 					<ul id="owner_list">
 						{% for o in article.owner.all %}
 						<li ownerid="{{ o.id }}">
-							<div class="timeslot-remove-icon"></div>
-							<img class="owner-profile-image" src="{{ o.profile.profile_image.url }}"></img>
+							<span class="timeslot-remove-icon"></span>
+							<div class="owner-profile-image vhmiddle" data-width="48" data-height="48">
+								<img src="{{ o.profile.profile_image.url }}"></img>
+							</div>
 							<span class="owner-profile-text">
 								{{ o.last_name }}{{ o.first_name}} 님이 관리합니다.
 							</span>

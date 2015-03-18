@@ -420,17 +420,15 @@
     white-space: nowrap;
 }
 
-#owner_list li div.timeslot-remove-icon
+#owner_list li span.timeslot-remove-icon
 {
     position: relative;
     left: -10px;
     top: 13px;
 }
 
-#owner_list li img.owner-profile-image
+#owner_list li div.owner-profile-image
 {
-    width: 48px;
-    height: 48px;
     border-radius: 50%;
     margin-right: 25px;
     float: inherit;

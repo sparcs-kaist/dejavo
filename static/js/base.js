@@ -34,7 +34,9 @@ ZB.updateLoginInfo = function(userinfo) {
 	var a = $(document.createElement('a'));
 	var a_s = $(document.createElement('span')).text(userinfo.last_name + ' ' + userinfo.first_name);
 	a.append(a_s);
-	$('img.profile-user-image').attr('src', userinfo.profile_image);
+	$.each($('.profile-image.vhmiddle-update'), function (i,v) {
+		$(this).data('vhmiddle').updateImage(userinfo.profile_image);
+	});
 	profile.empty().append(a);
 
 	var url = window.location.href;
@@ -144,6 +146,9 @@ ZB.login = function (){
 };
 
 $(document).ready(function(){
+
+	$('.vhmiddle').vhmiddle();
+
 	(function(d, s, id){
 		var js, fjs = d.getElementsByTagName(s)[0];
 		if (d.getElementById(id)) {return;}

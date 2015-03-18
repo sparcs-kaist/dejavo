@@ -46,7 +46,9 @@
 					<div class="menu menu_right" id="profile_container">
 						<div class="profile_img_container">
 							<div class="profile_img">
-								<img class="profile-user-image" src="{{ user.profile.profile_image.url }}"></img>
+								<div id="user_profile_image" class="profile-image vhmiddle vhmiddle-update" data-width="40" data-height="40">
+									<img src="{{ user.profile.profile_image.url }}"></img>
+								</div>
 							</div>
 						</div>
 						<div class="profile">
@@ -102,6 +104,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 		<script src="{{ STATIC_URL }}js/base.js"></script>
 		<script src="{{ STATIC_URL }}js/jquery.simplemodal.js"></script>
+		<script src="{{ STATIC_URL }}js/jquery.vhmiddle.js"></script>
 		<script src="{{ STATIC_URL }}js/layout.js"></script>
 		{% if not user.is_authenticated %}
 		<script>
