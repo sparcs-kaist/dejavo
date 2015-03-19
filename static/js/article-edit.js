@@ -431,7 +431,7 @@ $(document).ready(function(){
 			var realInput = this.element[0];
 			if (realInput.files && realInput.files[0]){
 				return {
-					'field' : 'image',
+					'field' : 'host_image',
 					'value' : realInput.files[0],
 				};
 			} else {
