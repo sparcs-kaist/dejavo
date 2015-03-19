@@ -117,22 +117,23 @@ $(document).ready(function(){
 
 		if (action == 'participate'){
 			var li = $(document.createElement('li')).attr('user-id', user.id);
-			var img = $(document.createElement('img')).addClass('participant-profile-image').attr('src', user.profile_image);
+			var div = $(document.createElement('div')).addClass('participant-profile-image vhmiddle').
+						attr('data-width', '48').attr('data-height', '48');
+			var img = $(document.createElement('img')).attr('src', user.profile_image);
 			var span = $(document.createElement('span')).addClass('participant-profile-text').
 				text(user.last_name + ' ' + user.first_name + ' 님이 참여합니다.');
-			li.append(img).append(span);
+			div.append(img).vhmiddle();
+			li.append(div).append(span);
 			li.hide();
 			counter.text(count + 1);
 			list.prepend(li);
-			li.show('fast');
 			li.fadeIn('fast');
 		} else {
 			$.each(list.find('li'), function(i, v) {
 				var element = $(v);
 				if (element.attr('user-id') == user.id ) {
-					element.hide('fast');
 					element.fadeOut('fast', function() {
-							element.remove();
+						element.remove();
 					});
 					counter.text(count - 1);
 					return;
