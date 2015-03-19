@@ -1,0 +1,136 @@
+body
+{
+    background: #ffffff;
+}
+
+#account_head_container
+{
+    padding: 35px 0px 40px 0px;
+    border-top: 2px solid #f6f0ee;
+    border-bottom: 2px solid #f6f0ee;
+    text-align: center;
+    font-family: 'Nanum Barun Gothic';
+    font-size: 23px;
+    color: #5c514e;
+}
+
+#profile_img
+{
+    width: 100px;
+    height: 100px;
+    margin: 20px auto;
+    border-radius: 100px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    background-color: #000000;
+}
+
+#account_content_container
+{
+    width: 960px;
+    margin: 0 auto;
+}
+
+#account_content_container > div
+{
+    position: relative;
+    top: -2px;
+    border-top: 3px solid #f0795b;
+}
+
+#content_left
+{
+    float: left;
+    width: 200px;
+    text-align: center;
+    font-family: 'Nanum Barun Gothic';
+    font-size: 21px;
+    color: #beb7b7;
+}
+
+#content_left div
+{
+    margin-top: 45px;
+}
+
+#content_right
+{
+    float: right;
+    width: 660px;
+}
+
+#change_passwd
+{
+    margin-top: 37px;
+    height: 170px;
+}
+
+.account_setting input
+{
+    width: 340px;
+    height: 50px;
+    margin: 0px 0px 20px 0px;
+    padding: 0px;
+    background-color: #fcf4f2;
+    border: 0;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+}
+
+.account_setting_left
+{
+    float: left;
+    width: 126px;
+    height: 170px;
+    color: #5d5454;
+    font-size: 17px;
+    font-family: 'Nanum Gothic';
+    font-weight: 700;
+}
+
+.account_setting_left label
+{
+    position: relative;
+    top: 16px;
+    left: 10px;
+}
+
+.account_setting_right
+{
+    float: left;
+    width: 340px;
+}
+
+.account_setting_button
+{
+    float: right;
+}
+
+.account_setting_button button
+{
+    height: 50px;
+    padding: 0px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+#change_passwd .account_setting_button
+{
+    position: relative;
+    top: 70px;
+}
+
+#change_passwd button
+{
+    width: 100px;
+}
+
+#facebook_account button
+{
+    width: 170px;
+    background-color: #6184d4;
+}

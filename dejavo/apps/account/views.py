@@ -177,10 +177,7 @@ def auth_by_access_token(request, backend):
 def main(request):
     # User notification, owning article, history, else else else...
     # TODO create user page
-    return HttpResponse(
-            status = 200,
-            content = 'User page'
-            )
+    return render(request, "account/main.html", {})
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST', 'GET'])

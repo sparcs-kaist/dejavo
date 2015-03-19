@@ -1,0 +1,25 @@
+{% extends "zabo/layout.html" %}
+
+{% block css %}
+		<link rel="stylesheet" href="/static/css/account.css">
+{% endblock %}
+
+{% block content %}
+        <div id="account_head_container">
+			<div id="profile_img"></div>
+			<div id="account_name">의 페이지</div>
+		</div>
+		<div id="account_content_container">
+			<div id="content_left">
+				<div>메세지</div>
+				<div>참여하는 행사</div>
+				<div>관리하는 행사</div>
+				<div>계정 설정</div>
+				<div>프로필 설정</div>
+			</div>
+			<div id="content_right">
+{% block account_content %}
+{% endblock %}
+			</div>
+		</div>
+{% endblock %}
