@@ -103,6 +103,7 @@ button
 #profile_container .profile
 {
     float: right;
+    margin-left: 10px;
 }
 
 #profile_container .profile_img_container
@@ -110,7 +111,6 @@ button
     float: right;
     width: 40px;
     height: 80px;
-    margin-left: 10px;
     position: relative;
 }
 
@@ -124,6 +124,41 @@ button
     bottom: 0;
     border-radius: 40px;
     overflow: hidden;
+}
+
+#account_dialog 
+{
+    padding: 10px;
+    background-color: #f4e5e2;
+    border-radius: 10px;
+    position: absolute;
+}
+
+#account_dialog > div:first-child
+{
+    margin-top: 0px;
+}
+
+#account_dialog > div
+{
+    margin-top: 10px;
+}
+
+#account_dialog button
+{
+    width: 120px;
+    background-color: #ffffff;
+    color: #706563;
+    font-weight: bold;
+    transition: all 0.5s;
+    border: solid 2px transparent;
+    outline: none;
+}
+
+#account_dialog button:hover
+{
+    color: #f15050;
+    border-color: #f15050;
 }
 
 /*

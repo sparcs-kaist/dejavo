@@ -57,8 +57,11 @@ ZB.updateLoginInfo = function(userinfo) {
 			},
 		});
 	}
-
 }
+
+ZB.isLogin = function() {
+	return $('div#profile_container').find('#login_button').length == 0;
+};
 
 ZB.registerOrLogin = function(accessToken) {
 	$.ajax({
@@ -142,6 +145,59 @@ ZB.login = function (){
 
 	$('#modal-overlay').click(function() {
 		modal.close();
+	});
+};
+
+ZB.showAccountDialog = function(){
+	var profileDiv = $('#profile_container');
+
+	var dialog = profileDiv.find('#account_dialog');
+	if (dialog.length > 0) {
+		dialog.fadeIn();
+		return;
+	}
+
+	dialog = $(document.createElement('div')).attr('id', 'account_dialog');
+
+	var logoutDiv = $(document.createElement('div'));
+	var editProfileDiv = $(document.createElement('div'));
+	var logout = $(document.createElement('button')).text('로그아웃');
+	var editProfile = $(document.createElement('button')).text('마이페이지');
+
+	logoutDiv.append(logout);
+	editProfileDiv.append(editProfile);
+
+	dialog.hide();
+	dialog.append(logoutDiv).append(editProfileDiv);
+	logout.click(function () {
+		$.ajax({
+			'method' : 'GET',
+			'dataType' : 'json',
+			'url' : '/logout/',
+			'success' : function() {
+				window.location = '/';
+			},
+			'error' : function () {},
+		});
+	});
+	editProfile.click(function () {
+		window.location = '/account/';
+	});
+
+	var pPosition = profileDiv.offset();
+	var leftMargin = (profileDiv.width() - 140) / 2;
+	pPosition.top+= 65;
+	pPosition.left += leftMargin;
+
+	dialog.offset(pPosition);
+	profileDiv.append(dialog);
+	dialog.fadeIn();
+};
+
+ZB.removeAccountDialog = function(){
+	var dialog = $('#account_dialog');
+	dialog.fadeOut('fast', function () {
+		dialog.remove();
 	});
 };
 

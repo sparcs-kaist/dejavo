@@ -24,4 +24,12 @@ $(document).ready(function(){
 			},
 		});
 	});
+
+	$('div#profile_container').mouseover(function() {
+		if (ZB.isLogin()) {
+			ZB.showAccountDialog();
+		}
+	}).mouseleave(function () {
+		ZB.removeAccountDialog();
+	});
 });

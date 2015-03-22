@@ -44,13 +44,6 @@
 						</a>
 					</div>
 					<div class="menu menu_right" id="profile_container">
-						<div class="profile_img_container">
-							<div class="profile_img">
-								<div id="user_profile_image" class="profile-image vhmiddle vhmiddle-update" data-width="40" data-height="40">
-									<img src="{{ user.profile.profile_image.url }}"></img>
-								</div>
-							</div>
-						</div>
 						<div class="profile">
 							{% if not user.is_authenticated %}
 							<a id="login_button" href="#">
@@ -61,6 +54,13 @@
 								<span>{{ user.last_name }} {{ user.first_name }}</span>
 							</a>
 							{% endif %}
+						</div>
+						<div class="profile_img_container">
+							<div class="profile_img">
+								<div id="user_profile_image" class="profile-image vhmiddle vhmiddle-update" data-width="40" data-height="40">
+									<img src="{{ user.profile.profile_image.url }}"></img>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
