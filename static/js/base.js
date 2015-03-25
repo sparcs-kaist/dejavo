@@ -90,7 +90,7 @@ ZB.register = function () {
 			dialog.container.fadeIn(200, function () {
 				dialog.data.fadeIn(200);
 
-				var register_button = dialog.data.find('#register_button button');
+				var register_button = dialog.data.find('#register_button_container button');
 				var username = dialog.data.find('input#register_username');
 				var password = dialog.data.find('input#register_password');
 				var password_check = dialog.data.find('input#register_password_check');
@@ -128,7 +128,7 @@ ZB.register = function () {
 					$.ajax({
 						'method' : 'POST',
 						'dataType' : 'json',
-						'url' : '/register/',
+						'url' : '/account/create/',
 						'data' : {
 							'username' : username.val(),
 							'password' : password.val(),

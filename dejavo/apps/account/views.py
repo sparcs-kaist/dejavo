@@ -203,10 +203,9 @@ def create(request):
 
     # create user
     username = request.POST.get('username', None)
-    email = request.POST.get('email', None)
     password = request.POST.get('password', None)
 
-    if not username or not email or not password:
+    if not username or not password:
         if request.ACCEPT_FORMAT == 'html':
             return HttpResponse(
                     status = 400,
@@ -219,10 +218,10 @@ def create(request):
                     data = {'error' : 'Invalid format'}
                     )
 
-    new_user  = get_user_model().objects.create_user(username, email, password)
+    new_user  = get_user_model().objects.create_user(username, None, password)
 
-    last_name = request.POST.get('lastname', '')
-    first_name = request.POST.get('firstname', '')
+    new_user.last_name = request.POST.get('lastname', '')
+    new_user.first_name = request.POST.get('firstname', '')
 
     profile = new_user.profile
     profile.phone = request.POST.get('phone', '')
