@@ -67,15 +67,16 @@ body
 
 .account_setting input
 {
-    width: 340px;
+    width: 320px;
     height: 50px;
     margin: 0px 0px 20px 0px;
-    padding: 0px;
+    padding: 0px 10px;
     background-color: #fcf4f2;
     border: 0;
     border-radius: 10px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
+    font-size: 17px;
 }
 
 .account_setting_left
@@ -116,6 +117,7 @@ body
     -moz-border-radius: 10px;
     font-size: 17px;
     font-weight: 700;
+    cursor: pointer;
 }
 
 #change_passwd .account_setting_button
