@@ -78,17 +78,108 @@ ZB.registerOrLogin = function(accessToken) {
 	});
 }
 
-ZB.login = function (){
+ZB.register = function () {
 
-	var modal = $('#login_container').modal({
+	var modal = $('#register_container').modal({
 		overlayCss : { 'background' : '#000' },
 		overlayId : 'modal-overlay',
-		position : ['30%',],
+		overlayClose : true,
+		position : ['25%',],
 		onOpen : function (dialog) {
 			dialog.overlay.fadeIn(200);
 			dialog.container.fadeIn(200, function () {
 				dialog.data.fadeIn(200);
 
+				var register_button = dialog.data.find('#register_button button');
+				var username = dialog.data.find('input#register_username');
+				var password = dialog.data.find('input#register_password');
+				var password_check = dialog.data.find('input#register_password_check');
+				var firstname = dialog.data.find('input#register_firstname');
+				var lastname = dialog.data.find('input#register_lastname');
+
+				var password_fail = $('#register_password_error');
+
+				username.focus();
+
+				username.focusout(function(e){
+					// check username duplication
+					$.ajax({});
+				});
+
+				$.each([password, password_check], function(i, element) {
+					$(element).on('input', function () {
+						var p = password.val();
+						var pc = password_check.val();
+						if (p == '' && pc == '') {
+							password_fail.text('');
+						} else if (p != '' && pc != '' && pc == p) {
+							password_fail.text('일치');
+						} else {
+							password_fail.text('불일치');
+						}
+					});
+				});
+
+				$.each([password, password_check], function(i, e) {
+				});
+
+				register_button.click(function(e){
+					e.preventDefault();
+					$.ajax({
+						'method' : 'POST',
+						'dataType' : 'json',
+						'url' : '/register/',
+						'data' : {
+							'username' : username.val(),
+							'password' : password.val(),
+							'firstname' : firstname.val(),
+							'lastname' : lastname.val(),
+						},
+						'success' : function(response) {
+							$.modal.close();
+							username.val('');
+							password.val('');
+							firstname.val('');
+							lastname.val('');
+							ZB.updateLoginInfo(response);
+						},
+						'error' : function(jqXHR) {
+							dialog.data.find('span#register_error').text('error');
+						},
+					});
+				});
+			});
+		},
+		onClose: function (dialog) {
+			dialog.overlay.fadeOut(200, function () {
+				$.modal.close();
+			});
+			dialog.data.fadeOut(200, function () {
+				dialog.container.fadeOut(200);
+			});
+		},
+	});
+};
+
+ZB.login = function (){
+
+	var modal = $('#login_container').modal({
+		overlayCss : { 'background' : '#000' },
+		overlayId : 'modal-overlay',
+		overlayClose : true,
+		position : ['25%',],
+		onShow : function(dialog) {
+			dialog.data.find("#register_link").click(function(e){
+				dialog.closeForRegister = true;
+				$.modal.close();
+
+			});
+		},
+
+		onOpen : function (dialog) {
+			dialog.overlay.fadeIn(200);
+			dialog.container.fadeIn(200, function () {
+				dialog.data.fadeIn(200);
 				dialog.data.find('input#login_username').focus();
 				dialog.data.find('#facebook_login').click(function(e){
 					e.preventDefault();
@@ -96,6 +187,7 @@ ZB.login = function (){
 						ZB.statusChangeCallback(response);
 					});
 				});
+
 
 				var login_button = dialog.data.find('#login_button button');
 				var username = dialog.data.find('input#login_username');
@@ -134,17 +226,21 @@ ZB.login = function (){
 			});
 		},
 		onClose: function (dialog) {
-			dialog.overlay.fadeOut(200, function () {
-				$.modal.close();
-			});
+			if (dialog.closeForRegister) {
+				dialog.closeForRegister = false;
+				dialog.overlay.fadeOut(200, function () {
+					$.modal.close();
+					ZB.register();
+				});
+			} else {
+				dialog.overlay.fadeOut(200, function () {
+					$.modal.close();
+				});
+			}
 			dialog.data.fadeOut(200, function () {
 				dialog.container.fadeOut(200);
 			});
 		},
-	});
-
-	$('#modal-overlay').click(function() {
-		modal.close();
 	});
 };
 

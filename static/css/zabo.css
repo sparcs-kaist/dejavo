@@ -194,6 +194,8 @@ button
     height: 20px;
     font-size: 18px;
     font-family: 'Nanum Gothic';
+    font-weight: bold;
+    color: #5c514e;
     border: 0px;
     padding: 15px 20px;
     margin-bottom: 25px;
@@ -205,6 +207,7 @@ button
     margin-bottom: 5px;
 }
 
+
 div#login_error_container
 {
     height: 20px;
@@ -213,25 +216,112 @@ div#login_error_container
     font-size: 13px;
 }
 
-#login_error {
+#login_error,
+#register_error
+{
     float:right;
 }
 
-.login_form input::-webkit-input-placeholder { /* WebKit browsers */
+.register_form
+{
+    width: 240px;
+    padding: 30px 30px 20px 30px;
+    background-color: #f4e5e2;
+    border-radius: 10px;
+}
+
+.register_form #register_head
+{
+    font-family: 'Nanum Gothic';
+    font-size: 18px;
+    font-weight: bold;
+    color: #685854;
+    margin: 0px 0px 20px 3px;
+}
+
+.register_form input
+{
+    width: 280px;
+    height: 20px;
+    font-size: 15px;
+    font-family: 'Nanum Gothic';
+    font-weight: bold;
+    color: #5c514e;
+    border: 0px;
+    padding: 5px 20px;
+    margin-bottom: 13px;
+    border-radius: 5px;
+}
+
+.register_form span.error
+{
+    line-height: 30px;
+    vertical-align: middle;
+    color: #f15050;
+    font-family: 'Nanum Gothic';
+    font-size: 11px;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.register_form input#register_username
+{
+    width: 90px;
+}
+
+.register_form input#register_password,
+.register_form input#register_password_check
+{
+    width: 160px;
+}
+
+.register_form input#register_lastname
+{
+    width: 60px;
+}
+
+.register_form input#register_firstname
+{
+    width: 94px;
+}
+
+.register_form #register_button_container
+{
+    height: 35px;
+}
+
+.register_form #register_button_container button
+{
+    float: right;
+    font-weight: bold;
+}
+
+.login_form input::-webkit-input-placeholder,
+.register_form input::-webkit-input-placeholder
+{ /* WebKit browsers */
     color: #f0795b;
     font-weight: bold;
 }
-.login_form input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+
+.login_form input:-moz-placeholder,
+.register_form input:-moz-placeholder
+{ /* Mozilla Firefox 4 to 18 */
     color: #f0795b;
     font-weight: bold;
     opacity:  1;
 }
-.login_form input::-moz-placeholder { /* Mozilla Firefox 19+ */
+
+.login_form input::-moz-placeholder,
+.register_form input::-moz-placeholder
+{ /* Mozilla Firefox 19+ */
     color: #f0795b;
     font-weight: bold;
     opacity:  1;
 }
-.login_form input:-ms-input-placeholder { /* Internet Explorer 10+ */
+
+.login_form input:-ms-input-placeholder,
+.register_form input:-ms-input-placeholder
+{ /* Internet Explorer 10+ */
     color: #f0795b;
     font-weight: bold;
 }
@@ -242,8 +332,9 @@ div#login_error_container
     float: left;
 }
 
-#login_id_pw div#link_list a
+#login_id_pw div#link_list span
 {
+    cursor: pointer;
     color: #af8b82;
     font-size: 13px;
     font-family: 'Nanum Gothic';
