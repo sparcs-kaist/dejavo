@@ -28,11 +28,13 @@ $(document).ready(function(){
 					var i, d=null,
 						$main_elem = $("<div class='elem'/>"),
 						$poster_div = $("<div class='poster'></div>"),
+						$anchor = $("<a></a>").attr({'href':"/article/"+article.id}),
 						$img = $("<img/>").attr({'src':article.poster, 'alt':article.title}).load(function(){;
 							var scaled_width = this.width * 317/this.height;
 							var cell_size = Math.round(scaled_width/223);
 							if(cell_size >= 2) $main_elem.addClass('elem_wide');
-							$poster_div.append($img);
+							$anchor.append($img);
+							$poster_div.append($anchor);
 						});
 
 					$main_elem.append($poster_div);
