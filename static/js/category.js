@@ -15,11 +15,8 @@ $(document).ready(function(){
 
 	var $current_button = null;
 
-	$('#category_list button').click(function(){
-		var category_name = this.innerText;
-		if($current_button) $current_button.removeClass('toggled');
-		($current_button = $(this)).addClass('toggled');
-		$.get("/category/"+this.value+"/?accept=application/json", function(data){
+	var getArticles = function getArticles(v){
+		$.get("/category/"+v+"/?accept=application/json", function(data){
 			$main_list.empty();
 			var elems = [],
 				now = Date.now();
@@ -59,7 +56,7 @@ $(document).ready(function(){
 					}
 
 					$main_elem.append([$dday_elem, $("<table/>").append([
-						$("<tr/>").append([$("<th class='elem_title'/>").text(category_name), $("<th class='elem_time'>시간</td>")]),
+						$("<tr/>").append([$("<th class='elem_title'/>").text(article.category), $("<th class='elem_time'>시간</td>")]),
 						$("<tr/>").append([$("<td class='elem_title'/>").text(article.title), $("<td class='elem_time'>").append($("<time/>").attr('datetime', d.toISOString()).text(toDisplayDate(d)))])
 					])]);
 					return $main_elem;
@@ -67,5 +64,13 @@ $(document).ready(function(){
 			}
 			$main_list.append(elems);
 		});
+	};
+
+	$('#category_list button').click(function(){
+		if($current_button) $current_button.removeClass('toggled');
+		($current_button = $(this)).addClass('toggled');
+		getArticles(this.value);
 	});
+
+	getArticles("all");
 });

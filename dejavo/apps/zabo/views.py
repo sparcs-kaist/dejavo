@@ -460,7 +460,12 @@ def view_category(request):
 @require_http_methods(['GET'])
 def get_category(request, category):
     article_list = []
-    for a in Article.objects.filter(category = category):
+
+    article_set = Article.objects.all()
+    if category != "all":
+        article_set = Article.objects.filter(category = category)
+
+    for a in article_set:
         article_list.append(a.as_json())
     
     return JsonResponse(
