@@ -10,7 +10,7 @@ class UserProfile(models.Model):
     profile_image = models.ImageField(upload_to = 'profile', default='default_profile.png')
     phone = models.CharField(max_length = 50)
     bio = models.TextField()
-    participation = models.ManyToManyField(Article)
+    participation = models.ManyToManyField(Article, blank=True)
 
 def post_save_user(signal, sender, instance, **kwargs):
     created = kwargs['created']
