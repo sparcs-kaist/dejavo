@@ -6,7 +6,11 @@
 
 {% block content %}
         <div id="account_head_container">
-			<div id="profile_img"></div>
+			<div id="edit_profile_img_container">
+				<div id="edit_profile_image" class="vhmiddle" data-width="100" data-height="100">
+					<img src="{{ user.profile.profile_image.url }}"></img>
+				</div>
+			</div>
 			<div id="account_name">{{ user.first_name }}의 페이지</div>
 		</div>
 		<div id="account_content_container">

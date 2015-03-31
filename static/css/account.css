@@ -14,15 +14,26 @@ body
     color: #5c514e;
 }
 
-#profile_img
+#edit_profile_img_container
 {
     width: 100px;
     height: 100px;
     margin: 20px auto;
+}
+
+#edit_profile_img_container #edit_profile_image
+{
     border-radius: 100px;
     -webkit-border-radius: 100px;
     -moz-border-radius: 100px;
-    background-color: #000000;
+    transition: all 0.5s;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translateZ(0) scale(1.0, 1.0);
+}
+
+#edit_profile_img_container #edit_profile_image:hover
+{
+    opacity: 0.8;
 }
 
 #account_content_container
