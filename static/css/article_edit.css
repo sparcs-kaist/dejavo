@@ -144,6 +144,8 @@
 {
     cursor: pointer;
     transition: all 0.5s;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translateZ(0) scale(1.0, 1.0);
 }
 
 #host_image_container:hover
