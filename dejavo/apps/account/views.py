@@ -3,6 +3,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import REDIRECT_FIELD_NAME
@@ -177,6 +178,13 @@ def auth_by_access_token(request, backend):
 def main(request):
     # User notification, owning article, history, else else else...
     # TODO create user page
+
+    #return HttpResponse(
+    #        status = 200,
+    #        content = 'User editing page'
+    #        )
+
+    section = request.GET.get('section')
     return render(request, "account/main.html", {})
 
 @require_accept_formats(['text/html', 'application/json'])
@@ -249,26 +257,59 @@ def create(request):
         return response
 
 @require_accept_formats(['text/html', 'application/json'])
-@require_http_methods(['POST', 'GET'])
+@require_http_methods(['POST'])
 @auth_required
 def edit(request):
-    # User profile editing page
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect('/login/')
 
-    if requset.method == 'GET':
-        return HttpResponse(
-                status = 200,
-                content = 'User editing page'
-                )
-    # TODO
-    # password
-    # email
-    # profile bio
-    # profile image
-    # profile phone
+    update_fields = request.POST.get('fields').split(',')
+    user = request.user
 
-    return HttpResponse(__name__ + '.' + sys._getframe().f_code.co_name) 
+    error_list = {}
+
+    if 'password' in update_fields:
+        new_password = request.POST.get('password', None)
+        if not new_password:
+            error_list.setdefault('password', []).append('Password field is empty')
+        user.set_password(new_password)
+
+    if 'profile_image' in update_fields:
+        if 'profile_image' not in request.FILES:
+            error_list.setdefault('profile_image', []).append('Image field is empty')
+        user.profile.profile_image = request.FILES['profile_image']
+
+    if 'email' in update_fields:
+        email = request.POST.get('email', None)
+        try:
+            validate_email(email)
+        except ValidationError as e:
+            error_list.setdefault('email', []).append(unicode(e.message))
+        user.email = email
+
+    if 'first_name' in update_fields:
+        first_name = request.POST.get('first_name', None)
+        if not first_name:
+            error_list.setdefault('first_name', []).append('First name field is empty')
+        user.first_name = first_name
+
+    if 'last_name' in update_fields:
+        last_name = request.POST.get('last_name', None)
+        if not last_name:
+            error_list.setdefault('last_name', []).append('Last name field is empty')
+        user.last_name = last_name
+
+    if len(error_list) > 0:
+        if request.ACCEPT_FORMAT == 'json':
+            return JsonResponse(status = 400, data = error_list)
+        else:
+            return HttpResponse(status = 400, content = 'Invalid format')
+
+    user.profile.save()
+    user.save()
+
+    if request.ACCEPT_FORMAT == 'json':
+        return JsonResponse(status = 200, data = {'user' : user.as_json()})
+    else:
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['GET'])
