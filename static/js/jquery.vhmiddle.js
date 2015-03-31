@@ -25,7 +25,7 @@
 				this.image.removeAttr('style');
 				this.image.hide();
 				if (this.orientation == 'landscape') {
-					this.element.removeClass('vhmiddle-portarit').addClass('vhmiddle-landscape');
+					this.element.removeClass('vhmiddle-portrait').addClass('vhmiddle-landscape');
 				}
 				else if (this.orientation == 'portrait') {
 					this.element.removeClass('vhmiddle-landscape').addClass('vhmiddle-portrait');
