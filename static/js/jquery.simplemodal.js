@@ -1,9 +1,9 @@
 /*
- * SimpleModal @VERSION - jQuery Plugin
+ * SimpleModal 1.4.4 - jQuery Plugin
  * http://simplemodal.com/
- * Copyright (c) 2014 Eric Martin
+ * Copyright (c) 2013 Eric Martin
  * Licensed under MIT and GPL
- * Date:
+ * Date: Sun, Jan 20 2013 15:58:56 -0800
  */
 
 /**
@@ -58,7 +58,7 @@
  * @requires jQuery v1.3
  * @cat Plugins/Windows and Overlays
  * @author Eric Martin (http://ericmmartin.com)
- * @version @VERSION
+ * @version 1.4.4
  */
 
 ;(function (factory) {
@@ -84,7 +84,6 @@
 	};
 	browser.ie6 = browser.msie && /msie 6./.test(ua) && typeof window['XMLHttpRequest'] !== 'object';
 	browser.ie7 = browser.msie && /msie 7.0/.test(ua);
-	browser.boxModel = (document.compatMode === "CSS1Compat");
 
 	/*
 	 * Create and display a modal dialog.
@@ -238,7 +237,9 @@
 				return false;
 			}
 
-			browser.ieQuirks = browser.msie && !browser.boxModel;
+			// $.support.boxModel is undefined if checked earlier
+			// browser.ieQuirks = browser.msie && !$.support.boxModel;
+			browser.ieQuirks = browser.msie && (document.compatMode === "BackCompat");
 
 			// merge defaults and user options
 			s.o = $.extend({}, $.modal.defaults, options);
@@ -597,7 +598,7 @@
 				st = s.d.container.css('position') !== 'fixed' ? wndw.scrollTop() : 0;
 
 			if (s.o.position && Object.prototype.toString.call(s.o.position) === '[object Array]') {
-				top = parseFloat(st) + parseFloat(s.o.position[0] || hc);
+				top = st + (s.o.position[0] || hc);
 				left = s.o.position[1] || vc;
 			} else {
 				top = st + hc;
