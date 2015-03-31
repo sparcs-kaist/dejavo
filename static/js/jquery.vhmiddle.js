@@ -25,24 +25,10 @@
 				this.image.removeAttr('style');
 				this.image.hide();
 				if (this.orientation == 'landscape') {
-					this.image.css({
-						'position' : 'absolute',
-						'left' : '50%',
-						'top' : '50%',
-						'transform' : 'translate(-50%, -50%)',
-						'height' : '100%',
-						'width' : 'auto',
-					});
+					this.element.removeClass('vhmiddle-portarit').addClass('vhmiddle-landscape');
 				}
 				else if (this.orientation == 'portrait') {
-					this.image.css({
-						'position' : 'absolute',
-						'left' : '50%',
-						'top' : '50%',
-						'transform' : 'translate(-50%, -50%)',
-						'width' : '100%',
-						'height' : 'auto',
-					});
+					this.element.removeClass('vhmiddle-landscape').addClass('vhmiddle-portrait');
 				}
 			};
 
@@ -57,10 +43,8 @@
 			};
 
 			this.element.css({
-				'position' : 'relative',
 				'width' : this.showWidth,
 				'height' : this.showHeight,
-				'overflow' : 'hidden',
 			});
 
 			this.update();

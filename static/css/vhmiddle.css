@@ -1,0 +1,30 @@
+.vhmiddle
+{
+    position: relative;
+    overflow: hidden;
+}
+
+.vhmiddle img
+{
+    display: none;
+}
+
+.vhmiddle.vhmiddle-landscape img
+{
+    position : absolute;
+    left : 50%;
+    top : 50%;
+    transform : translate(-50%, -50%);
+    height : 100%;
+    width : auto;
+}
+
+.vhmiddle.vhmiddle-portrait img
+{
+    position : absolute;
+    left : 50%;
+    top : 50%;
+    transform : translate(-50%, -50%);
+    width : 100%;
+    height : auto;
+}
