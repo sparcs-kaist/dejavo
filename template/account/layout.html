@@ -7,10 +7,13 @@
 {% block content %}
         <div id="account_head_container">
 			<div id="edit_profile_img_container">
-				<div id="edit_profile_image" class="vhmiddle" data-width="100" data-height="100">
+				<div id="edit_profile_image" onclick="getElementById('profile_image_input').click();"
+					class="profile-image vhmiddle vhmiddle-update" data-width="100" data-height="100">
 					<img src="{{ user.profile.profile_image.url }}"></img>
 				</div>
 			</div>
+			<input id="profile_image_input" name="image" type="file"
+				style="opacity:0; position: absolute; top: 0px; left: 0px; width: 0px; height: 0px;">
 			<div id="account_name">{{ user.first_name }}의 페이지</div>
 		</div>
 		<div id="account_content_container">
@@ -26,4 +29,8 @@
 {% endblock %}
 			</div>
 		</div>
+{% endblock %}
+
+{% block aftercontent %}
+<script src="{{ STATIC_URL }}js/account-edit.js"></script>
 {% endblock %}

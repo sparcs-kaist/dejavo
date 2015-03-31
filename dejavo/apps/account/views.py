@@ -275,7 +275,8 @@ def edit(request):
     if 'profile_image' in update_fields:
         if 'profile_image' not in request.FILES:
             error_list.setdefault('profile_image', []).append('Image field is empty')
-        user.profile.profile_image = request.FILES['profile_image']
+        new_profile_image = request.FILES['profile_image']
+        user.profile.profile_image.save(new_profile_image.name, new_profile_image)
 
     if 'email' in update_fields:
         email = request.POST.get('email', None)
@@ -307,7 +308,7 @@ def edit(request):
     user.save()
 
     if request.ACCEPT_FORMAT == 'json':
-        return JsonResponse(status = 200, data = {'user' : user.as_json()})
+        return JsonResponse(status = 200, data = user.as_json())
     else:
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
