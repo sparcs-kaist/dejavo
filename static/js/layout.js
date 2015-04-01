@@ -5,9 +5,7 @@ $(document).ready(function(){
 		$.ajax({
 			'type' : 'POST',
 			'url' : '/article/create/',
-			'headers' : {
-				'ACCEPT' : 'application/json',
-			},
+			'dataType' : 'json',
 			'success' : function(data, textStatus, jqXHR) {
 				if (jqXHR.status == 201) {
 					var newLocation = jqXHR.getResponseHeader('Location');
