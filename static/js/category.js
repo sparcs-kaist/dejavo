@@ -29,7 +29,7 @@ $(document).ready(function(){
 						var i, d=null,
 							$main_elem = $("<div class='elem'/>"),
 							$poster_div = $("<div class='poster'></div>"),
-							$anchor = $("<a></a>").attr({'href':"/article/"+article.id}),
+							$anchor = $("<a/>").attr({'href':"/article/"+article.id}),
 							$img = $("<img/>").attr({'src':article.poster, 'alt':article.title}).load(function(){;
 								var scaled_width = this.width * 317/this.height;
 								var cell_size = Math.round(scaled_width/223);
@@ -61,7 +61,7 @@ $(document).ready(function(){
 
 						$main_elem.append([$dday_elem, $("<table/>").append([
 							$("<tr/>").append([$("<th class='elem_title'/>").text(article.category), $("<th class='elem_time'>시간</td>")]),
-							$("<tr/>").append([$("<td class='elem_title'/>").text(article.title), $("<td class='elem_time'>").append($("<time/>").attr('datetime', d.toISOString()).text(toDisplayDate(d)))])
+							$("<tr/>").append([$("<td class='elem_title'/>").append([$("<span/>").text(article.title)]), $("<td class='elem_time'>").append($("<time/>").attr('datetime', d.toISOString()).text(toDisplayDate(d)))])
 						])]);
 						return $main_elem;
 					});
