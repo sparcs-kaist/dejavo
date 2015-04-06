@@ -69,7 +69,6 @@ $(document).ready(function(){
 				$main_list.append(elems);
 			},
 			'error' :  function() {
-				console.log("??");
 			},
 		});
 	};

@@ -15,14 +15,14 @@ import datetime
 @require_accept_formats(['text/html'])
 @require_http_methods(['GET'])
 def main(request):
-    articles = []
+    article_list = []
     dday = []
-    articlesQ = Article.objects.filter(timeslot__start_time__gte=datetime.datetime.now())
-    for aq in articlesQ:
-        if not articles or not articles[-1].get("id") == aq.id:
-            articles.append(aq.as_json())
+    articles_set = Article.objects.filter(timeslot__start_time__gte=datetime.datetime.now())
+    for aq in articles_set:
+        if not article_list or not article_list[-1].get("id") == aq.id:
+            article_list.append(aq.as_json())
 
-    return render(request, 'zabo/main.html', {'articles': articles, 'days': dday})
+    return render(request, 'zabo/main.html', {'articles': article_list, 'days': dday})
 
 
 @require_accept_formats(['text/html', 'application/json'])
@@ -461,12 +461,13 @@ def view_category(request):
 def get_category(request, category):
     article_list = []
 
-    article_set = Article.objects.all()
+    article_set = Article.objects.filter(timeslot__start_time__gte=datetime.datetime.now())
     if category != "all":
-        article_set = Article.objects.filter(category = category)
+        article_set = article_set.filter(category = category)
 
     for a in article_set:
-        article_list.append(a.as_json())
+        if not article_list or not article_list[-1].get("id") == a.id:
+            article_list.append(a.as_json())
     
     return JsonResponse(
             status = 200,
