@@ -8,7 +8,6 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dejavo.settings')
 django.setup()
 
-from django.contrib.auth.models import User
 from django.core.files import File
 from django.utils.dateparse import parse_datetime
 
@@ -20,6 +19,7 @@ testdata_dir = './testdata'
 
 gen_user = True
 gen_article = True
+User = ZaboUser
 
 def generate_user(user_info):
 
@@ -33,12 +33,12 @@ def generate_user(user_info):
     phone = user_info[6]
     bio = user_info[7]
 
-    user = User.objects.create_user(username, email, password)
+    user = User.objects.create_user(email, password)
     user.last_name = last_name
     user.first_name = first_name
     user.save()
 
-    profile = User.objects.get(username = username).profile
+    profile = User.objects.get(email = email).profile
     profile_image = testdata_dir + '/profile/' + image
     with open(profile_image, 'rb') as image_file:
         profile.profile_image.save(image, File(image_file), save = True)
@@ -47,7 +47,7 @@ def generate_user(user_info):
     profile.save()
     user.save()
 
-    print 'Generate user ' + last_name + ' ' + first_name + '(' + username + '), ' + phone
+    print 'Generate user ' + last_name + ' ' + first_name + '(' + email + '), ' + phone
     return user
 
 def generate_article(info, user_pool):
@@ -136,7 +136,7 @@ def set_question(info, article_id):
     
     article = Article.objects.get(id=article_id)
     content = info[2]
-    writer = User.objects.get(username=info[3])
+    writer = User.objects.get(email=info[3] + "@sparcs.org")
     created_date = parse_datetime(info[4])
 
     q = Question(article = article, content = content, writer = writer)
@@ -151,7 +151,7 @@ def set_answer(info, q_id):
 
     question = Question.objects.get(id=q_id)
     content = info[1]
-    writer = User.objects.get(username=info[2])
+    writer = User.objects.get(email=info[2] + "@sparcs.org")
     created_date = parse_datetime(info[3])
 
     ans = Answer(question = question, content = content, writer = writer)

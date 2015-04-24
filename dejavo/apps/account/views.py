@@ -14,7 +14,7 @@ from jwt_auth.token import generate_jwt, refresh_jwt
 from social.apps.django_app.utils import psa
 from social.exceptions import NotAllowedToDisconnect
 
-from dejavo.apps.account.models import UserProfile
+from dejavo.apps.account.models import Participation
 from dejavo.apps.zabo.models import Article
 
 import json
@@ -398,8 +398,8 @@ def check_participate(request, article_id):
         article = Article.objects.get(id = article_id)
         check = False
         if request.user.is_authenticated:
-            check = UserProfile.objects.filter(user = request.user,
-                    participation__exact = article).exists()
+            check = Participation.objects.filter(user = request.user,
+                    article = article).exists()
 
         return JsonResponse(status = 200,
                 data = { 'check' : check }
@@ -418,16 +418,15 @@ def participate(request, article_id):
 
     try:
         article = Article.objects.get(id = article_id)
-        check = UserProfile.objects.filter(user = request.user,
-                participation__exact = article).exists()
+        check = Participation.objects.filter(user = request.user, article = article)
 
         if check:
             return JsonResponse(status = 400,
                     data = { 'error' : 'User already participate the article' }
                     )
 
-        request.user.profile.participation.add(article)
-        request.user.profile.save()
+        p = Participation(user = request.user, article = article)
+        p.save()
         return JsonResponse(status = 200, data = request.user.as_json())
 
     except Article.DoesNotExist:
@@ -442,12 +441,10 @@ def participate(request, article_id):
 def unparticipate(request, article_id):
     try:
         article = Article.objects.get(id = article_id)
-        check = UserProfile.objects.filter(user = request.user,
-                participation__exact = article).exists()
+        p = Participation.objects.filter(user = request.user, article = article)
 
-        if check:
-            request.user.profile.participation.remove(article)
-            request.user.profile.save()
+        if len(p) > 0:
+            p.delete()
             return JsonResponse(status = 200, data = request.user.as_json())
 
         return JsonResponse(status = 400,

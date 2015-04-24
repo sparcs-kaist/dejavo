@@ -31,6 +31,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+AUTH_USER_MODEL = 'account.ZaboUser'
 
 # Application definition
 
@@ -131,6 +132,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_uid',
     'social.pipeline.social_auth.auth_allowed',
     'social.pipeline.social_auth.social_user',
+    'social.pipeline.social_auth.associate_by_email',
     'social.pipeline.user.get_username',
     'social.pipeline.user.create_user',
     'dejavo.apps.account.pipeline.save_profile_picture',
@@ -140,3 +142,5 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 SOCIAL_AUTH_FORCE_POST_DISCONNECT = True
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+SOCIAL_AUTH_USER_FIELDS = ['email']

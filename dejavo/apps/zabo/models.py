@@ -83,7 +83,7 @@ class Article(models.Model):
 
         owner_list = []
         for owner in list(self.owner.all()):
-            owner_list.append(owner.username)
+            owner_list.append(owner.id)
 
         contact_list = []
         for contact in list(Contact.objects.filter(article = self)):
@@ -210,7 +210,7 @@ class Question(models.Model):
         for answer in list(Answer.objects.filter(question = self)):
             answer_list.append({
                 'writer' : {
-                    'username' : answer.writer.username,
+                    'id' : answer.writer.id,
                     'image_url' : answer.writer.profile.profile_image.url,
                     'first_name' : self.writer.first_name,
                     'last_name' : self.writer.last_name,
@@ -223,7 +223,7 @@ class Question(models.Model):
         return {
                 'id' : self.id,
                 'writer' : {
-                    'username' : self.writer.username,
+                    'id' : self.writer.id,
                     'first_name' : self.writer.first_name,
                     'last_name' : self.writer.last_name,
                     'image_url' : self.writer.profile.profile_image.url,
@@ -234,7 +234,7 @@ class Question(models.Model):
                 }
 
     def __unicode__(self):
-        return self.article.title + ' ::' + str(self.id) + ' ::' + self.writer.username
+        return self.article.title + ' ::' + str(self.id) + ' ::' + self.writer.email
 
 
 class Answer(models.Model):
@@ -253,7 +253,7 @@ class Answer(models.Model):
     def as_json(self):
         return {
                 'writer' : {
-                    'username' : self.writer.username,
+                    'id' : self.writer.id,
                     'image_url' : self.writer.profile.profile_image.url,
                     'first_name' : self.writer.first_name,
                     'last_name' : self.writer.last_name,

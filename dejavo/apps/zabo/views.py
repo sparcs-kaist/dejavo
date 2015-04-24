@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 
 from accept_checker.decorators import require_accept_formats, auth_required
 from dejavo.apps.zabo.models import Article, Timeslot, Question, Answer
-from dejavo.apps.account.models import UserProfile
+from dejavo.apps.account.models import Participation
 
 import json
 import datetime
@@ -53,10 +53,10 @@ def create(request):
             response['Location'] = '/article/' + str(draft_article.id) + '/edit/'
             return response
 
-    owner = set(request.POST.getlist('owner', [request.user.username]))
+    owner = set(request.POST.getlist('owner', [request.user.email]))
     new_article = Article(is_published = False)
     new_article.save()
-    new_article.owner.add(*map(lambda o : get_user_model().objects.get(username = o), owner))
+    new_article.owner.add(*map(lambda o : get_user_model().objects.get(email = o), owner))
     new_article.save()
 
     if request.ACCEPT_FORMAT == 'json':
@@ -84,9 +84,10 @@ def view_article(request, article_id):
             question = Question.objects.filter(article = article)
             return render(request, 'zabo/article.html', {
                 'article' : article,
-                'participant' : UserProfile.objects.filter(participation = article),
-                'is_participating' : UserProfile.objects.filter(user = request.user.id,
-                    participation__exact = article).exists(),
+                'participant' : map(lambda x : x.user,
+                    Participation.objects.filter(article = article)),
+                'is_participating' : Participation.objects.filter(user = request.user.id,
+                    article = article).exists(),
                 'request' : request,
                 })
 
