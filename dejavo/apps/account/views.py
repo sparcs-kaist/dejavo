@@ -12,6 +12,7 @@ from django.db.models import Q
 from accept_checker.decorators import require_accept_formats, auth_required 
 from jwt_auth.token import generate_jwt, refresh_jwt
 from social.apps.django_app.utils import psa
+from social.exceptions import NotAllowedToDisconnect
 
 from dejavo.apps.account.models import UserProfile
 from dejavo.apps.zabo.models import Article
@@ -170,6 +171,24 @@ def auth_by_access_token(request, backend):
                 status = 401,
                 data = { 'error' : 'User cannot be authorized' }
                 )
+
+
+@require_http_methods(['POST', 'GET'])
+@require_accept_formats(['application/json'])
+@auth_required
+@psa()
+def disconnect_access_token(request, backend, association_id=None):
+    """Disconnects given backend from current logged in user."""
+    try:
+        request.backend.disconnect(user=request.user, association_id=association_id)
+
+    except NotAllowedToDisconnect as e:
+        return JsonResponse(
+                status = 400,
+                data = {'error' : 'User should set password first'}
+                )
+
+    return JsonResponse(status = 200, data = request.user.as_json())
 
 
 @require_accept_formats(['text/html'])
