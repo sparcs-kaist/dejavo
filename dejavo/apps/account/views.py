@@ -163,7 +163,7 @@ def auth_by_access_token(request, backend):
     token = request.GET.get('access_token')
     user = request.backend.do_auth(request.GET.get('access_token'))
 
-    if user:
+    if user and user.is_active:
         login(request, user)
         return JsonResponse(status = 200, data = user.as_json())
     else:
