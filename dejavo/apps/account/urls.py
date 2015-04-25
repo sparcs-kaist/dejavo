@@ -3,7 +3,7 @@ from dejavo.apps.account import views
 from django.views.generic.base import TemplateView
 
 urlpatterns = patterns('',
-    url(r'^$', views.main),
+    url(r'^$', views.main, name='account_main'),
     url(r'^register/$', views.register),
     url(r'^activate/(?P<activation_key>\w+)/$', views.activate, name='registration_activate'),
     url(r'^edit/$', views.edit),

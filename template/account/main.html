@@ -28,3 +28,12 @@
 					</div>
 				</div>
 {% endblock %}
+{% block aftercontent %}
+{% if from_activate %}
+<script>
+$(document).ready(function(){
+	$.notify('계정이 활성화되었습니다!!!', 'success');
+	});
+</script>
+{% endif %}
+{% endblock %}

@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import REDIRECT_FIELD_NAME
@@ -204,8 +205,17 @@ def main(request):
     #        content = 'User editing page'
     #        )
 
+    from_activate = False
+    try:
+        from_activate = request.session.pop('first_login')
+    except:
+        pass
+
     section = request.GET.get('section')
-    return render(request, "account/main.html", {})
+
+    return render(request, "account/main.html", {
+        'from_activate' : from_activate
+        })
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST', 'GET'])
@@ -288,7 +298,7 @@ def register(request):
         response['Location'] = '/account/edit/'
         return response
 
-@require_accept_formats(['text/html', 'application/json'])
+@require_accept_formats(['text/html'])
 @require_http_methods(['POST', 'GET'])
 def activate(request, activation_key):
     """
@@ -297,8 +307,14 @@ def activate(request, activation_key):
 
     """
     activated_user = RegistrationProfile.objects.activate_user(activation_key)
-    return HttpResponse(status = 200,
-            content = activated_user.as_json())
+    # a little trick to login without password
+    activated_user.backend = "django.contrib.auth.backends.ModelBackend"
+    if activated_user:
+        login(request, activated_user)
+        request.session['first_login'] = True
+        return HttpResponseRedirect(reverse('account_main'))
+    else:
+        return HttpResponse(status = 400, content = "Invalid or Wrong approach")
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST'])
