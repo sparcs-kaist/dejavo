@@ -63,6 +63,9 @@
 									<div class="question-content">
 										{{ q.content }}
 									</div>
+									<div class="answer-popup">
+										<img src="/media/dasf.png" class="answer-popup-image"/>
+									</div>
 									{% for a in q.answer_set.all %}
 									<div class="answer" answer-id="{{ a.id }}">
 										<div class="answer-profile-image-container">
@@ -177,6 +180,8 @@
 {% block aftercontent %}
 <script>
 	var articleID = {{ article.id }};
+	var user_prof_img_src = '{{ user.profile.profile_image.url }}';
+	var user_name = '{{ user.last_name}}{{ user.first_name }}'
 </script>
 		<script src="{{ STATIC_URL }}js/article-view.js"></script>
 		<script>

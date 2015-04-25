@@ -211,7 +211,17 @@ button#add_question_button
     font-family: 'Nanum Gothic';
     font-size: 15px;
     color: #696060;
-    padding-bottom: 20px;
+    padding-bottom: 15px;
+}
+
+.answer-popup
+{
+    padding-bottom: 10px;
+}
+
+.answer-popup img
+{
+    cursor: pointer;
 }
 
 .answer-profile-image-container
@@ -249,7 +259,6 @@ button#add_question_button
     margin-bottom: 10px;
 }
 
-
 .answer-profile-name
 {
     font-family: 'Nanum Gothic';
@@ -271,6 +280,45 @@ button#add_question_button
     font-family: 'Nanum Gothic';
     font-size: 17px;
     color: #696060;
+}
+
+.answer-write
+{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    overflow: hidden;
+    border-top: 2px solid #f2f2f2;
+}
+
+.answer-box-container
+{
+    float: right;
+    width: 470px;
+}
+
+textarea.answer-box
+{
+    font-family: 'Nanum Gothic';
+    font-size: 15px;
+    color: #696060;
+    width: 450px;
+    height: 70px;
+    border: 0px;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f6f0ee;
+    resize: none;
+    margin-bottom: 10px;
+}
+
+button#add_answer_button
+{
+    padding: 0;
+    font-size: 12px;
+    height: 30px;
+    width: 80px;
+    float: right;
+    cursor: pointer;
 }
 
 /*
