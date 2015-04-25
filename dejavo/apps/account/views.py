@@ -7,6 +7,7 @@ from django.core.validators import validate_email
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.sites.models import Site
 from django.db.models import Q
 
 from accept_checker.decorators import require_accept_formats, auth_required 
@@ -14,7 +15,7 @@ from jwt_auth.token import generate_jwt, refresh_jwt
 from social.apps.django_app.utils import psa
 from social.exceptions import NotAllowedToDisconnect
 
-from dejavo.apps.account.models import Participation
+from dejavo.apps.account.models import Participation, RegistrationProfile
 from dejavo.apps.zabo.models import Article
 
 import json
@@ -208,7 +209,7 @@ def main(request):
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST', 'GET'])
-def create(request):
+def register(request):
     # User creation page
     if request.user.is_authenticated():
         if request.ACCEPT_FORMAT == 'html':
@@ -229,10 +230,10 @@ def create(request):
                 )
 
     # create user
-    username = request.POST.get('username', None)
+    email = request.POST.get('email', None)
     password = request.POST.get('password', None)
 
-    if not username or not password:
+    if not email or not password:
         if request.ACCEPT_FORMAT == 'html':
             return HttpResponse(
                     status = 400,
@@ -245,7 +246,8 @@ def create(request):
                     data = {'error' : 'Invalid format'}
                     )
 
-    new_user  = get_user_model().objects.create_user(username, None, password)
+    new_user = get_user_model().objects.create_user(email = email,
+            password = password)
 
     new_user.last_name = request.POST.get('lastname', '')
     new_user.first_name = request.POST.get('firstname', '')
@@ -255,10 +257,21 @@ def create(request):
     profile.bio = request.POST.get('bio', '')
 
     profile.save()
+
+    if Site._meta.installed:
+        site = Site.objects.get_current()
+    else:
+        site = RequestSite(request)
+
     new_user.save()
 
-    user = authenticate(username = username, password = password)
-    login(request, user)
+    new_user_register = RegistrationProfile.objects.create_inactive_user(
+        new_user=new_user,
+        site=site,
+        send_email=True,
+        request=request,
+    )
+    new_user_register.save()
 
     if request.ACCEPT_FORMAT == 'html':
         response = HttpResponse(
@@ -270,10 +283,22 @@ def create(request):
     elif request.ACCEPT_FORMAT == 'json':
         response = JsonResponse(
                 status = 201,
-                data = user.as_json()
+                data = new_user.as_json()
                 )
         response['Location'] = '/account/edit/'
         return response
+
+@require_accept_formats(['text/html', 'application/json'])
+@require_http_methods(['POST', 'GET'])
+def activate(request, activation_key):
+    """
+    Given an an activation key, look up and activate the user
+    account corresponding to that key (if possible).
+
+    """
+    activated_user = RegistrationProfile.objects.activate_user(activation_key)
+    return HttpResponse(status = 200,
+            content = activated_user.as_json())
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST'])

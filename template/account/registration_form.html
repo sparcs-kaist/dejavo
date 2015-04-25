@@ -1,0 +1,25 @@
+<div id="register_container">
+    <div class="register_form">
+        <div><p id="register_head">회원가입</p></div>
+        <div>
+            <div style="white-space: nowrap;">
+                <input id="register_username" type="text" placeholder="아이디">
+                <span id="register_username_error" class="error"></span>
+            </div>
+            <input id="register_password" type="password" placeholder="비밀번호">
+            <div style="white-space: nowrap;">
+                <input id="register_password_check" type="password" placeholder="비밀번호 확인">
+                <span id="register_password_error" class="error"></span>
+            </div>
+            <input id="register_lastname" type="text" placeholder="성">
+            <input id="register_firstname" type="text" placeholder="이름">
+            {% csrf_token %}
+        </div>
+        <div id="register_button_container">
+            <div id="register_error_container">
+                <span id="register_error"></span>
+            </div>
+            <button>가입</button>
+        </div>
+    </div>
+</div>

@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'social.apps.django_app.default',
 
@@ -53,6 +54,7 @@ INSTALLED_APPS = (
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -121,6 +123,8 @@ ACCEPT_CHECKER = {
     )
 }
 
+SITE_ID = 1
+
 LOGIN_URL = '/login/'
 
 # Python Social Auth
@@ -135,6 +139,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.associate_by_email',
     'social.pipeline.user.get_username',
     'social.pipeline.user.create_user',
+    'dejavo.apps.account.pipeline.activate_new_user',
     'dejavo.apps.account.pipeline.save_profile_picture',
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
@@ -144,3 +149,9 @@ SOCIAL_AUTH_PIPELINE = (
 SOCIAL_AUTH_FORCE_POST_DISCONNECT = True
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 SOCIAL_AUTH_USER_FIELDS = ['email']
+
+# Django registration
+ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
+REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
+EMAIL_HOST = 'localhost'
+DEFAULT_FROM_EMAIL = 'webmaster@143.248.234.137'

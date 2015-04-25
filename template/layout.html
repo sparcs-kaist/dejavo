@@ -69,65 +69,10 @@
             {% block content %}
             {% endblock %}
         </div>
-		<div id="login_container" style="display:none">
-			<div class="login_form" id="login_id_pw">
-				<div>
-					<input id="login_username" type="text" placeholder="아이디"></input>
-					<input id="login_password" type="password" placeholder="비밀번호"></input>
-					<div id="login_error_container">
-						<span id="login_error"></span>
-					</div>
-				</div>
-				<div id="action_container">
-					<div id="link_list">
-						<span id="register_link">지금 가입하기</span><br>
-						<span id="lost_id_pw_link">아이디/비밀번호 분실</span>
-					</div>
-					<div id="login_button">
-						<button>로그인</button>
-					</div>
-				</div>
-			</div>
-			<div class="login_form" id="login_sns">
-				<div id="facebook_login">
-					<img style="padding-left: 50px; padding-top: 8px;"
-						src="{{ STATIC_URL }}/css/images/cross_red.png"></img>
-					<span style="padding-right: 50px; padding-top: 15px;
-						color: #ffffff; font-size: 19px;
-						float: right; font-weight: bold; font-family: 'Nanum Gothic';
-						position: relative;">
-						페이스북으로 로그인
-					</span>
-				</div>
-			</div>
-		</div>
-		<div id="register_container" style="display:none">
-			<div class="register_form">
-				<div><p id="register_head">회원가입</p></div>
-				<div>
-					<div style="white-space: nowrap;">
-						<input id="register_username" type="text" placeholder="아이디"></input>
-						<span id="register_username_error" class="error"></span>
-					</div>
-					<input id="register_password" type="password" placeholder="비밀번호"></input>
-					<div style="white-space: nowrap;">
-						<input id="register_password_check" type="password" placeholder="비밀번호 확인"></input>
-						<span id="register_password_error" class="error"></span>
-					</div>
-					<input id="register_lastname" type="text" placeholder="성"></input>
-					<input id="register_firstname" type="text" placeholder="이름"></input>
-				</div>
-				<div id="register_button_container">
-					<div id="register_error_container">
-						<span id="register_error"></span>
-					</div>
-					<button>가입</button>
-				</div>
-			</div>
-		</div>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script src="{{ STATIC_URL }}js/notify-combined.js"></script>
 		<script src="{{ STATIC_URL }}js/base.js"></script>
 		<script src="{{ STATIC_URL }}js/jquery.simplemodal.js"></script>
 		<script src="{{ STATIC_URL }}js/jquery.vhmiddle.js"></script>

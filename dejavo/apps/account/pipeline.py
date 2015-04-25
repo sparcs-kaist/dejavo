@@ -5,6 +5,12 @@ from requests import request, HTTPError
 from django.core.files.base import ContentFile
 from social.apps.django_app.utils import psa
 
+def activate_new_user(backend, user, response, details,
+                         is_new=False,*args,**kwargs):
+    if is_new and backend.name == 'facebook':
+        user.is_active = True
+        user.save()
+
 def save_profile_picture(backend, user, response, details,
                          is_new=False,*args,**kwargs):
 

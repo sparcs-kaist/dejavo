@@ -1,0 +1,33 @@
+
+<div id="login_container">
+    <div class="login_form" id="login_id_pw">
+        <div>
+            <input id="login_username" type="text" placeholder="아이디">
+            <input id="login_password" type="password" placeholder="비밀번호">
+            {% csrf_token %}
+            <div id="login_error_container">
+                <span id="login_error"></span>
+            </div>
+        </div>
+        <div id="action_container">
+            <div id="link_list">
+                <span id="register_link">지금 가입하기</span><br>
+                <span id="lost_id_pw_link">아이디/비밀번호 분실</span>
+            </div>
+            <div id="login_button">
+                <button>로그인</button>
+            </div>
+        </div>
+    </div>
+    <div class="login_form" id="login_sns">
+        <div id="facebook_login">
+            <img style="padding-left: 50px; padding-top: 8px;" src="/static//css/images/cross_red.png">
+            <span style="padding-right: 50px; padding-top: 15px;
+                color: #ffffff; font-size: 19px;
+                float: right; font-weight: bold; font-family: 'Nanum Gothic';
+                position: relative;">
+                페이스북으로 로그인
+            </span>
+        </div>
+    </div>
+</div>

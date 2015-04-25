@@ -80,29 +80,41 @@ ZB.registerOrLogin = function(accessToken) {
 
 ZB.register = function () {
 
-	var modal = $('#register_container').modal({
-		overlayCss : { 'background' : '#000' },
-		overlayId : 'modal-overlay',
-		overlayClose : true,
-		position : ['25%',],
-		onOpen : function (dialog) {
+	var register = {
+		init: function () {
+			$.get("/account/registration_form/", function(data){
+				// create a modal dialog with the data
+				$(data).modal({
+					overlayCss : { 'background' : '#000' },
+					overlayId : 'modal-overlay',
+					overlayClose : true,
+					position : ['25%',],
+					onOpen: register.open,
+					//onShow: register.show,
+					onClose: register.close
+				});
+			});
+		},
+
+		open : function (dialog) {
 			dialog.overlay.fadeIn(200);
 			dialog.container.fadeIn(200, function () {
 				dialog.data.fadeIn(200);
 
 				var register_button = dialog.data.find('#register_button_container button');
-				var username = dialog.data.find('input#register_username');
+				var email = dialog.data.find('input#register_username');
 				var password = dialog.data.find('input#register_password');
 				var password_check = dialog.data.find('input#register_password_check');
 				var firstname = dialog.data.find('input#register_firstname');
 				var lastname = dialog.data.find('input#register_lastname');
+				var csrf = dialog.data.find('input[name=csrfmiddlewaretoken]');
 
 				var password_fail = $('#register_password_error');
 
-				username.focus();
+				email.focus();
 
-				username.focusout(function(e){
-					// check username duplication
+				email.focusout(function(e){
+					// check email duplication
 					$.ajax({});
 				});
 
@@ -128,20 +140,21 @@ ZB.register = function () {
 					$.ajax({
 						'method' : 'POST',
 						'dataType' : 'json',
-						'url' : '/account/create/',
+						'url' : '/account/register/',
 						'data' : {
-							'username' : username.val(),
+							'email' : email.val(),
+							'csrfmiddlewaretoken' : csrf.val(),
 							'password' : password.val(),
 							'firstname' : firstname.val(),
 							'lastname' : lastname.val(),
 						},
 						'success' : function(response) {
 							$.modal.close();
-							username.val('');
+							email.val('');
 							password.val('');
 							firstname.val('');
 							lastname.val('');
-							ZB.updateLoginInfo(response);
+							$.notify("인증메일이 보내졌습니다. 메일을 통해 활성화 하시기 바랍니다.", "success");
 						},
 						'error' : function(jqXHR) {
 							dialog.data.find('span#register_error').text('error');
@@ -150,7 +163,7 @@ ZB.register = function () {
 				});
 			});
 		},
-		onClose: function (dialog) {
+		close: function (dialog) {
 			dialog.overlay.fadeOut(200, function () {
 				$.modal.close();
 			});
@@ -158,25 +171,38 @@ ZB.register = function () {
 				dialog.container.fadeOut(200);
 			});
 		},
-	});
+	};
+	register.init();
 };
 
 ZB.login = function (){
 
-	var modal = $('#login_container').modal({
-		overlayCss : { 'background' : '#000' },
-		overlayId : 'modal-overlay',
-		overlayClose : true,
-		position : ['25%',],
-		onShow : function(dialog) {
+	var login = {
+		init : function() {
+			$.get("/account/login_form/", function(data){
+				// create a modal dialog with the data
+				$(data).modal({
+					overlayCss : { 'background' : '#000' },
+					overlayId : 'modal-overlay',
+					overlayClose : true,
+					position : ['25%',],
+					onOpen: login.open,
+					onShow: login.show,
+					onClose: login.close
+				});
+			});
+		},
+
+		show : function(dialog) {
 			dialog.data.find("#register_link").click(function(e){
+				e.preventDefault();
 				dialog.closeForRegister = true;
 				$.modal.close();
 
 			});
 		},
 
-		onOpen : function (dialog) {
+		open : function (dialog) {
 			dialog.overlay.fadeIn(200);
 			dialog.container.fadeIn(200, function () {
 				dialog.data.fadeIn(200);
@@ -192,6 +218,8 @@ ZB.login = function (){
 				var login_button = dialog.data.find('#login_button button');
 				var username = dialog.data.find('input#login_username');
 				var password = dialog.data.find('input#login_password');
+				var csrf = dialog.data.find('input[name=csrfmiddlewaretoken]');
+				console.log(csrf);
 				$.each([password, username], function(i, v) {
 					v.on('keypress', function (e) {
 						if (e.which == 13) {
@@ -209,6 +237,7 @@ ZB.login = function (){
 						'data' : {
 							'username' : username.val(),
 							'password' : password.val(),
+							'csrfmiddlewaretoken' : csrf.val(),
 						},
 						'success' : function(response) {
 							$.modal.close();
@@ -225,7 +254,7 @@ ZB.login = function (){
 				});
 			});
 		},
-		onClose: function (dialog) {
+		close: function (dialog) {
 			if (dialog.closeForRegister) {
 				dialog.closeForRegister = false;
 				dialog.overlay.fadeOut(200, function () {
@@ -241,7 +270,8 @@ ZB.login = function (){
 				dialog.container.fadeOut(200);
 			});
 		},
-	});
+	};
+	login.init();
 };
 
 ZB.showAccountDialog = function(){

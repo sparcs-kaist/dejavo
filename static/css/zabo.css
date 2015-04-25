@@ -266,7 +266,7 @@ div#login_error_container
 
 .register_form input#register_username
 {
-    width: 90px;
+    width: 160px;
 }
 
 .register_form input#register_password,
