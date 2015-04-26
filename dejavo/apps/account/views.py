@@ -308,13 +308,13 @@ def activate(request, activation_key):
     """
     activated_user = RegistrationProfile.objects.activate_user(activation_key)
     # a little trick to login without password
-    activated_user.backend = "django.contrib.auth.backends.ModelBackend"
     if activated_user:
+        activated_user.backend = "django.contrib.auth.backends.ModelBackend"
         login(request, activated_user)
         request.session['first_login'] = True
         return HttpResponseRedirect(reverse('account_main'))
     else:
-        return HttpResponse(status = 400, content = "Invalid or Wrong approach")
+        return render(request, "registration/activation_fail.html")
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST'])
