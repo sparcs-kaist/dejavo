@@ -45,6 +45,12 @@ ol
     height: inherit;
 }
 
+.poster a
+{
+    display: inline-block;
+    height: inherit;
+}
+
 .poster img
 {
     height: inherit;
@@ -73,9 +79,12 @@ ol
 
 .info_content
 {
+    width: 180px;
+    height: 27px;
     color: #675d5a;
     font-family: 'Nanum Barun Gothic';
     font-size: 24px;
+    overflow: hidden;
 }
 
 .event_desc
