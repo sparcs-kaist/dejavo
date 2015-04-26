@@ -23,7 +23,7 @@ class ArticleAdmin(admin.ModelAdmin):
     inlines = [ContactInline, AttachmentInline, TimeslotInline]
     list_display = ('id', 'title', 'category', 'get_owners', 'get_poster', 
             'get_attchments', 'is_published', 'created_date', 'updated_date')
-    search_fields = ('title', 'owner__username')
+    search_fields = ('title', 'owner__email')
     list_filter = ('category', 'is_published', 'created_date', 'updated_date')
 
     def get_poster(self, article):
@@ -46,7 +46,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
     def owner_link(self, user):
         return '<a href="%s"><b>%s</b></a>' % \
-                (reverse("admin:auth_user_change", args=(user.id,)) , escape(user))
+                (reverse("admin:account_zabouser_change", args=(user.id,)) , escape(user))
 
     def get_owners(self, article):
         owners = list(article.owner.all())
@@ -70,13 +70,13 @@ class TimeslotAdmin(admin.ModelAdmin):
 class QuestionAdmin(admin.ModelAdmin):
     model = Question
     list_display = ('id', 'get_article', 'get_writer', 'get_short_content', 'created_date')
-    search_fields = ('article__title', 'writer__username',)
+    search_fields = ('article__title', 'writer__email',)
     list_filter = ('created_date',)
     content_display_len = 50
 
     def writer_link(self, user):
         return '<a href="%s"><b>%s</b></a>' % \
-                (reverse("admin:auth_user_change", args=(user.id,)) , escape(user))
+                (reverse("admin:account_zabouser_change", args=(user.id,)) , escape(user))
 
     def get_writer(self, a):
         return self.writer_link(a.writer)
@@ -99,13 +99,13 @@ class AnswerAdmin(admin.ModelAdmin):
     model = Answer
     list_display = ('id', 'get_article', 'get_question', 'get_short_content',
             'get_writer', 'created_date')
-    search_fields = ('question__article__title', 'writer__username',)
+    search_fields = ('question__article__title', 'writer__email',)
     list_filter = ('created_date',)
     content_display_len = 50
 
     def writer_link(self, user):
         return '<a href="%s"><b>%s</b></a>' % \
-                (reverse("admin:auth_user_change", args=(user.id,)) , escape(user))
+                (reverse("admin:account_zabouser_change", args=(user.id,)) , escape(user))
 
     def get_writer(self, a):
         return self.writer_link(a.writer)
