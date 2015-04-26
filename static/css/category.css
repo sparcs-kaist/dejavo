@@ -69,24 +69,27 @@ li
 
 #main_list /* 메인 목록 */
 {
-	display: -webkit-flex;
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: space-around;
+    display: inline-block;
 }
 
 #main_list .elem /* 메인 목록에 뜨는 행사 */
 {
-	position: relative;
+    position: relative;
+    float: left;
+    margin-right: 24px;
     margin-bottom: 54px;
     width: 222px;
     height: 370px;
     background: #ffffff;
-	font-family: 'Nanum Gothic';
+    font-family: 'Nanum Gothic';
     font-weight: 800;
     overflow: hidden;
-	box-shadow: 1px 1px 1px #ccc;
+    box-shadow: 1px 1px 1px #ccc;
+}
+
+#main_list .elem_last
+{
+    margin-right: 0px;
 }
 
 #main_list .elem_wide /* 두 칸 짜리 행사 */
