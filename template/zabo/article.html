@@ -63,9 +63,11 @@
 									<div class="question-content">
 										{{ q.content }}
 									</div>
+									{% if user in article.owner.all %}
 									<div class="answer-popup">
 										<img src="/media/dasf.png" class="answer-popup-image"/>
 									</div>
+									{% endif %}
 									{% for a in q.answer_set.all %}
 									<div class="answer" answer-id="{{ a.id }}">
 										<div class="answer-profile-image-container">
