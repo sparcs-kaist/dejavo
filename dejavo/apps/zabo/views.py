@@ -1,5 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
@@ -28,6 +29,7 @@ def main(request):
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST'])
 @auth_required
+@csrf_exempt
 def create(request):
 
     draft = Article.objects.filter(owner__id = request.user.id, is_published = False)
