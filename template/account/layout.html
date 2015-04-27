@@ -7,9 +7,12 @@
 {% block content %}
         <div id="account_head_container">
 			<div id="edit_profile_img_container">
-				<div id="edit_profile_image" onclick="getElementById('profile_image_input').click();"
+				<div id="edit_profile_image"
 					class="profile-image vhmiddle vhmiddle-update" data-width="100" data-height="100">
 					<img src="{{ user.profile.profile_image.url }}"></img>
+				</div>
+				<div id="edit_profile_image_hover" onclick="getElementById('profile_image_input').click();">
+					<span>사진 변경</span>
 				</div>
 			</div>
 			<input id="profile_image_input" name="image" type="file"

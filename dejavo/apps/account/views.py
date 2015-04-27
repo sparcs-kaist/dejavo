@@ -376,6 +376,7 @@ def activate(request, activation_key):
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST'])
 @auth_required
+@csrf_exempt
 def edit(request):
 
     update_fields = request.POST.get('fields').split(',')

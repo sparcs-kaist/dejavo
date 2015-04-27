@@ -31,9 +31,40 @@ body
     -webkit-transform: translateZ(0) scale(1.0, 1.0);
 }
 
-#edit_profile_img_container #edit_profile_image:hover
+#edit_profile_img_container #edit_profile_image_hover
 {
-    opacity: 0.8;
+    position:relative;
+    width: 100px;
+    height: 100px;
+    top: -100px;
+    color: white;
+    vertical-align: middle;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 15px;
+    font-family: 'Nanum Gothic';
+    border-radius: 100px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    transition: all 0.2s linear;
+    cursor: pointer;
+}
+
+#edit_profile_img_container #edit_profile_image_hover span
+{
+    line-height: 100px;
+    transition: all 0.2s linear;
+    opacity: 0;
+}
+
+#edit_profile_img_container #edit_profile_image_hover:hover
+{
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+#edit_profile_img_container #edit_profile_image_hover:hover span
+{
+    opacity: 1;
+
 }
 
 #account_content_container
