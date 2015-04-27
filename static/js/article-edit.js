@@ -275,6 +275,13 @@ $(document).ready(function(){
 
 		removeTD.click(function (e){
 			tr.remove();
+			$.each(editable_list, function(i, editable) {
+				editable.update();
+			});
+		});
+
+		$.each(editable_list, function(i, editable) {
+			editable.update();
 		});
 
 		$('#timeslot_add_form').toggle();

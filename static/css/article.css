@@ -54,11 +54,13 @@ body
     height: 386px;
     display: table-cell;
     vertical-align: middle;
+    width: 600px;
+    text-align: center;
 }
 
 #article_image img
 {
-    width: 600px;
+    max-width: 600px;
 }
 
 #article_content
