@@ -211,15 +211,15 @@ button
 div#login_error_container
 {
     height: 20px;
+}
+
+div#login_error_container span#login_error
+{
+    float:right;
+    font-weight : bold;
     color: #f0795b;
     font-family: 'Nanum Gothic';
     font-size: 13px;
-}
-
-#login_error,
-#register_error
-{
-    float:right;
 }
 
 div#article_draft_content
@@ -263,26 +263,38 @@ div#article_action_container
     border-radius: 5px;
 }
 
-.register_form span.error
+
+.register_form span#register_error
 {
-    line-height: 30px;
+    float:left;
+    line-height: 35px;
     vertical-align: middle;
     color: #f15050;
     font-family: 'Nanum Gothic';
     font-size: 11px;
+    font-weight : bold;
     margin-left: 5px;
     font-weight: bold;
 }
 
-.register_form input#register_username
+.register_form input#register_email
 {
-    width: 160px;
+    width: 200px;
 }
 
 .register_form input#register_password,
 .register_form input#register_password_check
 {
     width: 160px;
+}
+
+.register_form span#register_password_error
+{
+    float: right;
+    line-height: 30px;
+    color: #f15050;
+    font-family: 'Nanum Gothic';
+    font-size: 11px;
 }
 
 .register_form input#register_lastname

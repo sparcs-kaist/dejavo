@@ -5,6 +5,7 @@ from django.views.generic.base import TemplateView
 urlpatterns = patterns('',
     url(r'^$', views.main, name='account_main'),
     url(r'^register/$', views.register),
+    url(r'^email_check/$', views.email_check),
     url(r'^activate/(?P<activation_key>\w+)/$', views.activate, name='registration_activate'),
     url(r'^edit/$', views.edit),
     url(r'^show/(?P<username>\w+)/$', views.show_user),

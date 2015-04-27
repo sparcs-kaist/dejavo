@@ -241,23 +241,45 @@ def register(request):
 
     # create user
     email = request.POST.get('email', None)
-    password = request.POST.get('password', None)
+    password1 = request.POST.get('password1', None)
+    password2 = request.POST.get('password2', None)
 
-    if not email or not password:
+    if not email or not password1 or not password2:
         if request.ACCEPT_FORMAT == 'html':
             return HttpResponse(
                     status = 400,
                     content = 'Invalid format'
                     )
-        
+
         elif request.ACCEPT_FORMAT == 'json':
             return JsonResponse(
                     status = 400,
                     data = {'error' : 'Invalid format'}
                     )
 
+    try:
+        validate_email(email)
+    except ValidationError as e:
+        if request.ACCEPT_FORMAT == 'html':
+            return HttpResponse(
+                    status = 400,
+                    content = 'Email validation fail'
+                    )
+
+        elif request.ACCEPT_FORMAT == 'json':
+            return JsonResponse(
+                    status = 400,
+                    data = {'error' : 'Email Validation fail'}
+                    )
+
+    if password1 != password2:
+        return JsonResponse(
+                status = 400,
+                data = {'error' : 'Password does not match'}
+                )
+
     new_user = get_user_model().objects.create_user(email = email,
-            password = password)
+            password = password1)
 
     new_user.last_name = request.POST.get('lastname', '')
     new_user.first_name = request.POST.get('firstname', '')
@@ -297,6 +319,41 @@ def register(request):
                 )
         response['Location'] = '/account/edit/'
         return response
+
+@require_accept_formats(['application/json'])
+@require_http_methods(['GET'])
+def email_check(request):
+
+    email = request.GET.get('email', None)
+    user_model = get_user_model()
+    if email:
+        try:
+            validate_email(email)
+            user = user_model.objects.get(email = email)
+            return JsonResponse(status = 409,
+                    data = {
+                        'email' : email,
+                        'msg' : 'Already registed email address',
+                        }
+                    )
+        except user_model.DoesNotExist as e:
+            return JsonResponse(status = 200, data = {'email' : email})
+        except ValidationError as e:
+            return JsonResponse(
+                    status = 400,
+                    data = {
+                        'error' : 'Invalid email address',
+                        'msg' : 'Invalid email address',
+                        }
+                    )
+    else:
+        return JsonResponse(
+                status = 400,
+                data = {
+                    'error' : 'Invalid request (email parameter empty',
+                    'msg' : 'Email is empty',
+                    }
+                )
 
 @require_accept_formats(['text/html'])
 @require_http_methods(['POST', 'GET'])

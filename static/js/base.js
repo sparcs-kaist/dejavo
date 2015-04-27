@@ -102,7 +102,7 @@ ZB.register = function () {
 				dialog.data.fadeIn(200);
 
 				var register_button = dialog.data.find('#register_button_container button');
-				var email = dialog.data.find('input#register_username');
+				var email = dialog.data.find('input#register_email');
 				var password = dialog.data.find('input#register_password');
 				var password_check = dialog.data.find('input#register_password_check');
 				var firstname = dialog.data.find('input#register_firstname');
@@ -110,12 +110,29 @@ ZB.register = function () {
 				var csrf = dialog.data.find('input[name=csrfmiddlewaretoken]');
 
 				var password_fail = $('#register_password_error');
+				var error = dialog.data.find('span#register_error');
 
 				email.focus();
 
 				email.focusout(function(e){
 					// check email duplication
-					$.ajax({});
+					email.val(email.val().trim());
+					$.ajax({
+						'method' : 'GET',
+						'url' : '/account/email_check/',
+						'data' : {'email' : email.val()},
+						'dataType' : 'json',
+						'success' : function(data, textStatus, jqXHR){
+							error.text('사용 가능한 이메일 주소입니다.');
+						},
+						'error' : function(jqXHR, textStatus, errorThrown) {
+							if (jqXHR.status == 400) {
+								error.text('잘못된 이메일 주소입니다.');
+							} else if (jqXHR.status == 409) {
+								error.text('이미 등록된 이메일 주소입니다.');
+							}
+						},
+					});
 				});
 
 				$.each([password, password_check], function(i, element) {
@@ -144,7 +161,8 @@ ZB.register = function () {
 						'data' : {
 							'email' : email.val(),
 							'csrfmiddlewaretoken' : csrf.val(),
-							'password' : password.val(),
+							'password1' : password.val(),
+							'password2' : password_check.val(),
 							'firstname' : firstname.val(),
 							'lastname' : lastname.val(),
 						},
@@ -152,12 +170,14 @@ ZB.register = function () {
 							$.modal.close();
 							email.val('');
 							password.val('');
+							password_check.val('');
 							firstname.val('');
 							lastname.val('');
 							$.notify("인증메일이 보내졌습니다. 메일을 통해 활성화 하시기 바랍니다.", "success");
 						},
 						'error' : function(jqXHR) {
-							dialog.data.find('span#register_error').text('error');
+							var msg = jqXHR.responseJSON;
+							dialog.data.find('span#register_error').text(msg.error);
 						},
 					});
 				});
