@@ -68,6 +68,21 @@ def create(request):
 def view_article(request, article_id):
     try:
         article = Article.objects.get(id = article_id)
+
+        error_flag = False
+        if article.is_deleted or article.is_blocked:
+            error_flag = True
+            msg = 'Article is deleted'
+        elif not article.is_published:
+            error_flag = True
+            msg = 'Article is not published'
+
+        if error_flag:
+            if request.ACCEPT_FORMAT == 'json':
+                return JsonResponse(status = 404, data = {'error' : msg})
+            else:
+                return HttpResponse(status = 404, content = msg)
+
         if request.ACCEPT_FORMAT == 'json':
             return JsonResponse(status = 200, data = article.as_json())
         else:
@@ -78,6 +93,7 @@ def view_article(request, article_id):
                     Participation.objects.filter(article = article)),
                 'is_participating' : Participation.objects.filter(user = request.user.id,
                     article = article).exists(),
+                'is_owner' : len(article.owner.filter(id = request.user.id)) > 0,
                 'request' : request,
                 })
 
@@ -187,6 +203,27 @@ def edit_article(request, article_id):
                     'msg' : e.message_dict
                     },
                 )
+
+@require_accept_formats(['application/json'])
+@require_http_methods(['POST', 'GET'])
+@auth_required
+@csrf_exempt
+def delete_article(request, article_id):
+    try:
+        article = Article.objects.get(id = article_id)
+        if len(article.owner.filter(id = request.user.id)) > 0:
+            article.is_deleted = True
+            article.save()
+            return JsonResponse(status = 200, data = article.as_json())
+        else:
+            return JsonResponse(
+                    status = 400,
+                    data = { 'error' : 'User dose not own article' }
+                    )
+
+    except Article.DoesNotExist:
+        msg = 'Article(' + str(article_id) + ') does not exist'
+        return JsonResponse(status = 404, data = { 'error' : msg })
 
 
 @require_accept_formats(['application/json'])

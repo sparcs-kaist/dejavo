@@ -122,7 +122,7 @@
 					<div id="participant_container" class="sub-container">
 						<div class="sub-head">참여자</div>
 						<div class="sub-content">
-							<span id="participant_count">{{ participant.count }}</span><span>명</span>
+							<span id="participant_count">{{ participant|length }}</span><span>명</span>
 						</div>
 					</div>
 					<div id="host_container" class="sub-container">
@@ -139,6 +139,12 @@
 						<div class="sub-head">공지사항</div>
 						<div id="notice_content" class="sub-content"><span>{{ article.announcement }}</span></div>
 					</div>
+					{% if is_owner %}
+					<div id="owner_button_container">
+						<button id="article_edit_button" class="button-large stress">수정</button>
+						<button id="article_delete_button" class="button-large">삭제</button>
+					</div>
+					{% endif %}
 				</div>
 				<div id="article_sub_share">
 					<ul>
@@ -157,6 +163,7 @@
 					<!-- http://graph.facebook.com/?id=http://www.naver.com -->
 					<!-- http://urls.api.twitter.com/1/urls/count.json?url=http://www.naver.com -->
 				</div>
+
 				<div id="article_sub_participants">
 					<ul id="participant_list">
 						{% for p in participant reversed %}
@@ -200,6 +207,24 @@
 			$("li#twitter").click(function(e){
 					e.preventDefault();
 					popupwindow('https://twitter.com/intent/tweet?text={{ article.title }}-{{ article.subtitle }}&url={{ request.build_absolute_uri }}', 'Tweet Article', 600, 260);
+				});
+
+			$("button#article_edit_button").click(function(e){
+					window.location = '/article/' + articleID + '/edit/';
+				});
+
+			$("button#article_delete_button").click(function(e){
+					var c = confirm('정말로 삭제하시겠습니까?');
+					if (c) {
+						$.ajax({
+							'method' : 'GET',
+							'url' : '/article/' + articleID + '/delete/',
+							'dataType' : 'json',
+							'success' : function(data) {
+								window.location = '/';
+							},
+						});
+					}
 				});
 		});
 

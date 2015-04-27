@@ -425,6 +425,38 @@ button.timeslot-label
     white-space: pre-line;
 }
 
+#owner_button_container
+{
+    margin: 20px 0px 20px 0px;
+    padding-top: 20px;
+    border-top: 2px solid #f6f0ee;
+}
+
+#article_edit_button
+{
+    width: 135px;
+    height: 70px;
+    cursor: pointer;
+    float: right;
+}
+
+#article_delete_button
+{
+    width: 135px;
+    height: 70px;
+    color: #f0795b;
+    background-color: transparent;
+    transition: all 0.5s;
+    border: solid 2px transparent;
+    cursor: pointer;
+}
+
+#article_delete_button:hover
+{
+    color: #f15050;
+    border-color: #f15050;
+}
+
 /*
  * SNS, Participate
  */

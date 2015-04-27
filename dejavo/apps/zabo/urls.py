@@ -5,6 +5,7 @@ urlpatterns = patterns('',
     url(r'^create/$', views.create),
     url(r'^(?P<article_id>\d+)/$', views.view_article),
     url(r'^(?P<article_id>\d+)/edit/$', views.edit_article), # editing page
+    url(r'^(?P<article_id>\d+)/delete/$', views.delete_article), # editing page
 
     url(r'^(?P<article_id>\d+)/timeslot/create/$', views.create_timeslot),
     url(r'^(?P<article_id>\d+)/timeslot/delete/(?P<timeslot_id>\d+)/$', views.delete_timeslot),
