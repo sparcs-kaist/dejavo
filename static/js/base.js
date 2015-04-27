@@ -311,7 +311,9 @@ ZB.showAccountDialog = function(){
 	});
 
 	var pPosition = profileDiv.offset();
+
 	var leftMargin = (profileDiv.width() - 140) / 2;
+	if (leftMargin < 0) leftMargin = Math.min(-70, leftMargin);
 	pPosition.top+= 65;
 	pPosition.left += leftMargin;
 	dialog.css({
