@@ -347,9 +347,9 @@ ZB.showAccountDialog = function(){
 
 ZB.removeAccountDialog = function(){
 	var dialog = $('#account_dialog');
-	//dialog.fadeOut('fast', function () {
-	//	dialog.remove();
-	//});
+	dialog.fadeOut('fast', function () {
+		dialog.remove();
+	});
 };
 
 $(document).ready(function(){
