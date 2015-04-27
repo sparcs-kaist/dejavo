@@ -592,7 +592,29 @@ $(document).ready(function(){
 				}
 			},
 			'error' : function(req, textStatus, err) {
-				console.log(textStatus);
+				var res = req.responseJSON;
+				var fields = [];
+				$.each(res.msg, function(key, val) {
+					if (key == 'category'){
+						fields.push('카테고리');
+					} else if (key == 'content') {
+						fields.push('내용');
+					} else if (key == 'host_description') {
+						fields.push('주체 단체 설명');
+					} else if (key == 'host_image') {
+						fields.push('주체 단체 이미지');
+					} else if (key == 'host_name') {
+						fields.push('주체 단체 명');
+					} else if (key == 'image') {
+						fields.push('메인포스터');
+					} else if (key == 'title') {
+						fields.push('제목');
+					}
+				});
+
+				var msg = '<b>' + fields.join(', ') + '</b>를(을) 입력하거나 선택해 주시기 바랍니다';
+				$('#error_msg').html(msg);
+
 			},
 			'complete' : function(jqXHR, textStatus) {
 				button.prop('disabled', false).css('opacity', 1);

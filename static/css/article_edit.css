@@ -327,6 +327,15 @@
     margin-bottom: 20px;
 }
 
+#error_msg
+{
+    text-align: left;
+    color: #f0795b;
+    font-size: 13px;
+    font-family: 'Nanum Gothic';
+    margin-bottom: 20px;
+}
+
 #category_list
 {
     list-style: none;

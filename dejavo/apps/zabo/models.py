@@ -27,7 +27,7 @@ class Article(models.Model):
     subtitle = models.CharField(max_length = 150, blank = True)
     location = models.CharField(max_length = 200, blank = True)
     content = models.TextField()
-    announcement = models.TextField()
+    announcement = models.TextField(blank = True)
     image = models.ImageField(upload_to = 'poster')
     category = models.CharField(max_length = 20, choices = CATEGORY_TYPE)
     # Article host group
