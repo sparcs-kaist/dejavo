@@ -255,4 +255,22 @@ $(document).ready(function(){
 			},
 		});
 	});
+
+	$("button#article_edit_button").click(function(e){
+		window.location = '/article/' + articleID + '/edit/';
+	});
+
+	$("button#article_delete_button").click(function(e){
+		var c = confirm('정말로 삭제하시겠습니까?');
+		if (c) {
+			$.ajax({
+				'method' : 'GET',
+				'url' : '/article/' + articleID + '/delete/',
+				'dataType' : 'json',
+				'success' : function(data) {
+					window.location = '/';
+				},
+			});
+		}
+	});
 });

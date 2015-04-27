@@ -384,6 +384,28 @@ $(document).ready(function(){
 
 	$('#cancel_button').click(function(e){
 		// TODO canel if published, remove if not
+
+		if (is_published) {
+			var c = confirm('정말로 취소하시겠습니까?');
+			if (c) {
+				window.location = '/article/' + articleID + '/';
+			}
+		} else {
+			var c = confirm('정말로 삭제하시겠습니까?');
+			if (c) {
+				$.ajax({
+					'method' : 'GET',
+					'url' : '/article/' + articleID + '/delete/',
+					'dataType' : 'json',
+					'success' : function(data) {
+						window.location = '/';
+					},
+					'error' : function(jqXHR) {
+						$('#error_msg').text(jqXHR.responseJSON.error);
+					},
+				});
+			}
+		}
 	});
 
 	$('#edit_button').click(function(e){
