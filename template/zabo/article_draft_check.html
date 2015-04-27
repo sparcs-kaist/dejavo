@@ -1,0 +1,16 @@
+<div id="article_draft_check_container">
+    <div class="register_form" id="article_draft_content">
+        <div>
+            이미 수정 중인 페이지가 있습니다.<br><br>
+            제목 : <b>{{ article.title }}</b><br>
+            마지막 수정 날짜 : <b>{{ article.updated_date }}</b><br>
+            <br>
+            <span style="color:red">새로 만들시 기존 페이지는 삭제됩니다.</span>
+        </div>
+        <br>
+        <div id="article_action_container">
+            <button id="article_edit" class="stress" style="float:left">수정하기</button>
+            <button id="article_create" class="stress" style="float:right">새로만들기</button>
+        </div>
+    </div>
+</div>

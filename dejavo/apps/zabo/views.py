@@ -2,6 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
+from django.template import RequestContext, loader
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 
@@ -26,34 +27,30 @@ def main(request):
     return render(request, 'zabo/main.html', {'articles': article_list, 'days': dday})
 
 
-@require_accept_formats(['text/html', 'application/json'])
+@require_accept_formats(['application/json'])
 @require_http_methods(['POST'])
 @auth_required
 @csrf_exempt
 def create(request):
 
+    remove_draft = request.GET.get('force', False)
     draft = Article.objects.filter(owner__id = request.user.id, is_published = False)
-    if (len(draft) > 0):
-        draft_article = draft[0]
-        if request.ACCEPT_FORMAT == 'json':
-            response = JsonResponse(
-                    status = 200,
-                    data = {
-                        'title' : draft_article.title,
-                        'subtitle' :  draft_article.subtitle,
-                        'created_date' : draft_article.created_date,
-                        'updated_date' : draft_article.updated_date
-                    })
-            response['Location'] = '/article/' + str(draft_article.id) + '/edit/'
-            return response
 
-        elif request.ACCEPT_FORMAT == 'html':
-            response = HttpResponse(
-                    status = 307,
-                    content = 'User already have draft: ' + draft_article.title
-                    )
-            response['Location'] = '/article/' + str(draft_article.id) + '/edit/'
-            return response
+    if remove_draft:
+        draft.delete()
+
+    elif (len(draft) > 0):
+        draft_article = draft[0]
+        template = loader.get_template('zabo/article_draft_check.html')
+        context = RequestContext(request, {'article' : draft_article})
+        html = template.render(context)
+        response = JsonResponse(
+                status = 200,
+                data = {
+                    'html' : html,
+                    'location' : '/article/' + str(draft_article.id) + '/edit/'
+                })
+        return response
 
     owner = set(request.POST.getlist('owner', [request.user.email]))
     new_article = Article(is_published = False)
@@ -61,18 +58,9 @@ def create(request):
     new_article.owner.add(*map(lambda o : get_user_model().objects.get(email = o), owner))
     new_article.save()
 
-    if request.ACCEPT_FORMAT == 'json':
-        response = JsonResponse(
-                status = 201,
-                data = new_article.as_json()
-                )
-        response['Location'] = '/article/' + str(new_article.id) + '/edit/'
-        return response
-
-    elif request.ACCEPT_FORMAT == 'html':
-        response = HttpResponse(status = 201, content = '')
-        response['Location'] = '/article/' + str(new_article.id) + '/edit/'
-        return response
+    response = JsonResponse(status = 201, data = {})
+    response['Location'] = '/article/' + str(new_article.id) + '/edit/'
+    return response
 
 
 @require_accept_formats(['text/html', 'application/json', '*/*'])
@@ -108,6 +96,7 @@ def view_article(request, article_id):
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST', 'GET'])
 @auth_required
+@csrf_exempt
 def edit_article(request, article_id):
     try:
         article = Article.objects.get(id = article_id)
@@ -288,6 +277,7 @@ def view_qna(request, article_id):
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST', 'PUT'])
 @auth_required
+@csrf_exempt
 def create_question(request, article_id):
     try:
         article = Article.objects.get(id = article_id)
@@ -345,6 +335,7 @@ def load_question(request, article_id):
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST'])
 @auth_required
+@csrf_exempt
 def delete_question(request, article_id, question_id):
     try:
         article = Article.objects.get(id = article_id)
@@ -374,6 +365,7 @@ def delete_question(request, article_id, question_id):
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST', 'PUT'])
 @auth_required
+@csrf_exempt
 def create_answer(request, article_id, question_id):
     try:
         question = Question.objects.get(id=question_id)
@@ -418,6 +410,7 @@ def create_answer(request, article_id, question_id):
 @require_accept_formats(['application/json'])
 @require_http_methods(['POST'])
 @auth_required
+@csrf_exempt
 def delete_answer(request, article_id, question_id, answer_id):
     try:
         article = Article.objects.get(id = article_id)

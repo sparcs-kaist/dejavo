@@ -222,6 +222,16 @@ div#login_error_container
     float:right;
 }
 
+div#article_draft_content
+{
+    width: 350px;
+}
+
+div#article_action_container
+{
+    height: 35px;
+}
+
 .register_form
 {
     width: 240px;
