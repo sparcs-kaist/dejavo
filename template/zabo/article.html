@@ -78,9 +78,7 @@
 												<span class="answer-profile-name">{{ a.writer.last_name }}{{ a.writer.first_name }}</span>
 												<span class="answer-time">{{ a.created_date|date:"n월 j일 G시 i분" }}</span>
 											</div>
-											<div class="answer-content">
-												{{ a.content }}
-											</div>
+											<span class="answer-content">{{ a.content }}</span>
 										</div>
 									</div>
 									{% endfor %}

@@ -71,6 +71,7 @@ body
     border-bottom: 2px solid #f2f2f2;
     margin-top : 30px;
     margin-bottom: 30px;
+    padding-bottom: 30px;
     line-height: 25px;
     -webkit-text-size-adjust: none;
 }
@@ -96,7 +97,6 @@ body
     font-family: 'Nanum Barun Gothic';
     font-size: 21px;
     color: #5c514e;
-    padding-top: 20px;
 }
 
 .question-textbox
@@ -279,9 +279,12 @@ button#add_question_button
 
 .answer-content
 {
+    display: inline-block;
+    width: 470px;
     font-family: 'Nanum Gothic';
     font-size: 17px;
     color: #696060;
+    word-wrap: break-word;
 }
 
 .answer-write

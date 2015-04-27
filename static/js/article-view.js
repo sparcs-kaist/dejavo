@@ -38,8 +38,8 @@ $(document).ready(function(){
 		var time = $(document.createElement('span')).addClass('answer-time').text((created_date.getMonth() + 1) + '월 ' + created_date.getDate() + '일 ' + created_date.getHours() + '시 ' + created_date.getMinutes() + '분');
 		a_c_container.append(a_meta.append(a_name).append(time));
 
-		var content_div = $(document.createElement('div')).addClass('answer-content').text(a.content);
-		a_c_container.append(content_div);
+		var content_span = $(document.createElement('span')).addClass('answer-content').text(a.content);
+		a_c_container.append(content_span);
 
 		a_div.append(a_profile).append(a_c_container);
 		return a_div;
