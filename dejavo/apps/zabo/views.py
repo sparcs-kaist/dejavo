@@ -34,7 +34,8 @@ def main(request):
 def create(request):
 
     remove_draft = request.GET.get('force', False)
-    draft = Article.objects.filter(owner__id = request.user.id, is_published = False)
+    draft = Article.objects.filter(owner__id = request.user.id,
+            is_published = False, is_deleted = False, is_blocked = False)
 
     if remove_draft:
         draft.delete()
