@@ -112,7 +112,7 @@ class ZaboUser(AbstractBaseUser):
 class ZaboProfile(models.Model):
     
     user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='profile', unique=True)
-    profile_image = models.ImageField(upload_to = 'profile', default='default_profile.png')
+    profile_image = models.ImageField(upload_to = 'profile', default='default/default_profile.png')
     phone = models.CharField(max_length = 50, blank = True)
     bio = models.TextField(blank = True)
 

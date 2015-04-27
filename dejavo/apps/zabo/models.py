@@ -32,7 +32,7 @@ class Article(models.Model):
     category = models.CharField(max_length = 20, choices = CATEGORY_TYPE)
     # Article host group
     host_name = models.CharField(max_length = 50)
-    host_image = models.ImageField(upload_to = 'host')
+    host_image = models.ImageField(upload_to = 'host', default='default/default_host.png')
     host_description = models.CharField(max_length = 150)
     is_blocked = models.BooleanField(default = False)
     is_deleted = models.BooleanField(default = False)
