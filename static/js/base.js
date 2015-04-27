@@ -333,7 +333,8 @@ ZB.showAccountDialog = function(){
 	var pPosition = profileDiv.offset();
 
 	var leftMargin = (profileDiv.width() - 140) / 2;
-	if (leftMargin < -70) leftMargin = -70;
+	console.log(leftMargin);
+	if (leftMargin < 0 && leftMargin > -70) leftMargin = -70;
 	pPosition.top+= 65;
 	pPosition.left += leftMargin;
 	dialog.css({
@@ -346,9 +347,9 @@ ZB.showAccountDialog = function(){
 
 ZB.removeAccountDialog = function(){
 	var dialog = $('#account_dialog');
-	dialog.fadeOut('fast', function () {
-		dialog.remove();
-	});
+	//dialog.fadeOut('fast', function () {
+	//	dialog.remove();
+	//});
 };
 
 $(document).ready(function(){
