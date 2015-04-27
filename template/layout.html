@@ -59,7 +59,11 @@
 						<div class="profile_img_container">
 							<div class="profile_img">
 								<div id="user_profile_image" class="profile-image vhmiddle vhmiddle-update" data-width="40" data-height="40">
+									{% if user.is_authenticated %}
 									<img src="{{ user.profile.profile_image.url }}"></img>
+									{% else %}
+									<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" width="0" height="0" alt="" />
+									{% endif %}
 								</div>
 							</div>
 						</div>
