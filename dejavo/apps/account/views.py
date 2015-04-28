@@ -41,10 +41,10 @@ def login_view(request):
         # TODO create login page
         return HttpResponse('Login page')
 
-    username = request.POST.get('username', None)
+    email = request.POST.get('email', None)
     password = request.POST.get('password', None)
     
-    if not username or not password:
+    if not email or not password:
         # invalid format
         if request.ACCEPT_FORMAT == 'html':
             return HttpResponse(
@@ -56,10 +56,10 @@ def login_view(request):
                     data = {'error' : 'Invalid format'}
                     )
 
-    user = authenticate(username = username, password = password)
+    user = authenticate(username = email, password = password)
 
     if user is None:
-        # login fail page. wrong password, username
+        # login fail page. wrong password, email 
         if request.ACCEPT_FORMAT == 'html':
             # TODO login fail page
             return HttpResponse(
@@ -116,17 +116,17 @@ def logout_view(request):
 @require_http_methods(['POST'])
 @csrf_exempt
 def jwt_login(request):
-    username = request.POST.get('username', None)
+    email = request.POST.get('email', None)
     password = request.POST.get('password', None)
 
-    if not username or not password:
+    if not email or not password:
         # invalid format
         return JsonResponse(status = 400, data = {'error' : 'Invalid format'})
 
-    user = authenticate(username = username, password = password)
+    user = authenticate(username = email, password = password)
 
     if user is None:
-        # login fail page. wrong password, username
+        # login fail page. wrong password, email 
         return JsonResponse(status = 400, data = {'error' : 'Failed to login'})
 
     if not user.is_active:
@@ -432,10 +432,10 @@ def edit(request):
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['GET'])
-def show_user(request, username):
+def show_user(request, email):
 
     try:
-        user_info = get_user_model().objects.get(username = username).as_json()
+        user_info = get_user_model().objects.get(email = email).as_json()
         if request.ACCEPT_FORMAT == 'html':
             # TODO Create user page
             return HttpResponse(

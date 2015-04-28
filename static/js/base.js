@@ -226,7 +226,7 @@ ZB.login = function (){
 			dialog.overlay.fadeIn(200);
 			dialog.container.fadeIn(200, function () {
 				dialog.data.fadeIn(200);
-				dialog.data.find('input#login_username').focus();
+				dialog.data.find('input#login_email').focus();
 				dialog.data.find('#facebook_login').click(function(e){
 					e.preventDefault();
 					FB.getLoginStatus(function(response) {
@@ -236,11 +236,11 @@ ZB.login = function (){
 
 
 				var login_button = dialog.data.find('#login_button button');
-				var username = dialog.data.find('input#login_username');
+				var email = dialog.data.find('input#login_email');
 				var password = dialog.data.find('input#login_password');
 				var csrf = dialog.data.find('input[name=csrfmiddlewaretoken]');
 				console.log(csrf);
-				$.each([password, username], function(i, v) {
+				$.each([password, email], function(i, v) {
 					v.on('keypress', function (e) {
 						if (e.which == 13) {
 							login_button.click();
@@ -255,19 +255,19 @@ ZB.login = function (){
 						'dataType' : 'json',
 						'url' : '/login/',
 						'data' : {
-							'username' : username.val(),
+							'email' : email.val(),
 							'password' : password.val(),
 							'csrfmiddlewaretoken' : csrf.val(),
 						},
 						'success' : function(response) {
 							$.modal.close();
-							username.val('');
+							email.val('');
 							password.val('');
 							ZB.updateLoginInfo(response);
 						},
 						'error' : function(jqXHR) {
 							dialog.data.find('span#login_error').text('아이디 혹은 비밀번호가 틀렸습니다.');
-							username.focus();
+							email.focus();
 							password.val('');
 						},
 					});
