@@ -24,7 +24,6 @@ $(document).ready(function(){
 				$main_list.empty();
 				var elems = [],
 					now = Date.now(),
-					cnt = 0;
 				if(data && data.articles){
 					elems = data.articles.map(function(article){
 						var i, d=null,
@@ -36,12 +35,6 @@ $(document).ready(function(){
 								var cell_size = Math.round(scaled_width/223);
 								if(cell_size >= 2) {
 									$main_elem.addClass('elem_wide');
-									cnt += 2;
-								}
-								else cnt += 1;
-								if(cnt > 3) {
-									$main_elem.addClass('elem_last');
-									cnt = 0;
 								}
 								$anchor.append($img);
 								$poster_div.append($anchor);

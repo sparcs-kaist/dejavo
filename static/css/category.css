@@ -52,7 +52,7 @@ li
 
 #main_list_container
 {
-    width: 960px;
+    width: 984px;
     margin: 0 auto;
 }
 
@@ -76,8 +76,7 @@ li
 {
     position: relative;
     float: left;
-    margin-right: 24px;
-    margin-bottom: 54px;
+    margin: 0px 12px 54px 12px;
     width: 222px;
     height: 370px;
     background: #ffffff;
@@ -87,7 +86,7 @@ li
     box-shadow: 1px 1px 1px #ccc;
 }
 
-#main_list .elem_last
+#main_list
 {
     margin-right: 0px;
 }
