@@ -15,7 +15,7 @@
 		<div id="main_list_container">
 			<div id="main_list_title">Upcoming Events</div>
 			<ol id="main_list">
-				{% for article in articles %}
+				{% for article in articles|dictsort:"d_day" %}
 				<li class="event_elem">
 					<div class="event_container">
 						<div class="poster">

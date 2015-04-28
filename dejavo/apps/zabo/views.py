@@ -20,13 +20,12 @@ import datetime
 @require_http_methods(['GET'])
 def main(request):
     article_list = []
-    dday = []
     articles_set = Article.objects.filter(timeslot__start_time__gte=datetime.datetime.now())
     for aq in articles_set:
         if not article_list or not article_list[-1].get("id") == aq.id:
             article_list.append(aq.as_json())
 
-    return render(request, 'zabo/main.html', {'articles': article_list, 'days': dday})
+    return render(request, 'zabo/main.html', {'articles': article_list})
 
 
 @require_accept_formats(['application/json'])

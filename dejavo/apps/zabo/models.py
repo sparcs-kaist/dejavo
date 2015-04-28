@@ -93,7 +93,7 @@ class Article(models.Model):
                 })
 
         timeslot_list = []
-        timeslot_q_list = list(Timeslot.objects.filter(article = self))
+        timeslot_q_list = list(Timeslot.objects.filter(article = self).order_by('-start_time'))
         for timeslot in timeslot_q_list:
             timeslot_list.append({
                 'timeslot_type' : timeslot.timeslot_type,
