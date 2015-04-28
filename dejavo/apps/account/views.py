@@ -479,7 +479,7 @@ def search_user(request):
                 )
 
     _User = get_user_model()
-    user_list = _User.objects.filter(Q(username__icontains = query) |
+    user_list = _User.objects.filter(Q(email = query) |
             Q(first_name__icontains = query) | Q(last_name__icontains = query))[start:end]
     user_list_json = map(lambda x : x.as_json(), user_list)
 

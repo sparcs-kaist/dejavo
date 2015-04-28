@@ -27,6 +27,7 @@ $(document).ready(function(){
 			'data' : { 'q' : q.val() },
 			'dataType' : 'json',
 			'error' : function(req, textStatus, err) {
+				l.empty()
 				var li = $('<li></li>').css('text-align', 'center');
 				var div = $('<span></span>').css('line-height', '30px');
 				div.text('검색 결과가 없습니다.');
@@ -55,11 +56,9 @@ $(document).ready(function(){
 					var user_image = $('<img></img>').addClass('owner-small-profile-image')
 						.attr('src', user.profile_image);
 					var user_name = $('<div></div>').addClass('owner-small-profile-name')
-						.text(user.last_name + user.first_name);
-					var user_id = $('<div></div>').addClass('owner-small-profile-id')
-						.text(user.username);
+						.text(user.last_name + ' ' + user.first_name);
 
-					li.append(user_image).append(user_name).append(user_id);
+					li.append(user_image).append(user_name);
 					l.append(li);
 
 					// check if owner is included.

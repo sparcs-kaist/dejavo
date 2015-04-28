@@ -522,17 +522,6 @@
 
 #owner_selection_list li .owner-small-profile-name
 {
-    float: left;
-    margin-left: 15px;
-    font-family: 'Nanum Gothic';
-    height: inherit;
-    font-size: 13px;
-    line-height: 30px;
-    color: #696060;
-}
-
-#owner_selection_list li .owner-small-profile-id
-{
     float : right;
     margin-right: 25px;
     font-family: 'Nanum Gothic';
