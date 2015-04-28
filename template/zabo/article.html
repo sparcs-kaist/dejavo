@@ -204,7 +204,7 @@
 
 			$("li#twitter").click(function(e){
 					e.preventDefault();
-					popupwindow('https://twitter.com/intent/tweet?text={{ article.title }}-{{ article.subtitle }}&url={{ request.build_absolute_uri }}', 'Tweet Article', 600, 260);
+					popupwindow('https://twitter.com/intent/tweet?text={{ article.title|urlencode }}-{{ article.subtitle }}&url={{ request.build_absolute_uri }}', 'Tweet Article', 600, 260);
 				});
 		});
 
