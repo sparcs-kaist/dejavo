@@ -20,8 +20,12 @@
 
 {% block content %}
 		<div id="article_head_container">
-			<div id="article_title">{{ article.title }}</div>
-			<div id="article_subtitle">{{ article.subtitle }}</div>
+			{% if article.subtitle|length > 0 %}
+				<div id="article_title">{{ article.title }}</div>
+				<div id="article_subtitle">{{ article.subtitle }}</div>
+			{% else %}
+				<div id="article_title" class="nosubtitle">{{ article.title }}</div>
+			{% endif %}
 		</div>
 		<div id="article_body_container">
 			<div id="article_main">
@@ -113,10 +117,12 @@
 							</table>
 						</div>
 					</div>
+					{% if article.location|length > 0 %}
 					<div id="location_container" class="sub-container">
 						<div class="sub-head">장소</div>
 						<div class="sub-content"><span>{{ article.location }}</span></div>
 					</div>
+					{% endif %}
 					<div id="participant_container" class="sub-container">
 						<div class="sub-head">참여자</div>
 						<div class="sub-content">
@@ -133,10 +139,12 @@
 						</div>
 						<div id="host_content" class="sub-content">{{ article.host_description }}</div>
 					</div>
+					{% if article.announcement|length > 0 %}
 					<div id="notice_container" class="sub-container">
 						<div class="sub-head">공지사항</div>
 						<div id="notice_content" class="sub-content"><span>{{ article.announcement }}</span></div>
 					</div>
+					{% endif %}
 					{% if is_owner %}
 					<div id="owner_button_container">
 						<button id="article_edit_button" class="button-large stress">수정</button>

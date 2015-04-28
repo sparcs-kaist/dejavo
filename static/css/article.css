@@ -20,6 +20,11 @@ body
     color: #5c514e;
 }
 
+.nosubtitle#article_title
+{
+    margin-top: 20px;
+}
+
 #article_subtitle
 {
     font-family: 'Nanum Barun Gothic';
@@ -361,6 +366,7 @@ button#add_answer_button
 {
     border: 0;
     white-space: nowrap;
+    border-spacing: 0px;
 }
 
 #timeslot_container table td
