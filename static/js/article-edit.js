@@ -630,10 +630,12 @@ $(document).ready(function(){
 						fields.push('메인포스터');
 					} else if (key == 'title') {
 						fields.push('제목');
+					} else if (key == 'timeslot') {
+						fields.push('일시');
 					}
 				});
 
-				var msg = '<b>' + fields.join(', ') + '</b>를(을) 입력하거나 선택해 주시기 바랍니다';
+				var msg = '<b>' + fields.join(', ') + '</b>를(을) 바르게 입력하거나 선택해 주시기 바랍니다';
 				$('#error_msg').html(msg);
 
 			},

@@ -158,30 +158,38 @@ def edit_article(request, article_id):
     real_update_field = set(update_fields) & set(model_fields)
 
     try:
+        error_dict = {}
+
         if 'timeslot' in update_fields:
-            post_timeslot_str = request.POST.get('timeslot')
-            post_timeslot_list = json.loads(post_timeslot_str)
+            try:
+                post_timeslot_str = request.POST.get('timeslot')
+                post_timeslot_list = json.loads(post_timeslot_str)
 
-            keep_timeslot = []
-            new_timeslot = []
-            for ts in post_timeslot_list:
-                if 'id' in ts:
-                    keep_timeslot.append(int(ts['id']))
+                keep_timeslot = []
+                new_timeslot = []
+                for ts in post_timeslot_list:
+                    if 'id' in ts:
+                        keep_timeslot.append(int(ts['id']))
+                    else:
+                        new_timeslot.append(ts)
+
+                timeslot_list = map(lambda t : t['id'],
+                        Timeslot.objects.filter(article = article).values('id'))
+                remove_list = set(timeslot_list) - set(keep_timeslot)
+                for tid in remove_list:
+                    Timeslot.objects.filter(id__in = remove_list).delete();
+
+                for ts in new_timeslot:
+                    new_ts = Timeslot(article = article, timeslot_type = ts['type'],
+                            start_time = ts['start_time'], end_time = None,
+                            label = ts['label'])
+                    new_ts.save()
+
+            except ValidationError as e:
+                if 'timeslot' in error_dict:
+                    error_dict['timeslot'].append('Wrong time format: ' + str(ts))
                 else:
-                    new_timeslot.append(ts)
-
-            timeslot_list = map(lambda t : t['id'],
-                    Timeslot.objects.filter(article = article).values('id'))
-            remove_list = set(timeslot_list) - set(keep_timeslot)
-            for tid in remove_list:
-                Timeslot.objects.filter(id__in = remove_list).delete();
-
-            for ts in new_timeslot:
-                new_ts = Timeslot(article = article, timeslot_type = ts['type'],
-                        start_time = ts['start_time'], end_time = None,
-                        label = ts['label'])
-
-                new_ts.save()
+                    error_dict['timeslot'] = ['Wrong time format: ' + str(ts)]
 
         if 'owner' in update_fields:
             post_owner_str = request.POST.get('owner')
@@ -195,6 +203,9 @@ def edit_article(request, article_id):
             article.full_clean()
         article.save()
 
+        if len(error_dict) > 0:
+            raise ValidationError('Invalid Format on time slot or owner')
+
         response = JsonResponse(
                 status = 200,
                 data = {
@@ -206,11 +217,14 @@ def edit_article(request, article_id):
         return response
 
     except ValidationError as e:
+        e_dict = getattr(e, 'message_dict', {})
+        e_dict.update(error_dict)
+
         return JsonResponse(
                 status = 400,
                 data = {
                     'error' : 'Invalid format',
-                    'msg' : e.message_dict
+                    'msg' : e_dict,
                     },
                 )
 
