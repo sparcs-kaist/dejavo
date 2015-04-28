@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.sites.models import Site
+from django.contrib.sites.requests import RequestSite
 from django.db.models import Q
 
 from accept_checker.decorators import require_accept_formats, auth_required 

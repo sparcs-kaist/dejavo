@@ -7,8 +7,8 @@
 		<meta property="og:title" content="{{ article.title }}" />
 		<meta property="og:site_name" content="SPARCS Zabo Project" /> 
 		<meta property="og:description" content="{{ article.subtitle }}" />
-		<meta property="og:url" content="{{ request.build_absolute_uri }}">
-		<meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{{ article.image.url }}" />
+		<meta property="og:url" content="http://{{ site.domain }}{{ request.get_full_path }}">
+		<meta property="og:image" content="http://{{ site.domain }}{{ article.image.url }}" />
         <meta property="og:type" content="article" /> <!-- article? website? -->
 {% endblock %}
 

@@ -5,6 +5,8 @@ from django.shortcuts import render
 from django.template import RequestContext, loader
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
+from django.contrib.sites.requests import RequestSite
 
 from accept_checker.decorators import require_accept_formats, auth_required
 from dejavo.apps.zabo.models import Article, Timeslot, Question, Answer
@@ -87,9 +89,16 @@ def view_article(request, article_id):
         if request.ACCEPT_FORMAT == 'json':
             return JsonResponse(status = 200, data = article.as_json())
         else:
+            if Site._meta.installed:
+                site = Site.objects.get_current()
+            else:
+                site = RequestSite(request)
+
             question = Question.objects.filter(article = article)
+
             return render(request, 'zabo/article.html', {
                 'article' : article,
+                'site' : site,
                 'participant' : map(lambda x : x.user,
                     Participation.objects.filter(article = article)),
                 'is_participating' : Participation.objects.filter(user = request.user.id,
