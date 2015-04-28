@@ -160,21 +160,29 @@ def edit_article(request, article_id):
         error_dict = {}
 
         if 'timeslot' in update_fields:
+
+            post_timeslot_str = request.POST.get('timeslot')
+            post_timeslot_list = json.loads(post_timeslot_str)
+
+            keep_timeslot = []
+            new_timeslot = []
+            for ts in post_timeslot_list:
+                if 'id' in ts:
+                    keep_timeslot.append(int(ts['id']))
+                else:
+                    new_timeslot.append(ts)
+
+            timeslot_list = map(lambda t : t['id'],
+                    Timeslot.objects.filter(article = article).values('id'))
+            remove_list = set(timeslot_list) - set(keep_timeslot)
+
             try:
-                post_timeslot_str = request.POST.get('timeslot')
-                post_timeslot_list = json.loads(post_timeslot_str)
 
-                keep_timeslot = []
-                new_timeslot = []
-                for ts in post_timeslot_list:
-                    if 'id' in ts:
-                        keep_timeslot.append(int(ts['id']))
-                    else:
-                        new_timeslot.append(ts)
+                if (len(new_timeslot) + len(keep_timeslot) <= 0):
+                    error_dict['timeslot_count'] = ['At least one time slot is needed']
+                    # we should stop updating timeslots right now.
+                    raise ValidationError('At least one time slot is needed')
 
-                timeslot_list = map(lambda t : t['id'],
-                        Timeslot.objects.filter(article = article).values('id'))
-                remove_list = set(timeslot_list) - set(keep_timeslot)
                 for tid in remove_list:
                     Timeslot.objects.filter(id__in = remove_list).delete();
 
@@ -190,6 +198,11 @@ def edit_article(request, article_id):
                 else:
                     error_dict['timeslot'] = ['Wrong time format: ' + str(ts)]
 
+        else :
+            timeslot_list = Timeslot.objects.filter(article = article).values('id')
+            if (len(timeslot_list) <= 0):
+                error_dict['timeslot_count'] = ['At least one time slot is needed']
+
         if 'owner' in update_fields:
             post_owner_str = request.POST.get('owner')
             post_owner_list = map(lambda x : int(x), json.loads(post_owner_str))
@@ -200,11 +213,11 @@ def edit_article(request, article_id):
         article.set_fields(real_update_field, request.POST, request.FILES)
         if article.is_published:
             article.full_clean()
-        article.save()
 
         if len(error_dict) > 0:
             raise ValidationError('Invalid Format on time slot or owner')
 
+        article.save()
         response = JsonResponse(
                 status = 200,
                 data = {

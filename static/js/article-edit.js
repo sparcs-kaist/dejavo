@@ -615,6 +615,7 @@ $(document).ready(function(){
 			'error' : function(req, textStatus, err) {
 				var res = req.responseJSON;
 				var fields = [];
+				var timeslot_count = false;
 				$.each(res.msg, function(key, val) {
 					if (key == 'category'){
 						fields.push('카테고리');
@@ -632,11 +633,24 @@ $(document).ready(function(){
 						fields.push('제목');
 					} else if (key == 'timeslot') {
 						fields.push('일시');
+					} else if (key == 'timeslot_count') {
+						timeslot_count = true;
 					}
 				});
 
-				var msg = '<b>' + fields.join(', ') + '</b>를(을) 바르게 입력하거나 선택해 주시기 바랍니다';
+				var msg = '';
+				if (fields.length > 0) {
+					msg += '<b>' + fields.join(', ') + '</b>를(을) 바르게 입력하거나 선택해 주시기 바랍니다';
+				}
+				if (timeslot_count) {
+					if (fields.length > 0) {
+						msg += '<br><br>';
+					}
+					msg += '최소 하나의 <b>일정</b>이 있어야합니다.';
+				}
 				$('#error_msg').html(msg);
+				$('#error_msg').animate( { backgroundColor: "#f15050" }, 1 )
+					.animate( { backgroundColor: "#ffffff" }, 1000 );
 
 			},
 			'complete' : function(jqXHR, textStatus) {
