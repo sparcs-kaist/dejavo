@@ -88,5 +88,5 @@ $(document).ready(function(){
 		getArticles(this.value);
 	});
 
-	getArticles("all");
+	$('#category_list button[value="all"]').click();
 });
