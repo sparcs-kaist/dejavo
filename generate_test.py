@@ -71,6 +71,7 @@ def generate_article(info, user_pool):
     article.save()
     article.created_date = created_date
     article.updated_date = updated_date
+    article.is_published = True
     article.save()
 
     # Add Poster
