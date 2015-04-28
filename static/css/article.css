@@ -405,9 +405,9 @@ button.timeslot-label
     font-family: 'Nanum Barun Gothic';
     font-size: 25px;
     color: #443333;
-    float: left;
     height: 40px;
     line-height: 40px;
+    white-space: nowrap;
 }
 
 #host_content
