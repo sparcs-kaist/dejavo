@@ -640,7 +640,7 @@ $(document).ready(function(){
 
 				var msg = '';
 				if (fields.length > 0) {
-					msg += '<b>' + fields.join(', ') + '</b>를(을) 바르게 입력하거나 선택해 주시기 바랍니다';
+					msg += '<b>' + fields.join(', ') + '</b>를(을) 바르게 입력하거나 선택해 주시기 바랍니다.';
 				}
 				if (timeslot_count) {
 					if (fields.length > 0) {
