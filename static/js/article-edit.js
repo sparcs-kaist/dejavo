@@ -7,7 +7,6 @@ $(document).ready(function(){
 
 	$(document).click(function(e){
 		var f = function(a, b) {
-			console.log(e.target);
 			if (b.is(e.target) || b.has(e.target).length > 0) {
 				return;
 			}
@@ -261,6 +260,12 @@ $(document).ready(function(){
 		});
 		ele.toggle();
 		$('#ts_label').empty().focus();
+	});
+
+	$('#timeslot_add_form').keyup(function(e){
+		if (e.which == 13) {
+			$('#timeslot_add_button').click();
+		}
 	});
 
 	$('#timeslot_add_button').click(function(e){
