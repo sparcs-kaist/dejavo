@@ -616,7 +616,7 @@ $(document).ready(function(){
 				var res = req.responseJSON;
 				var fields = [];
 				var timeslot_count = false;
-				$.each(res.msg, function(key, val) {
+				res.msg && $.each(res.msg, function(key, val) {
 					if (key == 'category'){
 						fields.push('카테고리');
 					} else if (key == 'content') {

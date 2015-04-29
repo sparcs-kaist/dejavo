@@ -120,7 +120,12 @@
 					var embed = '<iframe title="YouTube video player" src="https://www.youtube.com/embed/'
 						+ valid +'" allowfullscreen="true" frameborder="0">';
 					document.execCommand("insertHtml", false, embed);
+
 				}
+			},
+			createLink = function() {
+				document.execCommand('insertHTML', false,
+						'<a href="' + selectedRange + '" target="_blank">' + selectedRange + '</a>');
 			},
 			markSelection = function (input, color) {
 				restoreSelection();
@@ -144,6 +149,13 @@
 					insertYoutube(this.value);
 					saveSelection();
 					this.value = '';
+				});
+
+				toolbar.find('div#create_link[data-' + options.commandRole + ']').click(function () {
+					restoreSelection();
+					editor.focus();
+					createLink();
+					saveSelection();
 				});
 
 				toolbar.find('input[type=file][data-' + options.commandRole + ']').change(function () {

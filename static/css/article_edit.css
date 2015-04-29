@@ -265,11 +265,23 @@
 #media_tool_container #media_tool .m-tool
 {
     float: left;
+    margin-right: 15px;
 }
 
-#media_tool_container #media_tool .m-tool:first-child
+#media_tool_container #media_tool .m-tool:last-child
 {
-    margin-right: 30px;
+    margin-right: 0px;
+}
+
+#create_link
+{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #f0795b;
+    background-image: url('images/link_img.png');
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 #insert_image
@@ -330,6 +342,9 @@
 #error_msg
 {
     text-align: left;
+    border-radius: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     color: #f0795b;
     font-size: 13px;
     font-family: 'Nanum Gothic';
