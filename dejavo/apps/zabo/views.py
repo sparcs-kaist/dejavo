@@ -20,10 +20,10 @@ import datetime
 @require_http_methods(['GET'])
 def main(request):
     article_list = []
-    articles_set = Article.objects.filter(timeslot__start_time__gte=datetime.datetime.now()).filter(is_published=True)
+    articles_set = Article.objects.filter(timeslot__start_time__gte=datetime.datetime.now(),
+            is_published=True, is_deleted=False, is_blocked=False).distinct()
     for aq in articles_set:
-        if not article_list or not article_list[-1].get("id") == aq.id:
-            article_list.append(aq.as_json())
+        article_list.append(aq.as_json())
 
     return render(request, 'zabo/main.html', {'articles': article_list})
 
