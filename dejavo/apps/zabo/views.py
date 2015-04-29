@@ -176,27 +176,28 @@ def edit_article(request, article_id):
                     Timeslot.objects.filter(article = article).values('id'))
             remove_list = set(timeslot_list) - set(keep_timeslot)
 
-            try:
+            if (len(new_timeslot) + len(keep_timeslot) <= 0):
+                error_dict['timeslot_count'] = ['At least one time slot is needed']
+                # we should stop updating timeslots right now.
 
-                if (len(new_timeslot) + len(keep_timeslot) <= 0):
-                    error_dict['timeslot_count'] = ['At least one time slot is needed']
-                    # we should stop updating timeslots right now.
-                    raise ValidationError('At least one time slot is needed')
+            else:
+                new_ts_list = []
+                for ts in new_timeslot:
+                    try:
+                        new_ts = Timeslot(article = article, timeslot_type = ts['type'],
+                                start_time = ts['start_time'], end_time = None,
+                                label = ts['label'])
+                        new_ts_list.append(new_ts)
+                    except ValidationError as e:
+                        if 'timeslot' in error_dict:
+                            error_dict['timeslot'].append('Wrong time format: ' + str(ts))
+                        else:
+                            error_dict['timeslot'] = ['Wrong time format: ' + str(ts)]
 
+                for new_ts in new_ts_list:
+                    new_ts.save()
                 for tid in remove_list:
                     Timeslot.objects.filter(id__in = remove_list).delete();
-
-                for ts in new_timeslot:
-                    new_ts = Timeslot(article = article, timeslot_type = ts['type'],
-                            start_time = ts['start_time'], end_time = None,
-                            label = ts['label'])
-                    new_ts.save()
-
-            except ValidationError as e:
-                if 'timeslot' in error_dict:
-                    error_dict['timeslot'].append('Wrong time format: ' + str(ts))
-                else:
-                    error_dict['timeslot'] = ['Wrong time format: ' + str(ts)]
 
         else :
             timeslot_list = Timeslot.objects.filter(article = article).values('id')

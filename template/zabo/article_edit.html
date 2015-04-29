@@ -48,6 +48,9 @@
 				<div id="media_tool_container">
 					<div id="media_tool" data-role="editor-toolbar">
 						<div class="m-tool">
+							<div id="create_link" class="stress" data-edit="createLink"></div>
+						</div>
+						<div class="m-tool">
 							<input id="editor_image_input" type="file" data-edit="insertImage"
 								style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 0px; height: 0px;">
 							<div onclick="getElementById('editor_image_input').click();" id="insert_image" class="stress"></div>
@@ -147,9 +150,10 @@
 							<div id="timeslot_add_form" style="display: none;
 								background-color: #f4e5e2; position: absolute; border-radius: 5px;
 								font-family: 'Nanum Gothic'; font-size: 15px; color: #5d5454;
-								padding: 10px 10px 10px 20px; width: 650px;">
+								padding: 10px 10px 10px 20px; width: 680px;">
 								<span>태그 :</span>
-								<input id="ts_label" type="text" style="width: 108px;"></input>
+								<input id="ts_label" type="text" style="width: 108px;" placeholder="ex) 지원마감"></input>
+								&nbsp;&nbsp;&nbsp;|
 								<input id="ts_year" type="text" style="width: 81px;"></input>
 								<span>년</span>
 								<input id="ts_month" type="text" style="width: 43px;"></input>
