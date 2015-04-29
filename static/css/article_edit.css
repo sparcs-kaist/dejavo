@@ -266,11 +266,22 @@
 {
     float: left;
     margin-right: 15px;
+    text-align: center;
 }
 
 #media_tool_container #media_tool .m-tool:last-child
 {
     margin-right: 0px;
+}
+
+#media_tool_container #media_tool .m-tool div.m-tool-button
+{
+    margin-bottom: 5px;
+}
+
+#media_tool_container #media_tool .m-tool span.m-tool-label
+{
+    font-size: 15px;
 }
 
 #create_link
