@@ -23,7 +23,7 @@ $(document).ready(function(){
 			'success' : function(data){
 				$main_list.empty();
 				var elems = [],
-					now = Date.now(),
+					now = Date.now();
 				if(data && data.articles){
 					elems = data.articles.map(function(article){
 						var i, d=null,
