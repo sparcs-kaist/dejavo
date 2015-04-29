@@ -41,6 +41,7 @@ $(document).ready(function(){
 										var newLocation = jqXHR.getResponseHeader('Location');
 										window.location.replace(newLocation);
 									},
+
 								});
 							});
 						},
@@ -56,6 +57,11 @@ $(document).ready(function(){
 				}
 			},
 			'error' : function(req, textStatus, jqXHR) {
+				if (req.status == 401) {
+					ZB.login(function () {
+						$('a#create_article').click();
+					});
+				}
 			},
 		});
 	});

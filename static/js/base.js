@@ -69,7 +69,6 @@ ZB.registerOrLogin = function(accessToken) {
 		'dataType' : 'json',
 		'url' : '/social/auth/facebook/?access_token=' + accessToken,
 		'success' : function(response) {
-			console.log(response);
 			$.modal.close();
 			ZB.updateLoginInfo(response);
 			// TODO
@@ -195,9 +194,10 @@ ZB.register = function () {
 	register.init();
 };
 
-ZB.login = function (){
+ZB.login = function (postFunc){
 
 	var login = {
+		'postFunc' : postFunc,
 		init : function() {
 			$.get("/account/login_form/", function(data){
 				// create a modal dialog with the data
@@ -239,7 +239,6 @@ ZB.login = function (){
 				var email = dialog.data.find('input#login_email');
 				var password = dialog.data.find('input#login_password');
 				var csrf = dialog.data.find('input[name=csrfmiddlewaretoken]');
-				console.log(csrf);
 				$.each([password, email], function(i, v) {
 					v.on('keypress', function (e) {
 						if (e.which == 13) {
@@ -260,6 +259,7 @@ ZB.login = function (){
 							'csrfmiddlewaretoken' : csrf.val(),
 						},
 						'success' : function(response) {
+							dialog.doPostFunc = true;
 							$.modal.close();
 							email.val('');
 							password.val('');
@@ -280,6 +280,12 @@ ZB.login = function (){
 				dialog.overlay.fadeOut(200, function () {
 					$.modal.close();
 					ZB.register();
+				});
+			} else if (dialog.doPostFunc) {
+				dialog.diPostFunc = false;
+				dialog.overlay.fadeOut(200, function () {
+					$.modal.close();
+					login.postFunc();
 				});
 			} else {
 				dialog.overlay.fadeOut(200, function () {
@@ -333,7 +339,6 @@ ZB.showAccountDialog = function(){
 	var pPosition = profileDiv.offset();
 
 	var leftMargin = (profileDiv.width() - 140) / 2;
-	console.log(leftMargin);
 	if (leftMargin < 0 && leftMargin > -70) leftMargin = -70;
 	pPosition.top+= 65;
 	pPosition.left += leftMargin;

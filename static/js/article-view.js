@@ -247,7 +247,9 @@ $(document).ready(function(){
 			},
 			'error' : function(jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 401) {
-					ZB.login();
+					ZB.login(function () {
+						$('li#participate').click();
+					});
 				}
 			},
 			'complete' : function(jqXHR, textStatus) {
