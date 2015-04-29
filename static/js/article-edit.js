@@ -1,5 +1,25 @@
 $(document).ready(function(){
 
+	var timeslot_add_form = $('div#timeslot_add_form');
+	var timeslot_add_div = $('div#timeslot_add_container');
+	var owner_add_form = $('div#owner_add_form');
+	var owner_add_div = $('div#owner_add_container');
+
+	$(document).click(function(e){
+		var f = function(a, b) {
+			console.log(e.target);
+			if (b.is(e.target) || b.has(e.target).length > 0) {
+				return;
+			}
+			if (!a.is(e.target) && a.has(e.target).length == 0) {
+				a.hide();
+				a.find('input').val('');
+			}
+		};
+		f(timeslot_add_form, timeslot_add_div);
+		f(owner_add_form, owner_add_div);
+	});
+
 	$.each($('#owner_list li'), function(i, v) {
 		var $v = $(v);
 		$v.find('span.timeslot-remove-icon').click(function(e){
