@@ -67,7 +67,7 @@
 									<div class="question-content">
 										{{ q.content }}
 									</div>
-									{% if user in article.owner.all %}
+									{% if user.is_authenticated %}
 									<div class="answer-popup">
 										<img src="/media/dasf.png" class="answer-popup-image"/>
 									</div>
