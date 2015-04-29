@@ -187,6 +187,7 @@ def edit_article(request, article_id):
                         new_ts = Timeslot(article = article, timeslot_type = ts['type'],
                                 start_time = ts['start_time'], end_time = None,
                                 label = ts['label'])
+                        new_ts.full_clean()
                         new_ts_list.append(new_ts)
                     except ValidationError as e:
                         if 'timeslot' in error_dict:
