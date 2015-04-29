@@ -175,7 +175,7 @@
 						{% for p in participant reversed %}
 						<li user-id="{{ p.id }}">
 							<div class="participant-profile-image vhmiddle" data-width="48" data-height="48">
-								<img src="{{ p.profile_image.url }}"></img>
+								<img src="{{ p.profile.profile_image.url }}"></img>
 							</div>
 							<span class="participant-profile-text">
 								{{ p.user.last_name }}{{ p.user.first_name}} 님이 참여합니다.
