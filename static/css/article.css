@@ -87,6 +87,11 @@ body
     margin-bottom: 20px;
 }
 
+#article_content a
+{
+    text-decoration: underline;
+}
+
 #article_content iframe
 {
     width: 600px;

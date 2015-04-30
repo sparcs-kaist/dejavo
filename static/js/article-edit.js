@@ -271,6 +271,7 @@ $(document).ready(function(){
 	$('#timeslot_add_button').click(function(e){
 		e.preventDefault();
 		var data = getNewTimeSlot();
+		if (!data) return;
 		var stime = data.start_time;
 
 		var tr = $('<tr></tr>').attr('mode', 'new');
@@ -289,9 +290,11 @@ $(document).ready(function(){
 					});
 		var labelTD = $('<td></td>');
 		if (data.label.trim() == '') {
-			labelTD.append('<span class="timeslot-label"></span>');;
+			labelTD.append('<span class="timeslot-label"></span>');
 		} else {
-			labelTD.append('<button class="timeslot-label">' + data.label + '</button>');;
+			var button = $('<button class="timeslot-label"></button>');
+			button.text(data.label);
+			labelTD.append(button);
 		}
 
 		tr.append(removeTD).append(dateTD).append(labelTD);
@@ -327,13 +330,28 @@ $(document).ready(function(){
 
 	var getNewTimeSlot = function() {
 		// TODO validation
-		var newDate = new Date();
-		newDate.setFullYear($('#ts_year').val());
-		newDate.setMonth($('#ts_month').val() - 1);
-		newDate.setDate($('#ts_date').val());
-		newDate.setHours($('#ts_hour').val());
-		newDate.setMinutes($('#ts_minute').val());
+		var newDate = new Date(
+				$('#ts_year').val(),
+				$('#ts_month').val() - 1,
+				$('#ts_date').val(),
+				$('#ts_hour').val(),
+				$('#ts_minute').val());
 
+		if (isNaN(newDate)) {
+			$('#error_msg').html('일시 형식이 잘못되었습니다.');
+			$('#error_msg').animate( { backgroundColor: "#f15050" }, 1 )
+				.animate( { backgroundColor: "#ffffff" }, 1000 );
+			return false;
+		} else {
+			var maxDate = new Date();
+			maxDate.setDate(maxDate.getDate() + 400);
+			if (newDate > maxDate) {
+				$('#error_msg').html('작성된 일시가 너무 멉니다.');
+				$('#error_msg').animate( { backgroundColor: "#f15050" }, 1 )
+					.animate( { backgroundColor: "#ffffff" }, 1000 );
+				return false;
+			}
+		}
 		return {
 			'label' : $('#ts_label').val(),
 			'start_time' : newDate,
