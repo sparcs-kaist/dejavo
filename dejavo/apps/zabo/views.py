@@ -209,6 +209,9 @@ def edit_article(request, article_id):
             post_owner_str = request.POST.get('owner')
             post_owner_list = map(lambda x : int(x), json.loads(post_owner_str))
 
+            if (len(post_owner_list) <= 0):
+                error_dict['owner'] = ['At leat one owner is needed']
+
             article.owner.clear()
             article.owner.add(*post_owner_list)
 
