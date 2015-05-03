@@ -87,12 +87,21 @@ body
     text-align: center;
     font-family: 'Nanum Barun Gothic';
     font-size: 21px;
-    color: #beb7b7;
 }
 
 #content_left div
 {
     margin-top: 45px;
+}
+
+#content_left div a
+{
+    color: #beb7b7;
+}
+
+#content_left div a#current
+{
+    color: #f0795b;
 }
 
 #content_right
