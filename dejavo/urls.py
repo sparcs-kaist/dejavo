@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.views.generic import RedirectView
 
 admin.autodiscover()
 
@@ -27,5 +28,7 @@ urlpatterns = patterns('',
     url(r'^account/', include('dejavo.apps.account.urls')),
     url(r'^article/', include('dejavo.apps.zabo.urls')),
     url(r'^manage/', include('dejavo.apps.manage.urls')),
+
+    url(r'^favicon\.ico', RedirectView.as_view(url='media/favicon.png')),
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

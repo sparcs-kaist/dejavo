@@ -234,6 +234,8 @@ button#add_question_button
 .answer-popup img
 {
     cursor: pointer;
+    width: 16px;
+    height: 16px;
 }
 
 .answer-profile-image-container

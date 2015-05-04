@@ -560,3 +560,17 @@ def unparticipate(request, article_id):
             status = 400,
             data = { 'error' : 'Article does not exist' }
             )
+
+@require_accept_formats(['text/html'])
+@require_http_methods(['GET'])
+@auth_required
+def my_articles(request):
+    article_list = []
+    article_set = Article.objects.filter(owner = request.user)
+
+    for a in article_set:
+        article_list.append(a.as_json())
+
+    return render(request, "account/article.html", {
+        'articles' : article_list
+        })

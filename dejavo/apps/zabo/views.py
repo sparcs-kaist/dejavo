@@ -535,13 +535,12 @@ def view_category(request):
 def get_category(request, category):
     article_list = []
 
-    article_set = Article.objects.filter(timeslot__start_time__gte=datetime.datetime.now())
+    article_set = Article.objects.filter(timeslot__start_time__gte=datetime.datetime.now(), is_published=True, is_deleted=False, is_blocked=False).distinct()
     if category != "all":
         article_set = article_set.filter(category = category)
 
     for a in article_set:
-        if not article_list or not article_list[-1].get("id") == a.id:
-            article_list.append(a.as_json())
+        article_list.append(a.as_json())
     
     return JsonResponse(
             status = 200,

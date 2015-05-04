@@ -21,6 +21,10 @@ $(document).ready(function(){
 		var content_div = $(document.createElement('div')).addClass('question-content').text(q.content);
 		q_c_container.append(content_div);
 
+		var answer_popup = $(document.createElement('div')).addClass('answer-popup');
+		var answer_popup_img = $(document.createElement('img')).attr('src', '/media/answer.png');
+		q_c_container.append(answer_popup.append(answer_popup_img));
+
 		q_div.append(q_profile).append(q_c_container);
 		return q_div;
 	};
