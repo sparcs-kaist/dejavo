@@ -74,6 +74,11 @@ ZB.registerOrLogin = function(accessToken) {
 			// TODO
 			// also need to update q and a part
 		},
+		'error' : function(jqXHR, textStatus, errorThrown) {
+			$('#facebook_error').text('이메일 주소를 가져오지 못했습니다.');
+			$('#facebook_error').animate( { 'background-color' : "#f15050" }, 1 )
+				.animate( { 'background-color' : "transparent" }, 1000 );
+		},
 	});
 }
 
@@ -267,6 +272,9 @@ ZB.login = function (postFunc){
 						},
 						'error' : function(jqXHR) {
 							dialog.data.find('span#login_error').text('아이디 혹은 비밀번호가 틀렸습니다.');
+							$(dialog.data.find('span#login_error'))
+								.animate( { 'background-color' : "#f15050" }, 1 )
+								.animate( { 'background-color' : "transparent" }, 1000 );
 							email.focus();
 							password.val('');
 						},

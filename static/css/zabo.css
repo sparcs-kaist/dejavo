@@ -183,7 +183,7 @@ button
 
 .login_form#login_sns
 {
-    padding-top: 25px;
+    padding-top: 5px;
     padding-bottom: 25px;
     border-radius: 0px 0px 10px 10px;
 }
@@ -207,13 +207,14 @@ button
     margin-bottom: 5px;
 }
 
-
-div#login_error_container
+div#login_error_container,
+div#facebook_error_container
 {
     height: 20px;
 }
 
-div#login_error_container span#login_error
+div#login_error_container span#login_error,
+div#facebook_error_container span#facebook_error
 {
     float:right;
     font-weight : bold;
@@ -357,6 +358,8 @@ div#article_action_container
 #login_id_pw div#link_list span
 {
     cursor: pointer;
+    position: relative;
+    top: -2px;
     color: #af8b82;
     font-size: 13px;
     font-family: 'Nanum Gothic';
@@ -365,7 +368,7 @@ div#article_action_container
 
 #login_id_pw div#action_container
 {
-    height: 40px;
+    height: 42px;
 }
 
 #login_id_pw div#login_button
@@ -375,7 +378,7 @@ div#article_action_container
 
 #login_id_pw div#login_button button
 {
-    height: 40px;
+    height: 42px;
     font-size: 15.2px;
     font-weight: bold;
     cursor: pointer;

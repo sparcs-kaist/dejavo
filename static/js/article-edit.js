@@ -659,6 +659,7 @@ $(document).ready(function(){
 				var res = req.responseJSON;
 				var fields = [];
 				var timeslot_count = false;
+				var owner_err = false;
 				res.msg && $.each(res.msg, function(key, val) {
 					if (key == 'category'){
 						fields.push('카테고리');
@@ -676,22 +677,26 @@ $(document).ready(function(){
 						fields.push('제목');
 					} else if (key == 'timeslot') {
 						fields.push('일시');
+
 					} else if (key == 'timeslot_count') {
 						timeslot_count = true;
+					} else if (key == 'owner') {
+						owner_err = true;
 					}
 				});
 
-				var msg = '';
+				var msg = [];
 				if (fields.length > 0) {
-					msg += '<b>' + fields.join(', ') + '</b>를(을) 바르게 입력하거나 선택해 주시기 바랍니다.';
+					msg.push('<b>' + fields.join(', ') +
+							'</b>를(을) 바르게 입력하거나 선택해 주시기 바랍니다.');
 				}
-				if (timeslot_count) {
-					if (fields.length > 0) {
-						msg += '<br><br>';
-					}
-					msg += '최소 하나의 <b>일정</b>이 있어야합니다.';
+				if (timeslot_count){
+					msg.push('최소 하나의 <b>일정</b>이 있어야합니다.');
 				}
-				$('#error_msg').html(msg);
+				if (owner_err){
+					msg.push('최소 한 명의 <b>관리자</b>가 있어야합니다.');
+				}
+				$('#error_msg').html(msg.join('<br><br>'));
 				$('#error_msg').animate( { backgroundColor: "#f15050" }, 1 )
 					.animate( { backgroundColor: "#ffffff" }, 1000 );
 

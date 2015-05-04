@@ -187,3 +187,21 @@ body
     width: 170px;
     background-color: #6184d4;
 }
+
+#facebook_email_input,
+#new_password2
+{
+    margin-bottom: 5px;
+}
+
+#disconnect_error,
+#change_password_error
+{
+    line-height: 30px;
+    border-radius: 5px;
+    float: right;
+    font-weight: bold;
+    color: #f0795b;
+    font-family: 'Nanum Gothic';
+    font-size: 13px;
+}
