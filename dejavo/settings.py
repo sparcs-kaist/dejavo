@@ -138,6 +138,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_user',
     'social.pipeline.social_auth.associate_by_email',
     'social.pipeline.user.get_username',
+    'dejavo.apps.account.pipeline.check_fields',
     'social.pipeline.user.create_user',
     'dejavo.apps.account.pipeline.activate_new_user',
     'dejavo.apps.account.pipeline.save_profile_picture',
@@ -149,6 +150,7 @@ SOCIAL_AUTH_PIPELINE = (
 SOCIAL_AUTH_FORCE_POST_DISCONNECT = True
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 SOCIAL_AUTH_USER_FIELDS = ['email']
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email']
 
 # Django registration
 ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.

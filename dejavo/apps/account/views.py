@@ -164,7 +164,11 @@ def auth_by_access_token(request, backend):
     # request.backend and request.strategy will be loaded with the current
     # backend and strategy.
     token = request.GET.get('access_token')
-    user = request.backend.do_auth(request.GET.get('access_token'))
+    try:
+        user = request.backend.do_auth(request.GET.get('access_token'))
+    except ValidationError as e:
+        return JsonResponse(status = 400,
+                data = {'error' : 'Email address denied'})
 
     if user and user.is_active:
         login(request, user)
