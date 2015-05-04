@@ -165,14 +165,21 @@ def auth_by_access_token(request, backend):
     # backend and strategy.
     token = request.GET.get('access_token')
     try:
-        user = request.backend.do_auth(request.GET.get('access_token'))
+        if request.user.is_authenticated():
+            user = request.backend.do_auth(token, user=request.user)
+        else:
+            user = request.backend.do_auth(token)
+
     except ValidationError as e:
         return JsonResponse(status = 400,
                 data = {'error' : 'Email address denied'})
 
     if user and user.is_active:
         login(request, user)
-        return JsonResponse(status = 200, data = user.as_json())
+        data = user.as_json()
+        social = request.user.social_auth.filter(provider='facebook')[0]
+        data['social_url'] = 'http://www.facebook.com/' + social.uid
+        return JsonResponse(status = 200, data = data)
     else:
         return JsonResponse(
                 status = 401,
@@ -211,15 +218,23 @@ def main(request):
     #        )
 
     from_activate = False
+    has_social = len(request.user.social_auth.all()) > 0
+    has_passwd = request.user.has_usable_password()
     try:
         from_activate = request.session.pop('first_login')
     except:
         pass
 
     section = request.GET.get('section')
+    social = None
+    if has_social:
+        social = request.user.social_auth.filter(provider='facebook')[0]
 
     return render(request, "account/main.html", {
-        'from_activate' : from_activate
+        'from_activate' : from_activate,
+        'social_url' : 'http://www.facebook.com/' + social.uid if social else '',
+        'has_social' : has_social,
+        'has_password' : has_passwd,
         })
 
 @require_accept_formats(['text/html', 'application/json'])
@@ -390,36 +405,45 @@ def edit(request):
     error_list = {}
 
     if 'password' in update_fields:
-        new_password = request.POST.get('password', None)
-        if not new_password:
+        password1 = request.POST.get('password1', None)
+        password2 = request.POST.get('password2', None)
+
+        if not password1 or not password2 or \
+                len(password1) <= 0 or len(password2) <= 0:
             error_list.setdefault('password', []).append('Password field is empty')
-        user.set_password(new_password)
+        elif password1 != password2:
+            error_list.setdefault('password', []).append('Password does not match')
+        else:
+            user.set_password(password1)
 
     if 'profile_image' in update_fields:
         if 'profile_image' not in request.FILES:
             error_list.setdefault('profile_image', []).append('Image field is empty')
-        new_profile_image = request.FILES['profile_image']
-        user.profile.profile_image.save(new_profile_image.name, new_profile_image)
+        else:
+            new_profile_image = request.FILES['profile_image']
+            user.profile.profile_image.save(new_profile_image.name, new_profile_image)
 
     if 'email' in update_fields:
         email = request.POST.get('email', None)
         try:
             validate_email(email)
+            user.email = email
         except ValidationError as e:
             error_list.setdefault('email', []).append(unicode(e.message))
-        user.email = email
 
     if 'first_name' in update_fields:
         first_name = request.POST.get('first_name', None)
         if not first_name:
             error_list.setdefault('first_name', []).append('First name field is empty')
-        user.first_name = first_name
+        else:
+            user.first_name = first_name
 
     if 'last_name' in update_fields:
         last_name = request.POST.get('last_name', None)
         if not last_name:
             error_list.setdefault('last_name', []).append('Last name field is empty')
-        user.last_name = last_name
+        else:
+            user.last_name = last_name
 
     if len(error_list) > 0:
         if request.ACCEPT_FORMAT == 'json':
@@ -501,7 +525,7 @@ def check_participate(request, article_id):
     try:
         article = Article.objects.get(id = article_id)
         check = False
-        if request.user.is_authenticated:
+        if request.user.is_authenticated():
             check = Participation.objects.filter(user = request.user,
                     article = article).exists()
 
