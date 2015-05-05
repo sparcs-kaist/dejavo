@@ -191,6 +191,7 @@ def auth_by_access_token(request, backend):
 @require_accept_formats(['application/json'])
 @auth_required
 @psa()
+@csrf_exempt
 def disconnect_access_token(request, backend, association_id=None):
     """Disconnects given backend from current logged in user."""
     try:

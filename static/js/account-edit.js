@@ -20,14 +20,10 @@ $(document).ready(function () {
 	});
 
 	var facebook_disconnect = function () {
-		var csrf = $('input[name="csrfmiddlewaretoken"]').val();
 		$.ajax({
 			'type' : 'POST',
 			'url' : '/social/disconnect/facebook/',
 			'dataType' : 'json',
-			'data' : {
-				'csrfmiddlewaretoken' : csrf,
-			},
 			'success' : function (data, textStatus, jqXHR) {
 				$.notify('계정 연동이 취소되었습니다.', 'success');
 				$('#facebook_email_input').val('연동 안됨');
