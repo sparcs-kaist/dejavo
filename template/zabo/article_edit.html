@@ -134,8 +134,26 @@
 											{% ifequal t.label '' %}
 												<td><span class="timeslot-label"></span></td>
 											{% else %}
+												{% if t.is_main %}
+												<td><button class="timeslot-label is-main">{{ t.label }}</button></td>
+												{% else %}
 												<td><button class="timeslot-label">{{ t.label }}</button></td>
+												{% endif %}
 											{% endifequal %}
+
+											<td class="timeslot-is-main">
+												<div class="squaredTwo">
+													{% if forloop.first %}
+													<span class="timeslot-main-span">대표 일정</span>
+													{% endif %}
+													{% if t.is_main %}
+													<input type="checkbox" id="timeslot{{ t.id }}-is-main" checked></input>
+													{% else %}
+													<input type="checkbox" id="timeslot{{ t.id }}-is-main"></input>
+													{% endif %}
+													<label for="timeslot{{ t.id }}-is-main"></label>
+												</div>
+											</td>
 										</tr>
 									{% endfor %}
 								</tbody>
@@ -288,6 +306,16 @@
 		})
 		editor.wysiwyg();
 
+	});
+
+	$('table#timeslot_table td.timeslot-is-main input').click(function () {
+		var $this = $(this);
+		var $button = $this.parent().parent().parent().find('button.timeslot-label');
+		if ($this.prop('checked')) {
+			$button.addClass('is-main');
+		} else {
+			$button.removeClass('is-main');
+		}
 	});
 
 	$(window).load(function () {

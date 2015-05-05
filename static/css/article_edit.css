@@ -85,6 +85,21 @@
     top: -2px;
 }
 
+#timeslot_container table td.timeslot-is-main
+{
+    padding-left: 25px;
+}
+
+#timeslot_container table td span.timeslot-main-span
+{
+    font-size: 15px;
+    position: relative;
+    color: #5d5454;
+    font-family: 'Nanum Gothic';
+    top: -35px;
+    left: -15px;
+}
+
 #article_title .editable-input
 {
     padding: 0px;

@@ -173,6 +173,7 @@ class Timeslot(models.Model):
     timeslot_type = models.CharField(max_length = 20, choices = TIMESLOT_TYPE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(blank = True, null = True)
+    is_main = models.BooleanField(default = False)
     label = models.CharField(max_length = 50, blank = True)
 
     def as_json(self):

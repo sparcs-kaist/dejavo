@@ -164,17 +164,21 @@ def edit_article(request, article_id):
             post_timeslot_str = request.POST.get('timeslot')
             post_timeslot_list = json.loads(post_timeslot_str)
 
-            keep_timeslot = []
+            keep_timeslot = {}
             new_timeslot = []
             for ts in post_timeslot_list:
                 if 'id' in ts:
-                    keep_timeslot.append(int(ts['id']))
+                    keep_timeslot[int(ts['id'])] = ts
                 else:
                     new_timeslot.append(ts)
 
-            timeslot_list = map(lambda t : t['id'],
-                    Timeslot.objects.filter(article = article).values('id'))
-            remove_list = set(timeslot_list) - set(keep_timeslot)
+            curr_timeslot_list = Timeslot.objects.filter(article = article)
+            keep_timeslot_list = Timeslot.objects.filter(article = article, id__in = keep_timeslot.keys())
+            remove_list = set(curr_timeslot_list) - set(keep_timeslot_list)
+
+            for k_ts in keep_timeslot_list:
+                k_ts.is_main = keep_timeslot[k_ts.id]['is_main']
+                k_ts.save()
 
             if (len(new_timeslot) + len(keep_timeslot) <= 0):
                 error_dict['timeslot_count'] = ['At least one time slot is needed']
@@ -186,7 +190,7 @@ def edit_article(request, article_id):
                     try:
                         new_ts = Timeslot(article = article, timeslot_type = ts['type'],
                                 start_time = ts['start_time'], end_time = None,
-                                label = ts['label'])
+                                is_main = ts['is_main'], label = ts['label'])
                         new_ts.full_clean()
                         new_ts_list.append(new_ts)
                     except ValidationError as e:
@@ -197,8 +201,9 @@ def edit_article(request, article_id):
 
                 for new_ts in new_ts_list:
                     new_ts.save()
-                for tid in remove_list:
-                    Timeslot.objects.filter(id__in = remove_list).delete();
+                for r_ts in remove_list:
+                    r_ts.delete()
+                    
 
         else :
             timeslot_list = Timeslot.objects.filter(article = article).values('id')

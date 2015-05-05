@@ -270,6 +270,16 @@ $(document).ready(function(){
 		}
 	});
 
+	var updateTable = function () {
+		var table = $('#timeslot_table tbody');
+		var tr_list = table.find('tr');
+		if (tr_list.length > 0) {
+			table.find('span.timeslot-main-span').remove();
+			var span = $(document.createElement('span')).addClass('timeslot-main-span');
+			$(tr_list[0]).find('div.squaredTwo').prepend(span.text('대표 일정'));
+		}
+	};
+
 	$('#timeslot_add_button').click(function(e){
 		e.preventDefault();
 		var data = getNewTimeSlot();
@@ -299,14 +309,33 @@ $(document).ready(function(){
 			labelTD.append(button);
 		}
 
-		tr.append(removeTD).append(dateTD).append(labelTD);
-		$('#timeslot_table tbody').append(tr);
+		var ranID = Math.random().toString(36).substring(7);
+		var isMainTD = $('<td></td>').addClass('timeslot-is-main');
+		var mainDiv = $(document.createElement('div')).addClass('squaredTwo');
+		var mainInput = $(document.createElement('input')).attr('type', 'checkbox').
+			attr('id', ranID);
+		var mainLabel = $(document.createElement('label')).attr('for', ranID);
+		isMainTD.append(mainDiv.append(mainInput).append(mainLabel));
+
+		mainInput.click(function() {
+			if ($(this).prop('checked')) {
+				labelTD.find('.timeslot-label').addClass('is-main');
+			} else {
+				labelTD.find('.timeslot-label').removeClass('is-main');
+			}
+		});
+
+		var table = $('#timeslot_table tbody');
+		tr.append(removeTD).append(dateTD).append(labelTD).append(isMainTD);
+		table.append(tr);
+		updateTable();
 
 		removeTD.click(function (e){
 			tr.remove();
 			$.each(editable_list, function(i, editable) {
 				editable.update();
 			});
+			updateTable();
 		});
 
 		$.each(editable_list, function(i, editable) {
@@ -387,10 +416,14 @@ $(document).ready(function(){
 					var time = timeTD.attr('time-year') + '-' + timeTD.attr('time-month') +
 							'-' + timeTD.attr('time-date') + 'T' + timeTD.attr('time-hour') +
 							':' + timeTD.attr('time-minute') + 'Z';
+
 					timeslot['label'] =  label;
 					timeslot['start_time'] = time;
 					timeslot['type'] = 'point';
+					timeslot['is_main'] = is_main;
 				}
+				var is_main = tr.find('.timeslot-is-main input[type=checkbox]').prop('checked');
+				timeslot['is_main'] = is_main;
 				data.push(timeslot);
 			});
 			return {
@@ -665,7 +698,17 @@ $(document).ready(function(){
 				var fields = [];
 				var timeslot_count = false;
 				var owner_err = false;
-				res.msg && $.each(res.msg, function(key, val) {
+				if (res === undefined) {
+					$('#error_msg').css({
+						'padding' : '10px 5px',
+						'margin-bottom' : '20px',
+					});
+					$('#error_msg').html('업데이트에 실패하였습니다.');
+					$('#error_msg').animate( { backgroundColor: "#f15050" }, 1 )
+						.animate( { backgroundColor: "#ffffff" }, 1000 );
+					return;
+				}
+				res.msg && res.msg && $.each(res.msg, function(key, val) {
 					if (key == 'category'){
 						fields.push('카테고리');
 					} else if (key == 'content') {

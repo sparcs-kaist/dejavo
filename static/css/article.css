@@ -382,7 +382,7 @@ button#add_answer_button
 
 #timeslot_container table tr:last-child td
 {
-    padding: 0px;
+    padding-bottom: 0px;
 }
 
 button.timeslot-label
@@ -392,6 +392,11 @@ button.timeslot-label
     top: -3px;
     padding: 7px 9px;
     margin-left: 20px;
+}
+
+button.timeslot-label.is-main
+{
+    background-color: #f15050;
 }
 
 #host_head_container

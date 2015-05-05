@@ -109,7 +109,11 @@
 										{% ifequal t.label '' %}
 											<td><span class="timeslot-label"></span></td>
 										{% else %}
+											{% if t.is_main %}
+											<td><button class="timeslot-label is-main">{{ t.label }}</button></td>
+											{% else %}
 											<td><button class="timeslot-label">{{ t.label }}</button></td>
+											{% endif %}
 										{% endifequal %}
 										</tr>
 								{% endfor %}
