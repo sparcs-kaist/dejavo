@@ -67,7 +67,7 @@ def generate_article(info, user_pool):
     content = info[7]
 
     article = Article(title = title, location = location, category = category,
-            content = escape(content), is_published = True)
+            content = escape(content).replace('\n', '<br>'), is_published = True)
     article.save()
     article.created_date = created_date
     article.updated_date = updated_date
