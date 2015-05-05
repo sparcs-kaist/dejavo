@@ -651,6 +651,9 @@ $(document).ready(function(){
 					((dd.getMinutes()<10?'0':'') + dd.getMinutes()) + '분 ' +
 					((dd.getSeconds()<10?'0':'') + dd.getSeconds()) + '초 ');
 
+				$('#error_msg').html('');
+				$('#error_msg').removeAttr('style');
+
 				if (to_publish) {
 					window.location.replace(jqXHR.getResponseHeader('Location'));
 				}
@@ -696,6 +699,10 @@ $(document).ready(function(){
 				if (owner_err){
 					msg.push('최소 한 명의 <b>관리자</b>가 있어야합니다.');
 				}
+				$('#error_msg').css({
+					'padding' : '10px 5px',
+					'margin-bottom' : '20px',
+				});
 				$('#error_msg').html(msg.join('<br><br>'));
 				$('#error_msg').animate( { backgroundColor: "#f15050" }, 1 )
 					.animate( { backgroundColor: "#ffffff" }, 1000 );

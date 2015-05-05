@@ -219,8 +219,8 @@ def edit_article(request, article_id):
         if article.is_published:
             article.full_clean()
 
-        if len(error_dict) > 0:
-            raise ValidationError('Invalid Format on time slot or owner')
+            if len(error_dict) > 0:
+                raise ValidationError('Invalid Format on time slot or owner')
 
         article.save()
         response = JsonResponse(
