@@ -259,6 +259,8 @@ $(document).ready(function(){
 			'left' : position.left - 380,
 		});
 		ele.toggle();
+		var currDate = new Date();
+		ele.find('#ts_year').val(currDate.getFullYear());
 		$('#ts_label').empty().focus();
 	});
 
