@@ -116,7 +116,7 @@ def set_timeslot(info, article_id):
     article = Article.objects.get(id=article_id)
 
     timeslot = Timeslot(article = article, label = label, start_time = start_time,
-            end_time = end_time, timeslot_type = timeslot_type)
+            end_time = end_time, timeslot_type = timeslot_type, is_main = bool(random.getrandbits(1)))
 
     article.timeslot.add(timeslot)
     article.save()
