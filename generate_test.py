@@ -38,6 +38,7 @@ def generate_user(user_info):
     user = User.objects.create_user(email, password)
     user.last_name = last_name
     user.first_name = first_name
+    user.is_active = True
     user.save()
 
     profile = User.objects.get(email = email).profile
