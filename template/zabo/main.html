@@ -19,20 +19,22 @@
 				<li class="event_elem">
 				<div class="event_container" article-id="{{ article.id }}">
 						<div class="poster">
-							<img src="{{ article.poster }}" />
+							<a href="/article/{{ article.id }}">
+								<img src="{{ article.poster }}" />
+							</a>
 						</div>
 						<div class="event_info">
 							<div class="info">
 								<div class="info_title">{{ article.category }}</div>
-								<div class="info_content">{{ article.host.name }}</div>
+								<div class="info_content">{{ article.title }}</div>
 							</div>
 							<div class="info">
 								<div class="info_title">일시</div>
 								<div class="info_content">{{ article.day }}</div>
 							</div>
 							<div class="info">
-								<div class="info_title">장소</div>
-								<div class="info_content">{{ article.location }}</div>
+								<div class="info_title">주최자</div>
+								<div class="info_content">{{ article.host.name }}</div>
 							</div>
 						</div>
 					</div>
