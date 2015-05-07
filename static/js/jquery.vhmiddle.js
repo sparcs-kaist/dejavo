@@ -8,6 +8,8 @@
 			this.element = $(element);
 			this.showWidth = this.element.attr('data-width');
 			this.showHeight = this.element.attr('data-height');
+			if (this.showWidth === undefined) this.showWidth = this.element.width();
+			if (this.showHeight === undefined) this.showHeight = this.element.height();
 			this.image = this.element.find('img');
 
 			VHMiddle.prototype.update = function () {
@@ -29,6 +31,18 @@
 				}
 				else if (this.orientation == 'portrait') {
 					this.element.removeClass('vhmiddle-landscape').addClass('vhmiddle-portrait');
+
+				}
+
+				if (this.image.height() < this.element.height()) {
+					var scale = image.naturalHeight / this.element.height();
+					this.image.height(image.naturalHeight / scale);
+					this.image.width(image.naturalWidth / scale);
+				}
+				if (this.image.width() < this.element.width()) {
+					var scale = image.naturalWidth / this.element.width();
+					this.image.height(image.naturalHeight / scale);
+					this.image.width(image.naturalWidth / scale);
 				}
 			};
 

@@ -28,7 +28,7 @@ $(document).ready(function(){
 					elems = data.articles.map(function(article){
 						var i, d=null,
 							$main_elem = $("<div class='elem'/>"),
-							$poster_div = $("<div class='poster'></div>"),
+							$poster_div = $("<div class='poster'></div>").addClass('vhmiddle'),
 							$anchor = $("<a/>").attr({'href':"/article/"+article.id}),
 							$img = $("<img/>").attr({'src':article.poster, 'alt':article.title}).load(function(){;
 								var scaled_width = this.width * 317/this.height;
@@ -38,6 +38,7 @@ $(document).ready(function(){
 								}
 								$anchor.append($img);
 								$poster_div.append($anchor);
+								$poster_div.vhmiddle();
 							});
 
 						$main_elem.append($poster_div);
