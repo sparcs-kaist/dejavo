@@ -34,15 +34,19 @@
 
 				}
 
-				if (this.image.height() < this.element.height()) {
-					var scale = image.naturalHeight / this.element.height();
-					this.image.height(image.naturalHeight / scale);
-					this.image.width(image.naturalWidth / scale);
-				}
-				if (this.image.width() < this.element.width()) {
-					var scale = image.naturalWidth / this.element.width();
-					this.image.height(image.naturalHeight / scale);
-					this.image.width(image.naturalWidth / scale);
+				if (image.naturalHeight > this.element.height() ||
+						image.naturalWidth > this.element.width()) {
+
+					if (this.image.height() < this.element.height()) {
+						var scale = image.naturalHeight / this.element.height();
+						this.image.height(image.naturalHeight / scale);
+						this.image.width(image.naturalWidth / scale);
+					}
+					if (this.image.width() < this.element.width()) {
+						var scale = image.naturalWidth / this.element.width();
+						this.image.height(image.naturalHeight / scale);
+						this.image.width(image.naturalWidth / scale);
+					}
 				}
 			};
 

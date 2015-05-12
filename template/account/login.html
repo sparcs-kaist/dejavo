@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block css %}
+<style>
+    #login_container
+    {
+        width: 400px;
+        margin: 100px auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% include "account/login_form.html" %}
+{% endblock %}
+
+{% block aftercontent %}
+<script>
+$(document).ready(function() {
+
+    $('input#login_email').focus();
+    $('#facebook_login').click(function(e){
+        e.preventDefault();
+        FB.getLoginStatus(function(response) {
+            ZB.statusChangeCallback(response);
+        });
+    });
+
+	$("#register_link").click(function (e) {
+		ZB.register();
+	});
+
+    var login_button = $('#login_button button');
+    var email = $('input#login_email');
+    var password = $('input#login_password');
+    var csrf = $('input[name=csrfmiddlewaretoken]');
+    $.each([password, email], function(i, v) {
+        v.on('keypress', function (e) {
+                if (e.which == 13) {
+                        login_button.click();
+                }
+        });
+    });
+
+    login_button.click(function(e){
+        var form = $(document.createElement('form')).attr('method', 'post');
+        var emailInput = $(document.createElement('input'))
+                            .val(email.val()).attr('name', 'email');
+        var passwordInput = $(document.createElement('input'))
+                            .val(password.val()).attr('name', 'password');
+        var csrfInput = $(document.createElement('input'))
+                            .val(csrf.val()).attr('name', 'csrfmiddlewaretoken');
+                            
+        form.append(emailInput).append(passwordInput).append(csrfInput);
+        form.submit();
+    });
+});
+</script>
+{% endblock %}

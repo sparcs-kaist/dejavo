@@ -28,10 +28,9 @@ def login_view(request):
 
     if request.user.is_authenticated():
         if request.ACCEPT_FORMAT == 'html':
-            return HttpResponse(
-                    status = 400,
-                    content = 'Already logged in'
-                    )
+            next_link = request.GET.get('next', '/')
+            return HttpResponseRedirect(next_link)
+
         elif request.ACCEPT_FORMAT == 'json':
             return JsonResponse(
                     status = 400,
@@ -39,8 +38,7 @@ def login_view(request):
                     )
 
     if request.method == 'GET':
-        # TODO create login page
-        return HttpResponse('Login page')
+        return render(request, "account/login.html")
 
     email = request.POST.get('email', None)
     password = request.POST.get('password', None)
@@ -48,10 +46,10 @@ def login_view(request):
     if not email or not password:
         # invalid format
         if request.ACCEPT_FORMAT == 'html':
-            return HttpResponse(
-                    status = 400,
-                    content = 'Invalid format'
-                    )
+            return render(request, "account/login.html", {
+                'error_msg' : 'Fail to login'
+                })
+
         elif request.ACCEPT_FORMAT == 'json':
             return JsonResponse(status = 400,
                     data = {'error' : 'Invalid format'}
@@ -62,11 +60,10 @@ def login_view(request):
     if user is None:
         # login fail page. wrong password, email 
         if request.ACCEPT_FORMAT == 'html':
-            # TODO login fail page
-            return HttpResponse(
-                    status = 400,
-                    content = 'Failed to login'
-                    )
+            return render(request, "account/login.html", {
+                'error_msg' : 'Fail to login'
+                })
+
         elif request.ACCEPT_FORMAT == 'json':
             return JsonResponse(
                     status = 400,
