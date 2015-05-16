@@ -218,12 +218,25 @@ button#add_question_button
     color: #beb7b7;
 }
 
+.question-delete
+{
+    float: right;
+    padding-right: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 .question-content
 {
     font-family: 'Nanum Gothic';
     font-size: 15px;
     color: #696060;
     padding-bottom: 15px;
+}
+
+.deleted
+{
+    color: #cccccc;
 }
 
 .answer-popup
@@ -241,13 +254,9 @@ button#add_question_button
 .answer-profile-image-container
 {
     float: left;
-    width: 45px;
-}
-
-.answer-profile-image
-{
     width: 40px;
     height: 40px;
+    margin: 0px 2.5px;
     border-radius: 50%;
 }
 
@@ -289,6 +298,14 @@ button#add_question_button
     color: #beb7b7;
 }
 
+.answer-delete
+{
+    float: right;
+    padding-right: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 .answer-content
 {
     display: inline-block;
@@ -318,7 +335,7 @@ textarea.answer-box
     font-family: 'Nanum Gothic';
     font-size: 15px;
     color: #696060;
-    width: 450px;
+    width: 448px;
     height: 70px;
     border: 0px;
     border-radius: 5px;
@@ -336,6 +353,16 @@ button#add_answer_button
     width: 80px;
     float: right;
     cursor: pointer;
+}
+
+span#add_answer_notice
+{
+    line-height: 30px;
+    float: right;
+    font-size: 13px;
+    font-family: 'Nanum Gothic';
+    color: #f0795b;
+    margin-right: 10px;
 }
 
 /*
