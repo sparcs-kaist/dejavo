@@ -587,16 +587,17 @@ def unparticipate(request, article_id):
 @require_http_methods(['GET'])
 @auth_required
 def my_articles(request):
-    article_list = []
-    article_set = Article.objects.filter(owner = request.user)
-
-    for a in article_set:
-        article_list.append(a.as_json())
-
     if request.ACCEPT_FORMAT == 'html':
         return render(request, "account/article.html", {
             })
+
     elif request.ACCEPT_FORMAT == 'json':
+        article_list = []
+        article_set = Article.objects.filter(owner = request.user).filter(is_published = True)
+
+        for a in article_set:
+            article_list.append(a.as_json())
+
         return JsonResponse(
                 status = 200,
                 data = {'articles' : article_list}
