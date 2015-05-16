@@ -7,7 +7,6 @@ $(document).ready(function(){
 							attr('data-width', '60').attr('data-height', '60');
 		var q_p_img = $(document.createElement('img')).attr('src', q.writer.image_url);
 		q_profile.append(q_p_img);
-		q_profile.vhmiddle();
 
 		var q_c_container = $(document.createElement('div')).addClass('question-content-container');
 		var q_meta = $(document.createElement('div')).addClass('question-meta');
@@ -16,22 +15,53 @@ $(document).ready(function(){
 		var time = $(document.createElement('span')).addClass('question-time').text(
 			(created_date.getMonth() + 1) + '월 ' + created_date.getDate() + '일 ' +
 			created_date.getHours() + '시 ' + created_date.getMinutes() + '분');
-		q_c_container.append(q_meta.append(p_name).append(time));
+
+		var delete_span = $(document.createElement('span')).addClass('question-delete').text('x');
+		delete_span.click(function(e) {
+			var c = confirm('정말로 삭제하시겠습니까?');
+			if (c) {
+				$.ajax({
+						'method' : 'GET',
+						'dataType' : 'json',
+						'url' : '/article/' + articleID + '/qna/delete/' + q.id,
+						'success' : function(data, textStatus, jqXHR) {
+							if (q_div.find('.answer').length == 0) {
+								q_div.fadeOut(function () { q_div.remove(); });
+							} else {
+								var span = $(document.createElement('span')).
+										addClass('deleted').text('-- deleted --');
+								content_div.empty().append(span);
+							}
+						},
+						'error' : function(jqXHR, textStatus, errorThrown) {
+							alert('error');
+						},
+					});
+			}
+		});
+		q_c_container.append(q_meta.append(p_name).append(time).append(delete_span));
 
 		var content_div = $(document.createElement('div')).addClass('question-content').text(q.content);
 		q_c_container.append(content_div);
 
 		var answer_popup = $(document.createElement('div')).addClass('answer-popup');
+		answer_popup.click(function () {
+			var answer_write = createAnswerPopup(q.id);
+			answer_popup.after(answer_write);
+			answer_write.find('textarea').focus();
+		});
 		var answer_popup_img = $(document.createElement('img')).attr('src', '/media/answer.png');
 		q_c_container.append(answer_popup.append(answer_popup_img));
 
 		q_div.append(q_profile).append(q_c_container);
+		q_profile.vhmiddle();
 		return q_div;
 	};
 
-	var createAnswer = function(a) {
+	var createAnswer = function(a, q_id) {
 		var a_div = $(document.createElement('div')).addClass('answer').attr('answer-id', a.id);
-		var a_profile = $(document.createElement('div')).addClass('answer-profile-image-container');
+		var a_profile = $(document.createElement('div')).addClass('answer-profile-image-container vhmiddle').
+							attr('data-width', '40').attr('data-height', '40');
 		var a_p_img = $(document.createElement('img')).attr('src', a.writer.image_url).addClass('answer-profile-image');
 		a_profile.append(a_p_img);
 
@@ -40,12 +70,32 @@ $(document).ready(function(){
 		var a_name = $(document.createElement('span')).addClass('answer-profile-name').text(a.writer.last_name + a.writer.first_name);
 		var created_date = new Date(a.created_date);
 		var time = $(document.createElement('span')).addClass('answer-time').text((created_date.getMonth() + 1) + '월 ' + created_date.getDate() + '일 ' + created_date.getHours() + '시 ' + created_date.getMinutes() + '분');
-		a_c_container.append(a_meta.append(a_name).append(time));
+		var delete_span = $(document.createElement('span')).addClass('answer-delete').text('x');
+		delete_span.click(function(e){
+			var c = confirm('정말로 삭제하시겠습니까?');
+			if (c) {
+				$.ajax({
+					'method' : 'GET',
+					'dataType' : 'json',
+					'url' : '/article/' + articleID + '/qna/' + q_id + '/delete/' + a.id,
+					'success' : function(data, textStatus, jqXHR) {
+						var span = $(document.createElement('span')).
+								addClass('deleted').text('-- deleted --');
+						content_span.empty().append(span);
+					},
+					'error' : function(jqXHR, textStatus, errorThrown) {
+						alert('error');
+					},
+				});
+			}
+		});
+		a_c_container.append(a_meta.append(a_name).append(time).append(delete_span));
 
 		var content_span = $(document.createElement('span')).addClass('answer-content').text(a.content);
 		a_c_container.append(content_span);
 
 		a_div.append(a_profile).append(a_c_container);
+		a_profile.vhmiddle();
 		return a_div;
 	};
 
@@ -134,12 +184,10 @@ $(document).ready(function(){
 		});
 	});
 
-	$('.answer-popup-image').click(function(e){
-		var button = $(this);
-		$('.answer-write').remove();
-
+	var createAnswerPopup = function (q_id) {
 		var answer_write = $(document.createElement('div')).addClass('answer-write');
-		var answer_profile = $(document.createElement('div')).addClass('answer-profile-image-container');
+		var answer_profile = $(document.createElement('div')).addClass('answer-profile-image-container vhmiddle').
+							attr('data-width', '40').attr('data-height', '40');
 		var answer_container = $(document.createElement('div')).addClass('answer-box-container');
 		var answer_profile_img = $(document.createElement('img')).attr('src', user_prof_img_src).addClass('answer-profile-image');
 		var answer_meta = $(document.createElement('div')).addClass('answer-meta');
@@ -151,11 +199,9 @@ $(document).ready(function(){
 		var answer_notice = $(document.createElement('span')).attr('id', 'add_answer_notice');
 
 		answer_button.click(function(e){
-			var question_id = button.parent().parent().parent().attr('question-id');
-
 			$.ajax({
 				'method' : 'POST',
-				'url' : '/article/' + articleID + '/qna/' + question_id + '/create/',
+				'url' : '/article/' + articleID + '/qna/' + q_id + '/create/',
 				'dataType' : 'json',
 				'data' : {
 					'content' : answer_box.val(),
@@ -165,13 +211,9 @@ $(document).ready(function(){
 				},
 				'success' : function(data, textStatus, jqXHR) {
 					answer_box.val('');
-					var new_a = createAnswer(data).hide();
-					button.parent().parent().append(new_a);
+					var new_a = createAnswer(data, q_id).hide();
+					answer_write.parent().append(new_a);
 					new_a.fadeIn('normal');
-
-					$('html,body').animate({
-						scrollTop: new_a.offset().top,
-					}, 'normal');
 				},
 				'error' : function(jqXHR, textStatus, errorThrown) {
 					if (jqXHR.status == 401) {
@@ -192,7 +234,17 @@ $(document).ready(function(){
 		answer_button_div.append(answer_button).append(answer_notice);
 		answer_container.append(answer_meta).append(answer_textbox).append(answer_button_div);
 		answer_write.append(answer_profile).append(answer_container);
+		answer_profile.vhmiddle();
+		return answer_write;
+	};
+
+	$('.answer-popup-image').click(function(e){
+		var button = $(this);
+		$('.answer-write').remove();
+		var question_id = button.parent().parent().parent().attr('question-id');
+		var answer_write = createAnswerPopup(question_id);
 		button.parent().after(answer_write);
+		answer_write.find('textarea').focus();
 	});
 
 	var update_participants_list = function(user, action) {
@@ -278,5 +330,59 @@ $(document).ready(function(){
 				},
 			});
 		}
+	});
+
+
+	$.each($('div.question'), function(i, elem) {
+		var q = $(elem);
+		var content = q.find('.question-content');
+		var id = q.attr('question-id');
+		q.find('.question-delete').click(function(e){
+			var c = confirm('정말로 삭제하시겠습니까?');
+			if (c) {
+				$.ajax({
+					'method' : 'GET',
+					'dataType' : 'json',
+					'url' : '/article/' + articleID + '/qna/delete/' + id,
+					'success' : function(data, textStatus, jqXHR) {
+						if (q.find('.answer').length == 0) {
+							q.fadeOut(function () { q.remove(); });
+						} else {
+							var span = $(document.createElement('span')).
+									addClass('deleted').text('-- deleted --');
+							content.empty().append(span);
+						}
+					},
+					'error' : function(jqXHR, textStatus, errorThrown) {
+						alert('error');
+					},
+				});
+			}
+		});
+	});
+
+	$.each($('div.answer'), function(i, elem) {
+		var a = $(elem);
+		var content = a.find('.answer-content');
+		var q_id = a.parent().parent().attr('question-id');
+		var a_id = a.attr('answer-id');
+		a.find('.answer-delete').click(function(e){
+			var c = confirm('정말로 삭제하시겠습니까?');
+			if (c) {
+				$.ajax({
+					'method' : 'GET',
+					'dataType' : 'json',
+					'url' : '/article/' + articleID + '/qna/' + q_id + '/delete/' + a_id,
+					'success' : function(data, textStatus, jqXHR) {
+						var span = $(document.createElement('span')).
+								addClass('deleted').text('-- deleted --');
+						content.empty().append(span);
+					},
+					'error' : function(jqXHR, textStatus, errorThrown) {
+						alert('error');
+					},
+				});
+			}
+		});
 	});
 });

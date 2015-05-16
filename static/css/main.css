@@ -44,13 +44,7 @@ ol
 .poster
 {
     float: left;
-    max-width: 530px;
-    height: inherit;
-}
-
-.poster *
-{
-    max-width: 530px;
+    width: 430px;
     height: inherit;
 }
 
@@ -58,8 +52,8 @@ ol
 {
     float: left;
     padding-left: 45px;
-    padding-right: 55px;
-    max-width: 330px;
+    padding-right: 25px;
+    max-width: 460px;
     height: inherit;
 }
 
@@ -78,12 +72,13 @@ ol
 
 .info_content
 {
-    max-width: 330px;
     height: 27px;
     color: #675d5a;
     font-family: 'Nanum Barun Gothic';
     font-size: 24px;
-    overflow: hidden;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .d_day

@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.contrib.sites.requests import RequestSite
+from django.db.models import Count, Q
 
 from accept_checker.decorators import require_accept_formats, auth_required
 from dejavo.apps.zabo.models import Article, Timeslot, Question, Answer
@@ -93,11 +94,16 @@ def view_article(request, article_id):
             else:
                 site = RequestSite(request)
 
-            question = Question.objects.filter(article = article)
+            question = Question.objects.filter(article=article).extra(select = {
+                        'num_a' : 'SELECT COUNT(*) FROM zabo_answer WHERE "zabo_question"."id"=zabo_answer.question_id',
+                        'num_d_a' : 'SELECT COUNT(*) FROM zabo_answer WHERE zabo_answer.is_deleted = 1' + \
+                                ' and "zabo_question"."id"=zabo_answer.question_id'
+                        }, where = ['not ("zabo_question"."is_deleted" = 1 AND num_a == num_d_a AND num_d_a > 0)'])
 
             return render(request, 'zabo/article.html', {
                 'article' : article,
                 'site' : site,
+                'question' : question,
                 'participant' : map(lambda x : x.user,
                     Participation.objects.filter(article = article)),
                 'is_participating' : Participation.objects.filter(user = request.user.id,
@@ -416,25 +422,19 @@ def load_question(request, article_id):
 
 
 @require_accept_formats(['application/json'])
-@require_http_methods(['POST'])
+@require_http_methods(['GET', 'DELETE'])
 @auth_required
 @csrf_exempt
 def delete_question(request, article_id, question_id):
     try:
-        article = Article.objects.get(id = article_id)
-        question = Question.objects.get(id = question_id)
+        question = Question.objects.get(id = question_id, article__id = article_id)
+        if question.writer != request.user:
+            return JsonResponse(status = 403,
+                    data = {'error' : 'User does not own the question'})
+
         question.is_deleted = True
         question.save()
-
         return JsonResponse(status = 200, data = {})
-
-    except Article.DoesNotExist:
-        return JsonResponse(
-                status = 404,
-                data = {
-                    'error' : 'article(' + article_id + ') does not exist'
-                    },
-                )
 
     except Question.DoesNotExist:
         return JsonResponse(
@@ -491,14 +491,16 @@ def create_answer(request, article_id, question_id):
 
 
 @require_accept_formats(['application/json'])
-@require_http_methods(['POST'])
+@require_http_methods(['GET', 'DELETE'])
 @auth_required
 @csrf_exempt
 def delete_answer(request, article_id, question_id, answer_id):
     try:
-        article = Article.objects.get(id = article_id)
-        question = Question.objects.get(id = question_id)
-        answer = Answer.objects.get(id = answer_id)
+        answer = Answer.objects.get(id = answer_id, question__id = question_id,
+                question__article__id = article_id)
+        if answer.writer != request.user:
+            return JsonResponse(status = 403,
+                    data = {'error' : 'User does not own the question'})
         answer.is_deleted = True
         answer.save()
 
@@ -540,7 +542,8 @@ def view_category(request):
 def get_category(request, category):
     article_list = []
 
-    article_set = Article.objects.filter(timeslot__start_time__gte=datetime.datetime.now(), is_published=True, is_deleted=False, is_blocked=False).distinct()
+    article_set = Article.objects.filter(timeslot__start_time__gte=datetime.datetime.now(),
+            is_published=True, is_deleted=False, is_blocked=False).distinct()
     if category != "all":
         article_set = article_set.filter(category = category)
 
