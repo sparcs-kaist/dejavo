@@ -108,12 +108,17 @@ body
 {
     float: right;
     width: 660px;
+    padding-top: 37px;
 }
 
 #change_passwd
 {
-    margin-top: 37px;
     height: 170px;
+}
+
+#facebook_account
+{
+    height: 50px;
 }
 
 .account_setting input
@@ -146,62 +151,4 @@ body
     position: relative;
     top: 16px;
     left: 10px;
-}
-
-.account_setting_right
-{
-    float: left;
-    width: 340px;
-}
-
-.account_setting_button
-{
-    float: right;
-}
-
-.account_setting_button button
-{
-    height: 50px;
-    padding: 0px;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-#change_passwd .account_setting_button
-{
-    position: relative;
-    top: 70px;
-}
-
-#change_passwd button
-{
-    width: 100px;
-}
-
-#facebook_account button
-{
-    width: 170px;
-    background-color: #6184d4;
-}
-
-#facebook_email_input,
-#new_password2
-{
-    margin-bottom: 5px;
-}
-
-#disconnect_error,
-#change_password_error
-{
-    line-height: 30px;
-    border-radius: 5px;
-    float: right;
-    font-weight: bold;
-    color: #f0795b;
-    font-family: 'Nanum Gothic';
-    font-size: 13px;
 }

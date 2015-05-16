@@ -583,7 +583,7 @@ def unparticipate(request, article_id):
             data = { 'error' : 'Article does not exist' }
             )
 
-@require_accept_formats(['text/html'])
+@require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['GET'])
 @auth_required
 def my_articles(request):
@@ -593,6 +593,11 @@ def my_articles(request):
     for a in article_set:
         article_list.append(a.as_json())
 
-    return render(request, "account/article.html", {
-        'articles' : article_list
-        })
+    if request.ACCEPT_FORMAT == 'html':
+        return render(request, "account/article.html", {
+            })
+    elif request.ACCEPT_FORMAT == 'json':
+        return JsonResponse(
+                status = 200,
+                data = {'articles' : article_list}
+                )

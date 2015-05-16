@@ -1,3 +1,3 @@
 $(document).ready(function(){
-	$('#content_left').children().children().eq(3).attr('id', 'current');
+	$('#content_left').children().children().eq(2).attr('id', 'current');
 });

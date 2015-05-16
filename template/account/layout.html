@@ -2,6 +2,8 @@
 
 {% block css %}
 		<link rel="stylesheet" href="/static/css/account.css">
+{% block account-css %}
+{% endblock %}
 {% endblock %}
 
 {% block content %}
@@ -21,7 +23,7 @@
 		</div>
 		<div id="account_content_container">
 			<div id="content_left">
-				<div><a href="#">메세지</a></div>
+				<!--div><a href="#">메세지</a></div-->
 				<div><a href="#">참여하는 행사</a></div>
 				<div><a href="/account/articles/">관리하는 행사</a></div>
 				<div><a href="/account/">계정 설정</a></div>

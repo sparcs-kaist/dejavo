@@ -1,0 +1,48 @@
+#content_right
+{
+    width: 620px;
+    padding: 37px 20px 0px 20px;
+    background: #f6f0ee;
+}
+
+.elem
+{
+    float: left;
+    width: 250px;
+    margin: 0px 30px 50px 30px;
+    background: #ffffff;
+    font-family: 'Nanum Gothic';
+    font-weight: bold;
+}
+
+.elem table
+{
+    padding: 6px 6px 6px 10px;
+}
+
+.elem th
+{
+    color: #636363;
+    font-size: 11px;
+    text-align: left;
+}
+
+.elem td
+{
+    font-size: 13px;
+    text-align: left;
+}
+
+.elem td span
+{
+    display: block;
+    width: 138px;
+    height: 17px;
+    overflow-y: hidden;
+}
+
+.poster
+{
+    width: 250px;
+    height: 355px;
+}
