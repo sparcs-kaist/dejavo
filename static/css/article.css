@@ -221,9 +221,10 @@ button#add_question_button
 .question-delete
 {
     float: right;
-    padding-right: 10px;
+    padding-top: 5px;
     font-weight: bold;
     cursor: pointer;
+    content : url('images/remove_icon.png');
 }
 
 .question-content
@@ -301,9 +302,10 @@ button#add_question_button
 .answer-delete
 {
     float: right;
-    padding-right: 10px;
+    padding-top: 5px;
     font-weight: bold;
     cursor: pointer;
+    content : url('images/remove_icon.png');
 }
 
 .answer-content
