@@ -16,7 +16,7 @@ $(document).ready(function(){
 			(created_date.getMonth() + 1) + '월 ' + created_date.getDate() + '일 ' +
 			created_date.getHours() + '시 ' + created_date.getMinutes() + '분');
 
-		var delete_span = $(document.createElement('span')).addClass('question-delete').text('x');
+		var delete_span = $(document.createElement('span')).addClass('question-delete');
 		delete_span.click(function(e) {
 			var c = confirm('정말로 삭제하시겠습니까?');
 			if (c) {
@@ -31,6 +31,7 @@ $(document).ready(function(){
 								var span = $(document.createElement('span')).
 										addClass('deleted').text('-- deleted --');
 								content_div.empty().append(span);
+								delete_span.remove();
 							}
 						},
 						'error' : function(jqXHR, textStatus, errorThrown) {
@@ -70,7 +71,7 @@ $(document).ready(function(){
 		var a_name = $(document.createElement('span')).addClass('answer-profile-name').text(a.writer.last_name + a.writer.first_name);
 		var created_date = new Date(a.created_date);
 		var time = $(document.createElement('span')).addClass('answer-time').text((created_date.getMonth() + 1) + '월 ' + created_date.getDate() + '일 ' + created_date.getHours() + '시 ' + created_date.getMinutes() + '분');
-		var delete_span = $(document.createElement('span')).addClass('answer-delete').text('x');
+		var delete_span = $(document.createElement('span')).addClass('answer-delete');
 		delete_span.click(function(e){
 			var c = confirm('정말로 삭제하시겠습니까?');
 			if (c) {
@@ -82,6 +83,7 @@ $(document).ready(function(){
 						var span = $(document.createElement('span')).
 								addClass('deleted').text('-- deleted --');
 						content_span.empty().append(span);
+						delete_span.remove();
 					},
 					'error' : function(jqXHR, textStatus, errorThrown) {
 						alert('error');
@@ -338,6 +340,7 @@ $(document).ready(function(){
 		var content = q.find('.question-content');
 		var id = q.attr('question-id');
 		q.find('.question-delete').click(function(e){
+			var $this = $(this);
 			var c = confirm('정말로 삭제하시겠습니까?');
 			if (c) {
 				$.ajax({
@@ -351,6 +354,7 @@ $(document).ready(function(){
 							var span = $(document.createElement('span')).
 									addClass('deleted').text('-- deleted --');
 							content.empty().append(span);
+							$this.remove();
 						}
 					},
 					'error' : function(jqXHR, textStatus, errorThrown) {
@@ -367,6 +371,7 @@ $(document).ready(function(){
 		var q_id = a.parent().parent().attr('question-id');
 		var a_id = a.attr('answer-id');
 		a.find('.answer-delete').click(function(e){
+			var $this = $(this);
 			var c = confirm('정말로 삭제하시겠습니까?');
 			if (c) {
 				$.ajax({
@@ -377,6 +382,7 @@ $(document).ready(function(){
 						var span = $(document.createElement('span')).
 								addClass('deleted').text('-- deleted --');
 						content.empty().append(span);
+						$this.remove();
 					},
 					'error' : function(jqXHR, textStatus, errorThrown) {
 						alert('error');
