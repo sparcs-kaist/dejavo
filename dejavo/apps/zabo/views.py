@@ -95,12 +95,11 @@ def view_article(request, article_id):
                 site = RequestSite(request)
 
             question = Question.objects.filter(article=article).extra(select = {
-                        'num_a' : 'SELECT COUNT(*) FROM zabo_answer WHERE "zabo_question"."id"=zabo_answer.question_id',
+                        'num_a' : 'SELECT COUNT(*) FROM zabo_answer WHERE zabo_question.id=zabo_answer.question_id',
                         'num_d_a' : 'SELECT COUNT(*) FROM zabo_answer WHERE zabo_answer.is_deleted = 1' + \
-                                ' and "zabo_question"."id"=zabo_answer.question_id'
-                        }, where = ['"zabo_question"."is_deleted" = 0 OR ' + \
-                                '"zabo_question"."is_deleted" = 1 AND num_a > num_d_a'])
-            print question.query
+                                ' and zabo_question.id=zabo_answer.question_id'
+                        }, where = ['zabo_question.is_deleted = 0 OR ' + \
+                                'zabo_question.is_deleted = 1 AND "num_a" > "num_d_a"'])
 
             return render(request, 'zabo/article.html', {
                 'article' : article,

@@ -593,7 +593,7 @@ def my_articles(request):
 
     elif request.ACCEPT_FORMAT == 'json':
         article_list = []
-        article_set = Article.objects.filter(owner = request.user).filter(is_published = True)
+        article_set = Article.objects.filter(owner = request.user, is_published = True)
 
         for a in article_set:
             article_list.append(a.as_json())
