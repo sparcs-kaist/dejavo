@@ -296,6 +296,27 @@ def register(request):
                 data = {'error' : 'Password does not match'}
                 )
 
+    if Site._meta.installed:
+        site = Site.objects.get_current()
+    else:
+        site = RequestSite(request)
+
+    try:
+        already = get_user_model().objects.get(email = email)
+        if already.is_active:
+            return JsonReponse(
+                    status = 400,
+                    data = {'error' : 'User already activated' }
+                    )
+        else:
+            RegistrationProfile.objects.get(user = already).send_activation_email(site)
+            return HttpResponse(
+                    status = 201,
+                    content = 'User create complete')
+
+    except:
+        pass
+
     new_user = get_user_model().objects.create_user(email = email,
             password = password1)
 
@@ -307,11 +328,6 @@ def register(request):
     profile.bio = request.POST.get('bio', '')
 
     profile.save()
-
-    if Site._meta.installed:
-        site = Site.objects.get_current()
-    else:
-        site = RequestSite(request)
 
     new_user.save()
 
@@ -347,7 +363,7 @@ def email_check(request):
     if email:
         try:
             validate_email(email)
-            user = user_model.objects.get(email = email)
+            user = user_model.objects.get(email = email, is_active=True)
             return JsonResponse(status = 409,
                     data = {
                         'email' : email,
