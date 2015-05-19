@@ -31,9 +31,40 @@ body
     -webkit-transform: translateZ(0) scale(1.0, 1.0);
 }
 
-#edit_profile_img_container #edit_profile_image:hover
+#edit_profile_img_container #edit_profile_image_hover
 {
-    opacity: 0.8;
+    position:relative;
+    width: 100px;
+    height: 100px;
+    top: -100px;
+    color: white;
+    vertical-align: middle;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 15px;
+    font-family: 'Nanum Gothic';
+    border-radius: 100px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    transition: all 0.2s linear;
+    cursor: pointer;
+}
+
+#edit_profile_img_container #edit_profile_image_hover span
+{
+    line-height: 100px;
+    transition: all 0.2s linear;
+    opacity: 0;
+}
+
+#edit_profile_img_container #edit_profile_image_hover:hover
+{
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+#edit_profile_img_container #edit_profile_image_hover:hover span
+{
+    opacity: 1;
+
 }
 
 #account_content_container
@@ -56,7 +87,6 @@ body
     text-align: center;
     font-family: 'Nanum Barun Gothic';
     font-size: 21px;
-    color: #beb7b7;
 }
 
 #content_left div
@@ -64,16 +94,31 @@ body
     margin-top: 45px;
 }
 
+#content_left div a
+{
+    color: #beb7b7;
+}
+
+#content_left div a#current
+{
+    color: #f0795b;
+}
+
 #content_right
 {
     float: right;
     width: 660px;
+    padding-top: 37px;
 }
 
 #change_passwd
 {
-    margin-top: 37px;
     height: 170px;
+}
+
+#facebook_account
+{
+    height: 50px;
 }
 
 .account_setting input
@@ -106,44 +151,4 @@ body
     position: relative;
     top: 16px;
     left: 10px;
-}
-
-.account_setting_right
-{
-    float: left;
-    width: 340px;
-}
-
-.account_setting_button
-{
-    float: right;
-}
-
-.account_setting_button button
-{
-    height: 50px;
-    padding: 0px;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-#change_passwd .account_setting_button
-{
-    position: relative;
-    top: 70px;
-}
-
-#change_passwd button
-{
-    width: 100px;
-}
-
-#facebook_account button
-{
-    width: 170px;
-    background-color: #6184d4;
 }

@@ -15,10 +15,10 @@
 		<div id="main_list_container">
 			<div id="main_list_title">Upcoming Events</div>
 			<ol id="main_list">
-				{% for article in articles %}
+				{% for article in articles|dictsort:"d_day" %}
 				<li class="event_elem">
-					<div class="event_container">
-						<div class="poster">
+				<div class="event_container" article-id="{{ article.id }}">
+						<div class="poster vhmiddle">
 							<a href="/article/{{ article.id }}">
 								<img src="{{ article.poster }}" />
 							</a>
@@ -26,22 +26,19 @@
 						<div class="event_info">
 							<div class="info">
 								<div class="info_title">{{ article.category }}</div>
-								<div class="info_content">{{ article.host.name }}</div>
+								<div class="info_content">{{ article.title }}</div>
 							</div>
 							<div class="info">
 								<div class="info_title">일시</div>
 								<div class="info_content">{{ article.day }}</div>
 							</div>
 							<div class="info">
-								<div class="info_title">장소</div>
-								<div class="info_content">{{ article.location }}</div>
+								<div class="info_title">주최자</div>
+								<div class="info_content">{{ article.host.name }}</div>
 							</div>
 						</div>
-						<div class="event_desc">
-							<pre>{{ article.content }}</pre>
-						</div>
-						<div class="d_day">D-{{ article.d_day }}</div>
 					</div>
+					<div class="d_day">D-{{ article.d_day }}</div>
 				</li>
 				{% endfor %}
 			</ol>
@@ -50,4 +47,5 @@
 {% endblock %}
 
 {% block aftercontent %}
+<script src="{{ STATIC_URL }}js/main.js"></script>
 {% endblock %}

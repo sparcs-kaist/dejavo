@@ -1,18 +1,25 @@
 {% extends "account/layout.html" %}
 
+{% block account-css %}
+		<link rel="stylesheet" href="/static/css/account-main.css">
+{% endblock %}
+
 {% block account_content %}
 				<div class="account_setting" id="change_passwd">
 					<div class="account_setting_left">
 						<label>비밀번호 변경</label>
 					</div>
 					<div class="account_setting_right">
-						<input type="password">
-						</input>
-						<input type="password">
-						</input>
+						<input type="password" id="new_password1"></input>
+						<input type="password" id="new_password2"></input>
+						<span id="change_password_error"></span>
 					</div>
 					<div class="account_setting_button">
-						<button>변경하기</button>
+						{% if has_password %}
+						<button id="change_password">변경하기</button>
+						{% else %}
+						<button id="change_password">설정하기</button>
+						{% endif %}
 					</div>
 				</div>
 				<div class="account_setting" id="facebook_account">
@@ -20,15 +27,25 @@
 						<label>페이스북</label>
 					</div>
 					<div class="account_setting_right">
-						<input>
-						</input>
+						{% if has_social %}
+							<input id="facebook_email_input" disabled value="{{ social_url }}"></input>
+						{% else %}
+							<input id="facebook_email_input" disabled value="연동 안됨"></input>
+						{% endif %}
+						<span id="disconnect_error"></span>
 					</div>
 					<div class="account_setting_button">
-						<button>계정 연동 취소하기</button>
+						{% if has_social %}
+							<button id="facebook_disconnect">계정 연동 취소하기</button>
+						{% else %}
+							<button id="facebook_connect">계정 연동하기</button>
+						{% endif %}
 					</div>
 				</div>
 {% endblock %}
 {% block aftercontent %}
+<script src="{{ STATIC_URL }}js/account-edit.js"></script>
+<script src="{{ STATIC_URL }}js/account-main.js"></script>
 {% if from_activate %}
 <script>
 $(document).ready(function(){

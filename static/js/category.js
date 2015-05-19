@@ -23,28 +23,22 @@ $(document).ready(function(){
 			'success' : function(data){
 				$main_list.empty();
 				var elems = [],
-					now = Date.now(),
-					cnt = 0;
+					now = Date.now();
 				if(data && data.articles){
 					elems = data.articles.map(function(article){
 						var i, d=null,
 							$main_elem = $("<div class='elem'/>"),
-							$poster_div = $("<div class='poster'></div>"),
+							$poster_div = $("<div class='poster'></div>").addClass('vhmiddle'),
 							$anchor = $("<a/>").attr({'href':"/article/"+article.id}),
 							$img = $("<img/>").attr({'src':article.poster, 'alt':article.title}).load(function(){;
 								var scaled_width = this.width * 317/this.height;
 								var cell_size = Math.round(scaled_width/223);
 								if(cell_size >= 2) {
 									$main_elem.addClass('elem_wide');
-									cnt += 2;
-								}
-								else cnt += 1;
-								if(cnt > 3) {
-									$main_elem.addClass('elem_last');
-									cnt = 0;
 								}
 								$anchor.append($img);
 								$poster_div.append($anchor);
+								$poster_div.vhmiddle();
 							});
 
 						$main_elem.append($poster_div);
@@ -88,5 +82,5 @@ $(document).ready(function(){
 		getArticles(this.value);
 	});
 
-	getArticles("all");
+	$('#category_list button[value="all"]').click();
 });

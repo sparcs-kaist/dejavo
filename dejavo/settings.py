@@ -128,16 +128,16 @@ SITE_ID = 1
 LOGIN_URL = '/login/'
 
 # Python Social Auth
-SOCIAL_AUTH_FACEBOOK_KEY = '274526142597066'
-SOCIAL_AUTH_FACEBOOK_SECRET = '63e9bbffa1f56ee0f049a51df317c0cd'
+SOCIAL_AUTH_FACEBOOK_KEY = '' # facebook app id
+SOCIAL_AUTH_FACEBOOK_SECRET = '' # facebook app secret
 
 SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_details',
     'social.pipeline.social_auth.social_uid',
     'social.pipeline.social_auth.auth_allowed',
     'social.pipeline.social_auth.social_user',
-    'social.pipeline.social_auth.associate_by_email',
     'social.pipeline.user.get_username',
+    'dejavo.apps.account.pipeline.check_fields',
     'social.pipeline.user.create_user',
     'dejavo.apps.account.pipeline.activate_new_user',
     'dejavo.apps.account.pipeline.save_profile_picture',
@@ -149,9 +149,16 @@ SOCIAL_AUTH_PIPELINE = (
 SOCIAL_AUTH_FORCE_POST_DISCONNECT = True
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 SOCIAL_AUTH_USER_FIELDS = ['email']
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email', 'first_name', 'last_name']
 
 # Django registration
 ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
 REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
 EMAIL_HOST = 'localhost'
-DEFAULT_FROM_EMAIL = 'webmaster@143.248.234.137'
+DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+
+
+try:
+    from local_settings import *
+except ImportError:
+    pass

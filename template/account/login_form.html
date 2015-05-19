@@ -2,11 +2,11 @@
 <div id="login_container">
     <div class="login_form" id="login_id_pw">
         <div>
-            <input id="login_username" type="text" placeholder="이메일">
+            <input id="login_email" type="text" placeholder="이메일">
             <input id="login_password" type="password" placeholder="비밀번호">
             {% csrf_token %}
             <div id="login_error_container">
-                <span id="login_error"></span>
+                <span id="login_error">{{ error_msg }}</span>
             </div>
         </div>
         <div id="action_container">
@@ -20,8 +20,11 @@
         </div>
     </div>
     <div class="login_form" id="login_sns">
+        <div id="facebook_error_container">
+            <span id="facebook_error"></span>
+        </div>
         <div id="facebook_login">
-            <img style="padding-left: 50px; padding-top: 8px;" src="/static//css/images/cross_red.png">
+            <img style="padding-left: 50px; padding-top: 8px;" src="{{ STATIC_URL }}css/images/facebook_icon.png">
             <span style="padding-right: 50px; padding-top: 15px;
                 color: #ffffff; font-size: 19px;
                 float: right; font-weight: bold; font-family: 'Nanum Gothic';

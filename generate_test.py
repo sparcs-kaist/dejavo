@@ -3,6 +3,7 @@
 import os, csv, random, sys
 from os import listdir
 from os.path import isfile, join
+from datetime import datetime, timedelta
 
 import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dejavo.settings')
@@ -10,6 +11,7 @@ django.setup()
 
 from django.core.files import File
 from django.utils.dateparse import parse_datetime
+from django.utils.html import escape
 
 from dejavo.apps.account.models import *
 from dejavo.apps.manage.models import *
@@ -36,6 +38,7 @@ def generate_user(user_info):
     user = User.objects.create_user(email, password)
     user.last_name = last_name
     user.first_name = first_name
+    user.is_active = True
     user.save()
 
     profile = User.objects.get(email = email).profile
@@ -65,10 +68,11 @@ def generate_article(info, user_pool):
     content = info[7]
 
     article = Article(title = title, location = location, category = category,
-            content = content)
+            content = escape(content).replace('\n', '<br>'), is_published = True)
     article.save()
     article.created_date = created_date
     article.updated_date = updated_date
+    article.is_published = True
     article.save()
 
     # Add Poster
@@ -106,12 +110,14 @@ def set_timeslot(info, article_id):
     
     label = info[1]
     timeslot_type = info[2]
-    start_time = parse_datetime(info[3])
-    end_time = None if info[4] == 'None' else parse_datetime(info[4])
+    #start_time = parse_datetime(info[3])
+    #end_time = None if info[4] == 'None' else parse_datetime(info[4])
+    start_time = datetime.datetime.now() + timedelta(days = random.randint(1, 31))
+    end_time = None if info[4] == 'None' else start_time + timedelta(days = random.randint(1, 3))
     article = Article.objects.get(id=article_id)
 
     timeslot = Timeslot(article = article, label = label, start_time = start_time,
-            end_time = end_time, timeslot_type = timeslot_type)
+            end_time = end_time, timeslot_type = timeslot_type, is_main = bool(random.getrandbits(1)))
 
     article.timeslot.add(timeslot)
     article.save()

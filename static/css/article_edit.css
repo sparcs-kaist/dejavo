@@ -85,6 +85,21 @@
     top: -2px;
 }
 
+#timeslot_container table td.timeslot-is-main
+{
+    padding-left: 25px;
+}
+
+#timeslot_container table td span.timeslot-main-span
+{
+    font-size: 15px;
+    position: relative;
+    color: #5d5454;
+    font-family: 'Nanum Gothic';
+    top: -35px;
+    left: -15px;
+}
+
 #article_title .editable-input
 {
     padding: 0px;
@@ -265,11 +280,34 @@
 #media_tool_container #media_tool .m-tool
 {
     float: left;
+    margin-right: 15px;
+    text-align: center;
 }
 
-#media_tool_container #media_tool .m-tool:first-child
+#media_tool_container #media_tool .m-tool:last-child
 {
-    margin-right: 30px;
+    margin-right: 0px;
+}
+
+#media_tool_container #media_tool .m-tool div.m-tool-button
+{
+    margin-bottom: 5px;
+}
+
+#media_tool_container #media_tool .m-tool span.m-tool-label
+{
+    font-size: 15px;
+}
+
+#create_link
+{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #f0795b;
+    background-image: url('images/link_img.png');
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 #insert_image
@@ -325,6 +363,15 @@
     font-size: 13px;
     font-family: 'Nanum Gothic';
     margin-bottom: 20px;
+}
+
+#error_msg
+{
+    text-align: left;
+    border-radius: 5px;
+    color: #f0795b;
+    font-size: 13px;
+    font-family: 'Nanum Gothic';
 }
 
 #category_list
@@ -512,17 +559,6 @@
 }
 
 #owner_selection_list li .owner-small-profile-name
-{
-    float: left;
-    margin-left: 15px;
-    font-family: 'Nanum Gothic';
-    height: inherit;
-    font-size: 13px;
-    line-height: 30px;
-    color: #696060;
-}
-
-#owner_selection_list li .owner-small-profile-id
 {
     float : right;
     margin-right: 25px;

@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.sites.models import Site
+from django.contrib.sites.requests import RequestSite
 from django.db.models import Q
 
 from accept_checker.decorators import require_accept_formats, auth_required 
@@ -27,10 +28,9 @@ def login_view(request):
 
     if request.user.is_authenticated():
         if request.ACCEPT_FORMAT == 'html':
-            return HttpResponse(
-                    status = 400,
-                    content = 'Already logged in'
-                    )
+            next_link = request.GET.get('next', '/')
+            return HttpResponseRedirect(next_link)
+
         elif request.ACCEPT_FORMAT == 'json':
             return JsonResponse(
                     status = 400,
@@ -38,34 +38,32 @@ def login_view(request):
                     )
 
     if request.method == 'GET':
-        # TODO create login page
-        return HttpResponse('Login page')
+        return render(request, "account/login.html")
 
-    username = request.POST.get('username', None)
+    email = request.POST.get('email', None)
     password = request.POST.get('password', None)
     
-    if not username or not password:
+    if not email or not password:
         # invalid format
         if request.ACCEPT_FORMAT == 'html':
-            return HttpResponse(
-                    status = 400,
-                    content = 'Invalid format'
-                    )
+            return render(request, "account/login.html", {
+                'error_msg' : 'Fail to login'
+                })
+
         elif request.ACCEPT_FORMAT == 'json':
             return JsonResponse(status = 400,
                     data = {'error' : 'Invalid format'}
                     )
 
-    user = authenticate(username = username, password = password)
+    user = authenticate(username = email, password = password)
 
     if user is None:
-        # login fail page. wrong password, username
+        # login fail page. wrong password, email 
         if request.ACCEPT_FORMAT == 'html':
-            # TODO login fail page
-            return HttpResponse(
-                    status = 400,
-                    content = 'Failed to login'
-                    )
+            return render(request, "account/login.html", {
+                'error_msg' : 'Fail to login'
+                })
+
         elif request.ACCEPT_FORMAT == 'json':
             return JsonResponse(
                     status = 400,
@@ -116,17 +114,17 @@ def logout_view(request):
 @require_http_methods(['POST'])
 @csrf_exempt
 def jwt_login(request):
-    username = request.POST.get('username', None)
+    email = request.POST.get('email', None)
     password = request.POST.get('password', None)
 
-    if not username or not password:
+    if not email or not password:
         # invalid format
         return JsonResponse(status = 400, data = {'error' : 'Invalid format'})
 
-    user = authenticate(username = username, password = password)
+    user = authenticate(username = email, password = password)
 
     if user is None:
-        # login fail page. wrong password, username
+        # login fail page. wrong password, email 
         return JsonResponse(status = 400, data = {'error' : 'Failed to login'})
 
     if not user.is_active:
@@ -163,11 +161,22 @@ def auth_by_access_token(request, backend):
     # request.backend and request.strategy will be loaded with the current
     # backend and strategy.
     token = request.GET.get('access_token')
-    user = request.backend.do_auth(request.GET.get('access_token'))
+    try:
+        if request.user.is_authenticated():
+            user = request.backend.do_auth(token, user=request.user)
+        else:
+            user = request.backend.do_auth(token)
+
+    except ValidationError as e:
+        return JsonResponse(status = 400,
+                data = {'error' : 'Email address denied'})
 
     if user and user.is_active:
         login(request, user)
-        return JsonResponse(status = 200, data = user.as_json())
+        data = user.as_json()
+        social = request.user.social_auth.filter(provider='facebook')[0]
+        data['social_url'] = 'http://www.facebook.com/' + social.uid
+        return JsonResponse(status = 200, data = data)
     else:
         return JsonResponse(
                 status = 401,
@@ -179,6 +188,7 @@ def auth_by_access_token(request, backend):
 @require_accept_formats(['application/json'])
 @auth_required
 @psa()
+@csrf_exempt
 def disconnect_access_token(request, backend, association_id=None):
     """Disconnects given backend from current logged in user."""
     try:
@@ -206,15 +216,23 @@ def main(request):
     #        )
 
     from_activate = False
+    has_social = len(request.user.social_auth.all()) > 0
+    has_passwd = request.user.has_usable_password()
     try:
         from_activate = request.session.pop('first_login')
     except:
         pass
 
     section = request.GET.get('section')
+    social = None
+    if has_social:
+        social = request.user.social_auth.filter(provider='facebook')[0]
 
     return render(request, "account/main.html", {
-        'from_activate' : from_activate
+        'from_activate' : from_activate,
+        'social_url' : 'http://www.facebook.com/' + social.uid if social else '',
+        'has_social' : has_social,
+        'has_password' : has_passwd,
         })
 
 @require_accept_formats(['text/html', 'application/json'])
@@ -241,23 +259,66 @@ def register(request):
 
     # create user
     email = request.POST.get('email', None)
-    password = request.POST.get('password', None)
+    password1 = request.POST.get('password1', None)
+    password2 = request.POST.get('password2', None)
 
-    if not email or not password:
+    if not email or not password1 or not password2:
         if request.ACCEPT_FORMAT == 'html':
             return HttpResponse(
                     status = 400,
                     content = 'Invalid format'
                     )
-        
+
         elif request.ACCEPT_FORMAT == 'json':
             return JsonResponse(
                     status = 400,
                     data = {'error' : 'Invalid format'}
                     )
 
+    try:
+        validate_email(email)
+    except ValidationError as e:
+        if request.ACCEPT_FORMAT == 'html':
+            return HttpResponse(
+                    status = 400,
+                    content = 'Email validation fail'
+                    )
+
+        elif request.ACCEPT_FORMAT == 'json':
+            return JsonResponse(
+                    status = 400,
+                    data = {'error' : 'Email Validation fail'}
+                    )
+
+    if password1 != password2:
+        return JsonResponse(
+                status = 400,
+                data = {'error' : 'Password does not match'}
+                )
+
+    if Site._meta.installed:
+        site = Site.objects.get_current()
+    else:
+        site = RequestSite(request)
+
+    try:
+        already = get_user_model().objects.get(email = email)
+        if already.is_active:
+            return JsonReponse(
+                    status = 400,
+                    data = {'error' : 'User already activated' }
+                    )
+        else:
+            RegistrationProfile.objects.get(user = already).send_activation_email(site)
+            return HttpResponse(
+                    status = 201,
+                    content = 'User create complete')
+
+    except:
+        pass
+
     new_user = get_user_model().objects.create_user(email = email,
-            password = password)
+            password = password1)
 
     new_user.last_name = request.POST.get('lastname', '')
     new_user.first_name = request.POST.get('firstname', '')
@@ -267,11 +328,6 @@ def register(request):
     profile.bio = request.POST.get('bio', '')
 
     profile.save()
-
-    if Site._meta.installed:
-        site = Site.objects.get_current()
-    else:
-        site = RequestSite(request)
 
     new_user.save()
 
@@ -298,6 +354,41 @@ def register(request):
         response['Location'] = '/account/edit/'
         return response
 
+@require_accept_formats(['application/json'])
+@require_http_methods(['GET'])
+def email_check(request):
+
+    email = request.GET.get('email', None)
+    user_model = get_user_model()
+    if email:
+        try:
+            validate_email(email)
+            user = user_model.objects.get(email = email, is_active=True)
+            return JsonResponse(status = 409,
+                    data = {
+                        'email' : email,
+                        'msg' : 'Already registed email address',
+                        }
+                    )
+        except user_model.DoesNotExist as e:
+            return JsonResponse(status = 200, data = {'email' : email})
+        except ValidationError as e:
+            return JsonResponse(
+                    status = 400,
+                    data = {
+                        'error' : 'Invalid email address',
+                        'msg' : 'Invalid email address',
+                        }
+                    )
+    else:
+        return JsonResponse(
+                status = 400,
+                data = {
+                    'error' : 'Invalid request (email parameter empty',
+                    'msg' : 'Email is empty',
+                    }
+                )
+
 @require_accept_formats(['text/html'])
 @require_http_methods(['POST', 'GET'])
 def activate(request, activation_key):
@@ -308,17 +399,18 @@ def activate(request, activation_key):
     """
     activated_user = RegistrationProfile.objects.activate_user(activation_key)
     # a little trick to login without password
-    activated_user.backend = "django.contrib.auth.backends.ModelBackend"
     if activated_user:
+        activated_user.backend = "django.contrib.auth.backends.ModelBackend"
         login(request, activated_user)
         request.session['first_login'] = True
         return HttpResponseRedirect(reverse('account_main'))
     else:
-        return HttpResponse(status = 400, content = "Invalid or Wrong approach")
+        return render(request, "registration/activation_fail.html")
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['POST'])
 @auth_required
+@csrf_exempt
 def edit(request):
 
     update_fields = request.POST.get('fields').split(',')
@@ -327,36 +419,45 @@ def edit(request):
     error_list = {}
 
     if 'password' in update_fields:
-        new_password = request.POST.get('password', None)
-        if not new_password:
+        password1 = request.POST.get('password1', None)
+        password2 = request.POST.get('password2', None)
+
+        if not password1 or not password2 or \
+                len(password1) <= 0 or len(password2) <= 0:
             error_list.setdefault('password', []).append('Password field is empty')
-        user.set_password(new_password)
+        elif password1 != password2:
+            error_list.setdefault('password', []).append('Password does not match')
+        else:
+            user.set_password(password1)
 
     if 'profile_image' in update_fields:
         if 'profile_image' not in request.FILES:
             error_list.setdefault('profile_image', []).append('Image field is empty')
-        new_profile_image = request.FILES['profile_image']
-        user.profile.profile_image.save(new_profile_image.name, new_profile_image)
+        else:
+            new_profile_image = request.FILES['profile_image']
+            user.profile.profile_image.save(new_profile_image.name, new_profile_image)
 
     if 'email' in update_fields:
         email = request.POST.get('email', None)
         try:
             validate_email(email)
+            user.email = email
         except ValidationError as e:
             error_list.setdefault('email', []).append(unicode(e.message))
-        user.email = email
 
     if 'first_name' in update_fields:
         first_name = request.POST.get('first_name', None)
         if not first_name:
             error_list.setdefault('first_name', []).append('First name field is empty')
-        user.first_name = first_name
+        else:
+            user.first_name = first_name
 
     if 'last_name' in update_fields:
         last_name = request.POST.get('last_name', None)
         if not last_name:
             error_list.setdefault('last_name', []).append('Last name field is empty')
-        user.last_name = last_name
+        else:
+            user.last_name = last_name
 
     if len(error_list) > 0:
         if request.ACCEPT_FORMAT == 'json':
@@ -374,10 +475,10 @@ def edit(request):
 
 @require_accept_formats(['text/html', 'application/json'])
 @require_http_methods(['GET'])
-def show_user(request, username):
+def show_user(request, email):
 
     try:
-        user_info = get_user_model().objects.get(username = username).as_json()
+        user_info = get_user_model().objects.get(email = email).as_json()
         if request.ACCEPT_FORMAT == 'html':
             # TODO Create user page
             return HttpResponse(
@@ -421,7 +522,7 @@ def search_user(request):
                 )
 
     _User = get_user_model()
-    user_list = _User.objects.filter(Q(username__icontains = query) |
+    user_list = _User.objects.filter(Q(email = query) |
             Q(first_name__icontains = query) | Q(last_name__icontains = query))[start:end]
     user_list_json = map(lambda x : x.as_json(), user_list)
 
@@ -438,7 +539,7 @@ def check_participate(request, article_id):
     try:
         article = Article.objects.get(id = article_id)
         check = False
-        if request.user.is_authenticated:
+        if request.user.is_authenticated():
             check = Participation.objects.filter(user = request.user,
                     article = article).exists()
 
@@ -497,3 +598,23 @@ def unparticipate(request, article_id):
             status = 400,
             data = { 'error' : 'Article does not exist' }
             )
+
+@require_accept_formats(['text/html', 'application/json'])
+@require_http_methods(['GET'])
+@auth_required
+def my_articles(request):
+    if request.ACCEPT_FORMAT == 'html':
+        return render(request, "account/article.html", {
+            })
+
+    elif request.ACCEPT_FORMAT == 'json':
+        article_list = []
+        article_set = Article.objects.filter(owner = request.user, is_published = True)
+
+        for a in article_set:
+            article_list.append(a.as_json())
+
+        return JsonResponse(
+                status = 200,
+                data = {'articles' : article_list}
+                )

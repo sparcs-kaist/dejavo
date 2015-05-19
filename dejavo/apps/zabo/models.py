@@ -27,12 +27,12 @@ class Article(models.Model):
     subtitle = models.CharField(max_length = 150, blank = True)
     location = models.CharField(max_length = 200, blank = True)
     content = models.TextField()
-    announcement = models.TextField()
+    announcement = models.TextField(blank = True)
     image = models.ImageField(upload_to = 'poster')
     category = models.CharField(max_length = 20, choices = CATEGORY_TYPE)
     # Article host group
     host_name = models.CharField(max_length = 50)
-    host_image = models.ImageField(upload_to = 'host')
+    host_image = models.ImageField(upload_to = 'host', default='default/default_host.png')
     host_description = models.CharField(max_length = 150)
     is_blocked = models.BooleanField(default = False)
     is_deleted = models.BooleanField(default = False)
@@ -93,7 +93,7 @@ class Article(models.Model):
                 })
 
         timeslot_list = []
-        timeslot_q_list = list(Timeslot.objects.filter(article = self))
+        timeslot_q_list = list(Timeslot.objects.filter(article = self).order_by('-start_time'))
         for timeslot in timeslot_q_list:
             timeslot_list.append({
                 'timeslot_type' : timeslot.timeslot_type,
@@ -173,6 +173,7 @@ class Timeslot(models.Model):
     timeslot_type = models.CharField(max_length = 20, choices = TIMESLOT_TYPE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(blank = True, null = True)
+    is_main = models.BooleanField(default = False)
     label = models.CharField(max_length = 50, blank = True)
 
     def as_json(self):

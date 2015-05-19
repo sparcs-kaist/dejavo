@@ -7,8 +7,8 @@
 		<meta property="og:title" content="{{ article.title }}" />
 		<meta property="og:site_name" content="SPARCS Zabo Project" /> 
 		<meta property="og:description" content="{{ article.subtitle }}" />
-		<meta property="og:url" content="{{ request.build_absolute_uri }}">
-		<meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{{ article.image.url }}" />
+		<meta property="og:url" content="http://{{ site.domain }}{{ request.get_full_path }}">
+		<meta property="og:image" content="http://{{ site.domain }}{{ article.image.url }}" />
         <meta property="og:type" content="article" /> <!-- article? website? -->
 {% endblock %}
 
@@ -20,8 +20,12 @@
 
 {% block content %}
 		<div id="article_head_container">
-			<div id="article_title">{{ article.title }}</div>
-			<div id="article_subtitle">{{ article.subtitle }}</div>
+			{% if article.subtitle|length > 0 %}
+				<div id="article_title">{{ article.title }}</div>
+				<div id="article_subtitle">{{ article.subtitle }}</div>
+			{% else %}
+				<div id="article_title" class="nosubtitle">{{ article.title }}</div>
+			{% endif %}
 		</div>
 		<div id="article_body_container">
 			<div id="article_main">
@@ -50,37 +54,49 @@
 							</div>
 						</div>
 						<div id="question_list">
-							{% for q in article.question_set.all %}
+							{% for q in question %}
 							<div class="question" question-id="{{ q.id }}">
 								<div class="question-profile-image-container vhmiddle" data-width="60" data-height="60">
 									<img src="{{ q.writer.profile.profile_image.url}}">
 								</div>
 								<div class="question-content-container">
 									<div class="question-meta">
-										<span class="question-profile-name">{{ q.writer.last_name }} {{ q.writer.first_name }}</span>
+										<span class="question-profile-name">{{ q.writer.last_name }}{{ q.writer.first_name }}</span>
 										<span class="question-time">{{ q.created_date|date:"n월 j일 G시 i분" }}</span>
+										{% if request.user == q.writer and not q.is_deleted %}
+										<span class="question-delete"></span>
+										{% endif %}
 									</div>
 									<div class="question-content">
+										{% if q.is_deleted %}
+										<span class="deleted">-- deleted --</span>
+										{% else %}
 										{{ q.content }}
+										{% endif %}
 									</div>
-									{% if user in article.owner.all %}
+									{% if user.is_authenticated %}
 									<div class="answer-popup">
-										<img src="/media/dasf.png" class="answer-popup-image"/>
+										<img src="/media/answer.png" class="answer-popup-image"/>
 									</div>
 									{% endif %}
 									{% for a in q.answer_set.all %}
 									<div class="answer" answer-id="{{ a.id }}">
-										<div class="answer-profile-image-container">
+										<div class="answer-profile-image-container vhmiddle">
 											<img src="{{ a.writer.profile.profile_image.url }}" class="answer-profile-image"></img>
 										</div>
 										<div class="answer-content-container">
 											<div class="answer-meta">
 												<span class="answer-profile-name">{{ a.writer.last_name }}{{ a.writer.first_name }}</span>
 												<span class="answer-time">{{ a.created_date|date:"n월 j일 G시 i분" }}</span>
+												{% if request.user == a.writer and not a.is_deleted %}
+												<span class="answer-delete"></span>
+												{% endif %}
 											</div>
-											<div class="answer-content">
-												{{ a.content }}
-											</div>
+											{% if a.is_deleted %}
+											<span class="deleted">-- deleted --</span>
+											{% else %}
+											<span class="answer-content">{{ a.content }}</span>
+											{% endif %}
 										</div>
 									</div>
 									{% endfor %}
@@ -107,7 +123,11 @@
 										{% ifequal t.label '' %}
 											<td><span class="timeslot-label"></span></td>
 										{% else %}
+											{% if t.is_main %}
+											<td><button class="timeslot-label is-main">{{ t.label }}</button></td>
+											{% else %}
 											<td><button class="timeslot-label">{{ t.label }}</button></td>
+											{% endif %}
 										{% endifequal %}
 										</tr>
 								{% endfor %}
@@ -115,14 +135,16 @@
 							</table>
 						</div>
 					</div>
+					{% if article.location|length > 0 %}
 					<div id="location_container" class="sub-container">
 						<div class="sub-head">장소</div>
 						<div class="sub-content"><span>{{ article.location }}</span></div>
 					</div>
+					{% endif %}
 					<div id="participant_container" class="sub-container">
 						<div class="sub-head">참여자</div>
 						<div class="sub-content">
-							<span id="participant_count">{{ participant.count }}</span><span>명</span>
+							<span id="participant_count">{{ participant|length }}</span><span>명</span>
 						</div>
 					</div>
 					<div id="host_container" class="sub-container">
@@ -135,10 +157,18 @@
 						</div>
 						<div id="host_content" class="sub-content">{{ article.host_description }}</div>
 					</div>
+					{% if article.announcement|length > 0 %}
 					<div id="notice_container" class="sub-container">
 						<div class="sub-head">공지사항</div>
 						<div id="notice_content" class="sub-content"><span>{{ article.announcement }}</span></div>
 					</div>
+					{% endif %}
+					{% if is_owner %}
+					<div id="owner_button_container">
+						<button id="article_edit_button" class="button-large stress">수정</button>
+						<button id="article_delete_button" class="button-large">삭제</button>
+					</div>
+					{% endif %}
 				</div>
 				<div id="article_sub_share">
 					<ul>
@@ -157,15 +187,16 @@
 					<!-- http://graph.facebook.com/?id=http://www.naver.com -->
 					<!-- http://urls.api.twitter.com/1/urls/count.json?url=http://www.naver.com -->
 				</div>
+
 				<div id="article_sub_participants">
 					<ul id="participant_list">
 						{% for p in participant reversed %}
 						<li user-id="{{ p.id }}">
 							<div class="participant-profile-image vhmiddle" data-width="48" data-height="48">
-								<img src="{{ p.profile_image.url }}"></img>
+								<img src="{{ p.profile.profile_image.url }}"></img>
 							</div>
 							<span class="participant-profile-text">
-								{{ p.user.last_name }}{{ p.user.first_name}} 님이 참여합니다.
+								{{ p.last_name }}{{ p.first_name}} 님이 참여합니다.
 							</span>
 						</li>
 						{% endfor %}
@@ -199,7 +230,7 @@
 
 			$("li#twitter").click(function(e){
 					e.preventDefault();
-					popupwindow('https://twitter.com/intent/tweet?text={{ article.title }}-{{ article.subtitle }}&url={{ request.build_absolute_uri }}', 'Tweet Article', 600, 260);
+					popupwindow('https://twitter.com/intent/tweet?text={{ article.title|urlencode }}-{{ article.subtitle }}&url={{ request.build_absolute_uri }}', 'Tweet Article', 600, 260);
 				});
 		});
 

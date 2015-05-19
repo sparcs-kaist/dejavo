@@ -2,14 +2,19 @@
 
 {% block css %}
 		<link rel="stylesheet" href="/static/css/account.css">
+{% block account-css %}
+{% endblock %}
 {% endblock %}
 
 {% block content %}
         <div id="account_head_container">
 			<div id="edit_profile_img_container">
-				<div id="edit_profile_image" onclick="getElementById('profile_image_input').click();"
+				<div id="edit_profile_image"
 					class="profile-image vhmiddle vhmiddle-update" data-width="100" data-height="100">
 					<img src="{{ user.profile.profile_image.url }}"></img>
+				</div>
+				<div id="edit_profile_image_hover" onclick="getElementById('profile_image_input').click();">
+					<span>사진 변경</span>
 				</div>
 			</div>
 			<input id="profile_image_input" name="image" type="file"
@@ -18,11 +23,11 @@
 		</div>
 		<div id="account_content_container">
 			<div id="content_left">
-				<div>메세지</div>
-				<div>참여하는 행사</div>
-				<div>관리하는 행사</div>
-				<div>계정 설정</div>
-				<div>프로필 설정</div>
+				<!--div><a href="#">메세지</a></div-->
+				<div><a href="#">참여하는 행사</a></div>
+				<div><a href="/account/articles/">관리하는 행사</a></div>
+				<div><a href="/account/">계정 설정</a></div>
+				<div><a href="#">프로필 설정</a></div>
 			</div>
 			<div id="content_right">
 {% block account_content %}

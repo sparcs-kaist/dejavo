@@ -69,11 +69,15 @@ ZB.registerOrLogin = function(accessToken) {
 		'dataType' : 'json',
 		'url' : '/social/auth/facebook/?access_token=' + accessToken,
 		'success' : function(response) {
-			console.log(response);
 			$.modal.close();
 			ZB.updateLoginInfo(response);
 			// TODO
 			// also need to update q and a part
+		},
+		'error' : function(jqXHR, textStatus, errorThrown) {
+			$('#facebook_error').text('이메일 주소를 가져오지 못했습니다.');
+			$('#facebook_error').animate( { 'background-color' : "#f15050" }, 1 )
+				.animate( { 'background-color' : "transparent" }, 1000 );
 		},
 	});
 }
@@ -102,7 +106,7 @@ ZB.register = function () {
 				dialog.data.fadeIn(200);
 
 				var register_button = dialog.data.find('#register_button_container button');
-				var email = dialog.data.find('input#register_username');
+				var email = dialog.data.find('input#register_email');
 				var password = dialog.data.find('input#register_password');
 				var password_check = dialog.data.find('input#register_password_check');
 				var firstname = dialog.data.find('input#register_firstname');
@@ -110,12 +114,29 @@ ZB.register = function () {
 				var csrf = dialog.data.find('input[name=csrfmiddlewaretoken]');
 
 				var password_fail = $('#register_password_error');
+				var error = dialog.data.find('span#register_error');
 
 				email.focus();
 
 				email.focusout(function(e){
 					// check email duplication
-					$.ajax({});
+					email.val(email.val().trim());
+					$.ajax({
+						'method' : 'GET',
+						'url' : '/account/email_check/',
+						'data' : {'email' : email.val()},
+						'dataType' : 'json',
+						'success' : function(data, textStatus, jqXHR){
+							error.text('사용 가능한 이메일 주소입니다.');
+						},
+						'error' : function(jqXHR, textStatus, errorThrown) {
+							if (jqXHR.status == 400) {
+								error.text('잘못된 이메일 주소입니다.');
+							} else if (jqXHR.status == 409) {
+								error.text('이미 등록된 이메일 주소입니다.');
+							}
+						},
+					});
 				});
 
 				$.each([password, password_check], function(i, element) {
@@ -144,7 +165,8 @@ ZB.register = function () {
 						'data' : {
 							'email' : email.val(),
 							'csrfmiddlewaretoken' : csrf.val(),
-							'password' : password.val(),
+							'password1' : password.val(),
+							'password2' : password_check.val(),
 							'firstname' : firstname.val(),
 							'lastname' : lastname.val(),
 						},
@@ -152,12 +174,14 @@ ZB.register = function () {
 							$.modal.close();
 							email.val('');
 							password.val('');
+							password_check.val('');
 							firstname.val('');
 							lastname.val('');
 							$.notify("인증메일이 보내졌습니다. 메일을 통해 활성화 하시기 바랍니다.", "success");
 						},
 						'error' : function(jqXHR) {
-							dialog.data.find('span#register_error').text('error');
+							var msg = jqXHR.responseJSON;
+							dialog.data.find('span#register_error').text(msg.error);
 						},
 					});
 				});
@@ -175,9 +199,10 @@ ZB.register = function () {
 	register.init();
 };
 
-ZB.login = function (){
+ZB.login = function (postFunc){
 
 	var login = {
+		'postFunc' : postFunc,
 		init : function() {
 			$.get("/account/login_form/", function(data){
 				// create a modal dialog with the data
@@ -206,7 +231,7 @@ ZB.login = function (){
 			dialog.overlay.fadeIn(200);
 			dialog.container.fadeIn(200, function () {
 				dialog.data.fadeIn(200);
-				dialog.data.find('input#login_username').focus();
+				dialog.data.find('input#login_email').focus();
 				dialog.data.find('#facebook_login').click(function(e){
 					e.preventDefault();
 					FB.getLoginStatus(function(response) {
@@ -216,11 +241,10 @@ ZB.login = function (){
 
 
 				var login_button = dialog.data.find('#login_button button');
-				var username = dialog.data.find('input#login_username');
+				var email = dialog.data.find('input#login_email');
 				var password = dialog.data.find('input#login_password');
 				var csrf = dialog.data.find('input[name=csrfmiddlewaretoken]');
-				console.log(csrf);
-				$.each([password, username], function(i, v) {
+				$.each([password, email], function(i, v) {
 					v.on('keypress', function (e) {
 						if (e.which == 13) {
 							login_button.click();
@@ -235,19 +259,23 @@ ZB.login = function (){
 						'dataType' : 'json',
 						'url' : '/login/',
 						'data' : {
-							'username' : username.val(),
+							'email' : email.val(),
 							'password' : password.val(),
 							'csrfmiddlewaretoken' : csrf.val(),
 						},
 						'success' : function(response) {
+							dialog.doPostFunc = true;
 							$.modal.close();
-							username.val('');
+							email.val('');
 							password.val('');
 							ZB.updateLoginInfo(response);
 						},
 						'error' : function(jqXHR) {
 							dialog.data.find('span#login_error').text('아이디 혹은 비밀번호가 틀렸습니다.');
-							username.focus();
+							$(dialog.data.find('span#login_error'))
+								.animate( { 'background-color' : "#f15050" }, 1 )
+								.animate( { 'background-color' : "transparent" }, 1000 );
+							email.focus();
 							password.val('');
 						},
 					});
@@ -260,6 +288,12 @@ ZB.login = function (){
 				dialog.overlay.fadeOut(200, function () {
 					$.modal.close();
 					ZB.register();
+				});
+			} else if (dialog.doPostFunc) {
+				dialog.diPostFunc = false;
+				dialog.overlay.fadeOut(200, function () {
+					$.modal.close();
+					login.postFunc();
 				});
 			} else {
 				dialog.overlay.fadeOut(200, function () {
@@ -311,7 +345,9 @@ ZB.showAccountDialog = function(){
 	});
 
 	var pPosition = profileDiv.offset();
+
 	var leftMargin = (profileDiv.width() - 140) / 2;
+	if (leftMargin < 0 && leftMargin > -70) leftMargin = -70;
 	pPosition.top+= 65;
 	pPosition.left += leftMargin;
 	dialog.css({

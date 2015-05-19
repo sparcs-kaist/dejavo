@@ -50,12 +50,13 @@
 						<div class="m-tool">
 							<input id="editor_image_input" type="file" data-edit="insertImage"
 								style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 0px; height: 0px;">
-							<div onclick="getElementById('editor_image_input').click();" id="insert_image" class="stress"></div>
+							<div onclick="getElementById('editor_image_input').click();" id="insert_image" class="m-tool-button stress"></div>
+							<span class="m-tool-label">사진</span>
 						</div>
 						<div class="m-tool">
 							<input id="editor_youtube_input" type="text" data-edit="insertYoutube"
 								style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 0px; height: 0px;">
-							<div id="insert_video" class="stress"></div>
+							<div id="insert_video" class="m-tool-button stress"></div>
 							<div id="insert_video_form" style="display: none;
 								background-color: #f4e5e2; position: absolute; border-radius: 5px;
 								font-family: 'Nanum Gothic'; font-size: 15px; color: #5d5454;
@@ -65,6 +66,11 @@
 								<button id="video_add_button" class="stress"
 									style="padding: 5px 6px; border-radius: 5px; margin-left: 8px;">추가</button>
 							</div>
+							<span class="m-tool-label">동영상</span>
+						</div>
+						<div class="m-tool">
+							<div id="create_link" class="m-tool-button stress" data-edit="createLink"></div>
+							<span class="m-tool-label">하이퍼링크</span>
 						</div>
 					</div>
 				</div>
@@ -128,8 +134,26 @@
 											{% ifequal t.label '' %}
 												<td><span class="timeslot-label"></span></td>
 											{% else %}
+												{% if t.is_main %}
+												<td><button class="timeslot-label is-main">{{ t.label }}</button></td>
+												{% else %}
 												<td><button class="timeslot-label">{{ t.label }}</button></td>
+												{% endif %}
 											{% endifequal %}
+
+											<td class="timeslot-is-main">
+												<div class="squaredTwo">
+													{% if forloop.first %}
+													<span class="timeslot-main-span">대표 일정</span>
+													{% endif %}
+													{% if t.is_main %}
+													<input type="checkbox" id="timeslot{{ t.id }}-is-main" checked></input>
+													{% else %}
+													<input type="checkbox" id="timeslot{{ t.id }}-is-main"></input>
+													{% endif %}
+													<label for="timeslot{{ t.id }}-is-main"></label>
+												</div>
+											</td>
 										</tr>
 									{% endfor %}
 								</tbody>
@@ -147,9 +171,10 @@
 							<div id="timeslot_add_form" style="display: none;
 								background-color: #f4e5e2; position: absolute; border-radius: 5px;
 								font-family: 'Nanum Gothic'; font-size: 15px; color: #5d5454;
-								padding: 10px 10px 10px 20px; width: 650px;">
+								padding: 10px 10px 10px 20px; width: 680px;">
 								<span>태그 :</span>
-								<input id="ts_label" type="text" style="width: 108px;"></input>
+								<input id="ts_label" type="text" style="width: 108px;" placeholder="ex) 지원마감"></input>
+								&nbsp;&nbsp;&nbsp;|
 								<input id="ts_year" type="text" style="width: 81px;"></input>
 								<span>년</span>
 								<input id="ts_month" type="text" style="width: 43px;"></input>
@@ -209,6 +234,8 @@
 						<span>에 임시 저장되었습니다.</span>
 						{% endif %}
 					</div>
+					<div id="error_msg" class="sub_container">
+					</div>
 				</div>
 				{% if article.is_published %}
 				<div id="owner_container">
@@ -239,7 +266,7 @@
 							font-family: 'Nanum Gothic'; font-size: 15px; color: #5d5454;
 							padding: 10px 10px 10px 10px; width: 330px;">
 							<div>
-								<span style="margin-left: 10px;">아이디 혹은 이름</span>
+								<span style="margin-left: 10px;">이메일 혹은 이름</span>
 								<input id="owner_query" type="text"></input>
 								<button id="owner_search_button" class="stress"
 									style="padding: 5px 6px; border-radius: 5px; float: right;">검색</button>
@@ -260,7 +287,6 @@
 	var articleID = {{ article.id }};
 	var is_published = {% if article.is_published %}true{% else %}false{% endif %};
 </script>
-<script src="{{ STATIC_URL }}js/jquery.color.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.autosize.input.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.hotkeys.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap-wysiwyg.js"></script>
@@ -280,6 +306,16 @@
 		})
 		editor.wysiwyg();
 
+	});
+
+	$('table#timeslot_table td.timeslot-is-main input').click(function () {
+		var $this = $(this);
+		var $button = $this.parent().parent().parent().find('button.timeslot-label');
+		if ($this.prop('checked')) {
+			$button.addClass('is-main');
+		} else {
+			$button.removeClass('is-main');
+		}
 	});
 
 	$(window).load(function () {

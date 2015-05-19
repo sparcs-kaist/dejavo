@@ -1,5 +1,24 @@
 $(document).ready(function(){
 
+	var timeslot_add_form = $('div#timeslot_add_form');
+	var timeslot_add_div = $('div#timeslot_add_container');
+	var owner_add_form = $('div#owner_add_form');
+	var owner_add_div = $('div#owner_add_container');
+
+	$(document).click(function(e){
+		var f = function(a, b) {
+			if (b.is(e.target) || b.has(e.target).length > 0) {
+				return;
+			}
+			if (!a.is(e.target) && a.has(e.target).length == 0) {
+				a.hide();
+				a.find('input').val('');
+			}
+		};
+		f(timeslot_add_form, timeslot_add_div);
+		f(owner_add_form, owner_add_div);
+	});
+
 	$.each($('#owner_list li'), function(i, v) {
 		var $v = $(v);
 		$v.find('span.timeslot-remove-icon').click(function(e){
@@ -27,6 +46,7 @@ $(document).ready(function(){
 			'data' : { 'q' : q.val() },
 			'dataType' : 'json',
 			'error' : function(req, textStatus, err) {
+				l.empty()
 				var li = $('<li></li>').css('text-align', 'center');
 				var div = $('<span></span>').css('line-height', '30px');
 				div.text('검색 결과가 없습니다.');
@@ -55,11 +75,9 @@ $(document).ready(function(){
 					var user_image = $('<img></img>').addClass('owner-small-profile-image')
 						.attr('src', user.profile_image);
 					var user_name = $('<div></div>').addClass('owner-small-profile-name')
-						.text(user.last_name + user.first_name);
-					var user_id = $('<div></div>').addClass('owner-small-profile-id')
-						.text(user.username);
+						.text(user.last_name + ' ' + user.first_name);
 
-					li.append(user_image).append(user_name).append(user_id);
+					li.append(user_image).append(user_name);
 					l.append(li);
 
 					// check if owner is included.
@@ -241,12 +259,31 @@ $(document).ready(function(){
 			'left' : position.left - 380,
 		});
 		ele.toggle();
+		var currDate = new Date();
+		ele.find('#ts_year').val(currDate.getFullYear());
 		$('#ts_label').empty().focus();
 	});
+
+	$('#timeslot_add_form').keyup(function(e){
+		if (e.which == 13) {
+			$('#timeslot_add_button').click();
+		}
+	});
+
+	var updateTable = function () {
+		var table = $('#timeslot_table tbody');
+		var tr_list = table.find('tr');
+		if (tr_list.length > 0) {
+			table.find('span.timeslot-main-span').remove();
+			var span = $(document.createElement('span')).addClass('timeslot-main-span');
+			$(tr_list[0]).find('div.squaredTwo').prepend(span.text('대표 일정'));
+		}
+	};
 
 	$('#timeslot_add_button').click(function(e){
 		e.preventDefault();
 		var data = getNewTimeSlot();
+		if (!data) return;
 		var stime = data.start_time;
 
 		var tr = $('<tr></tr>').attr('mode', 'new');
@@ -265,16 +302,44 @@ $(document).ready(function(){
 					});
 		var labelTD = $('<td></td>');
 		if (data.label.trim() == '') {
-			labelTD.append('<span class="timeslot-label"></span>');;
+			labelTD.append('<span class="timeslot-label"></span>');
 		} else {
-			labelTD.append('<button class="timeslot-label">' + data.label + '</button>');;
+			var button = $('<button class="timeslot-label"></button>');
+			button.text(data.label);
+			labelTD.append(button);
 		}
 
-		tr.append(removeTD).append(dateTD).append(labelTD);
-		$('#timeslot_table tbody').append(tr);
+		var ranID = Math.random().toString(36).substring(7);
+		var isMainTD = $('<td></td>').addClass('timeslot-is-main');
+		var mainDiv = $(document.createElement('div')).addClass('squaredTwo');
+		var mainInput = $(document.createElement('input')).attr('type', 'checkbox').
+			attr('id', ranID);
+		var mainLabel = $(document.createElement('label')).attr('for', ranID);
+		isMainTD.append(mainDiv.append(mainInput).append(mainLabel));
+
+		mainInput.click(function() {
+			if ($(this).prop('checked')) {
+				labelTD.find('.timeslot-label').addClass('is-main');
+			} else {
+				labelTD.find('.timeslot-label').removeClass('is-main');
+			}
+		});
+
+		var table = $('#timeslot_table tbody');
+		tr.append(removeTD).append(dateTD).append(labelTD).append(isMainTD);
+		table.append(tr);
+		updateTable();
 
 		removeTD.click(function (e){
 			tr.remove();
+			$.each(editable_list, function(i, editable) {
+				editable.update();
+			});
+			updateTable();
+		});
+
+		$.each(editable_list, function(i, editable) {
+			editable.update();
 		});
 
 		$('#timeslot_add_form').toggle();
@@ -296,13 +361,28 @@ $(document).ready(function(){
 
 	var getNewTimeSlot = function() {
 		// TODO validation
-		var newDate = new Date();
-		newDate.setFullYear($('#ts_year').val());
-		newDate.setMonth($('#ts_month').val() - 1);
-		newDate.setDate($('#ts_date').val());
-		newDate.setHours($('#ts_hour').val());
-		newDate.setMinutes($('#ts_minute').val());
+		var newDate = new Date(
+				$('#ts_year').val(),
+				$('#ts_month').val() - 1,
+				$('#ts_date').val(),
+				$('#ts_hour').val(),
+				$('#ts_minute').val());
 
+		if (isNaN(newDate)) {
+			$('#error_msg').html('일시 형식이 잘못되었습니다.');
+			$('#error_msg').animate( { backgroundColor: "#f15050" }, 1 )
+				.animate( { backgroundColor: "#ffffff" }, 1000 );
+			return false;
+		} else {
+			var maxDate = new Date();
+			maxDate.setDate(maxDate.getDate() + 400);
+			if (newDate > maxDate) {
+				$('#error_msg').html('작성된 일시가 너무 멉니다.');
+				$('#error_msg').animate( { backgroundColor: "#f15050" }, 1 )
+					.animate( { backgroundColor: "#ffffff" }, 1000 );
+				return false;
+			}
+		}
 		return {
 			'label' : $('#ts_label').val(),
 			'start_time' : newDate,
@@ -336,10 +416,14 @@ $(document).ready(function(){
 					var time = timeTD.attr('time-year') + '-' + timeTD.attr('time-month') +
 							'-' + timeTD.attr('time-date') + 'T' + timeTD.attr('time-hour') +
 							':' + timeTD.attr('time-minute') + 'Z';
+
 					timeslot['label'] =  label;
 					timeslot['start_time'] = time;
 					timeslot['type'] = 'point';
+					timeslot['is_main'] = is_main;
 				}
+				var is_main = tr.find('.timeslot-is-main input[type=checkbox]').prop('checked');
+				timeslot['is_main'] = is_main;
 				data.push(timeslot);
 			});
 			return {
@@ -377,6 +461,28 @@ $(document).ready(function(){
 
 	$('#cancel_button').click(function(e){
 		// TODO canel if published, remove if not
+
+		if (is_published) {
+			var c = confirm('정말로 취소하시겠습니까?');
+			if (c) {
+				window.location = '/article/' + articleID + '/';
+			}
+		} else {
+			var c = confirm('정말로 삭제하시겠습니까?');
+			if (c) {
+				$.ajax({
+					'method' : 'GET',
+					'url' : '/article/' + articleID + '/delete/',
+					'dataType' : 'json',
+					'success' : function(data) {
+						window.location = '/';
+					},
+					'error' : function(jqXHR) {
+						$('#error_msg').text(jqXHR.responseJSON.error);
+					},
+				});
+			}
+		}
 	});
 
 	$('#edit_button').click(function(e){
@@ -580,12 +686,72 @@ $(document).ready(function(){
 					((dd.getMinutes()<10?'0':'') + dd.getMinutes()) + '분 ' +
 					((dd.getSeconds()<10?'0':'') + dd.getSeconds()) + '초 ');
 
+				$('#error_msg').html('');
+				$('#error_msg').removeAttr('style');
+
 				if (to_publish) {
 					window.location.replace(jqXHR.getResponseHeader('Location'));
 				}
 			},
 			'error' : function(req, textStatus, err) {
-				console.log(textStatus);
+				var res = req.responseJSON;
+				var fields = [];
+				var timeslot_count = false;
+				var owner_err = false;
+				if (res === undefined) {
+					$('#error_msg').css({
+						'padding' : '10px 5px',
+						'margin-bottom' : '20px',
+					});
+					$('#error_msg').html('업데이트에 실패하였습니다.');
+					$('#error_msg').animate( { backgroundColor: "#f15050" }, 1 )
+						.animate( { backgroundColor: "#ffffff" }, 1000 );
+					return;
+				}
+				res.msg && res.msg && $.each(res.msg, function(key, val) {
+					if (key == 'category'){
+						fields.push('카테고리');
+					} else if (key == 'content') {
+						fields.push('내용');
+					} else if (key == 'host_description') {
+						fields.push('주체 단체 설명');
+					} else if (key == 'host_image') {
+						fields.push('주체 단체 이미지');
+					} else if (key == 'host_name') {
+						fields.push('주체 단체 명');
+					} else if (key == 'image') {
+						fields.push('메인포스터');
+					} else if (key == 'title') {
+						fields.push('제목');
+					} else if (key == 'timeslot') {
+						fields.push('일시');
+
+					} else if (key == 'timeslot_count') {
+						timeslot_count = true;
+					} else if (key == 'owner') {
+						owner_err = true;
+					}
+				});
+
+				var msg = [];
+				if (fields.length > 0) {
+					msg.push('<b>' + fields.join(', ') +
+							'</b>를(을) 바르게 입력하거나 선택해 주시기 바랍니다.');
+				}
+				if (timeslot_count){
+					msg.push('최소 하나의 <b>일정</b>이 있어야합니다.');
+				}
+				if (owner_err){
+					msg.push('최소 한 명의 <b>관리자</b>가 있어야합니다.');
+				}
+				$('#error_msg').css({
+					'padding' : '10px 5px',
+					'margin-bottom' : '20px',
+				});
+				$('#error_msg').html(msg.join('<br><br>'));
+				$('#error_msg').animate( { backgroundColor: "#f15050" }, 1 )
+					.animate( { backgroundColor: "#ffffff" }, 1000 );
+
 			},
 			'complete' : function(jqXHR, textStatus) {
 				button.prop('disabled', false).css('opacity', 1);

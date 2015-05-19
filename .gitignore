@@ -54,4 +54,6 @@ docs/_build/
 target/
 
 db.sqlite3
-media/
+media/*
+!media/default
+local_settings.py

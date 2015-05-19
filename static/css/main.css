@@ -28,6 +28,7 @@ ol
 
 .event_elem
 {
+    position: relative;
     list-style: none;
     margin-bottom: 108px;
 }
@@ -37,22 +38,13 @@ ol
     width: 960px;
     height: 300px;
     background: #ffffff;
+    box-shadow: 1px 1px 3px #888888;
 }
 
 .poster
 {
     float: left;
-    height: inherit;
-}
-
-.poster a
-{
-    display: inline-block;
-    height: inherit;
-}
-
-.poster img
-{
+    width: 430px;
     height: inherit;
 }
 
@@ -60,7 +52,8 @@ ol
 {
     float: left;
     padding-left: 45px;
-    padding-right: 55px;
+    padding-right: 25px;
+    max-width: 460px;
     height: inherit;
 }
 
@@ -79,39 +72,19 @@ ol
 
 .info_content
 {
-    width: 180px;
     height: 27px;
     color: #675d5a;
     font-family: 'Nanum Barun Gothic';
     font-size: 24px;
-    overflow: hidden;
-}
-
-.event_desc
-{
-    height: 240px;
-    line-height: 30px;
-    padding: 25px 45px 35px 0px;
-    color: #8d8582;
-    font-family: 'Nanum Gothic';
-    font-size: 17px;
-    box-shadow: 1px 1px 3px #888888;
-}
-
-.event_desc pre
-{
-    height: 240px;
-    margin: 0;
-    font-family: 'Nanum Gothic';
-    word-wrap: break-word;
-    overflow: hidden;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .d_day
 {
-    float: right;
-    position: relative;
-    top: -116.6666666667%;
+    position: absolute;
+    top: -16.6666666667%;
     right: -5.2083333333%;
     padding-top: 35px;
     width: 100px;
