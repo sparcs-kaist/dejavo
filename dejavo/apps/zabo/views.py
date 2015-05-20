@@ -12,9 +12,11 @@ from django.db.models import Count, Q
 from accept_checker.decorators import require_accept_formats, auth_required
 from dejavo.apps.zabo.models import Article, Timeslot, Question, Answer
 from dejavo.apps.account.models import Participation
+from dejavo.settings import TIME_ZONE
 
-import json
 from datetime import datetime, date
+import json
+import pytz
 
 
 @require_accept_formats(['text/html'])
@@ -568,7 +570,7 @@ def get_day(article):
         #no main timeslot
         times = Timeslot.objects.filter(article = article).order_by('start_time')
     for t in times:
-        if t.start_time.replace(tzinfo=None) > datetime.now():
+        if t.start_time > pytz.timezone(TIME_ZONE).localize(datetime.now()):
             return t.start_time
 
     return None
