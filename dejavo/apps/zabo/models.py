@@ -102,15 +102,6 @@ class Article(models.Model):
                 'label' : timeslot.label,
                 })
 
-        d_day = 999
-        day = ""
-        for timeslot in timeslot_q_list:
-            delta = timeslot.start_time.replace(tzinfo=None) - datetime.datetime.now()
-            if delta.days > 0:
-                day = timeslot.start_time.strftime("%m월 %d일")
-                d_day = delta.days
-                pass
-
         attach_list = []
         for attach in list(Attachment.objects.filter(article = self)):
             attach_list.append({
@@ -138,8 +129,6 @@ class Article(models.Model):
                     'description' : self.host_description,
                     },
                 'attachment' : attach_list,
-                'd_day': d_day,
-                'day': day,
                 }
 
     def __unicode__(self):

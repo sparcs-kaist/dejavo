@@ -15,9 +15,9 @@
 		<div id="main_list_container">
 			<div id="main_list_title">Upcoming Events</div>
 			<ol id="main_list">
-				{% for article in articles|dictsort:"d_day" %}
+				{% for article in articles|dictsort:"date" %}
 				<li class="event_elem">
-				<div class="event_container" article-id="{{ article.id }}">
+					<div class="event_container" article-id="{{ article.id }}" data-date="{{ article.date|date:"Y/n/j" }}">
 						<div class="poster vhmiddle">
 							<a href="/article/{{ article.id }}">
 								<img src="{{ article.poster }}" />
@@ -30,7 +30,7 @@
 							</div>
 							<div class="info">
 								<div class="info_title">일시</div>
-								<div class="info_content">{{ article.day }}</div>
+								<div class="info_content">{{ article.date|date:"Y년 n월 j일" }}</div>
 							</div>
 							<div class="info">
 								<div class="info_title">주최자</div>
@@ -38,7 +38,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="d_day">D-{{ article.d_day }}</div>
+					<div class="d_day"></div>
 				</li>
 				{% endfor %}
 			</ol>
