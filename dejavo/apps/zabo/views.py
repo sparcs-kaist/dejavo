@@ -564,7 +564,7 @@ def get_day(article):
     times = Timeslot.objects.filter(article = article, is_main = True).order_by('start_time')
     if not times:
         #no main timeslot
-        times = Timeslot.objects.all()
+        times = Timeslot.objects.filter(article = article).order_by('start_time')
     for t in times:
         if t.start_time.replace(tzinfo=None) > datetime.now():
             return t.start_time
