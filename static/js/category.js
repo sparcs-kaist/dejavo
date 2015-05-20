@@ -43,20 +43,20 @@ $(document).ready(function(){
 
 						$main_elem.append($poster_div);
 
-						for(i=0; i<article.timeslot.length; i++){
-							d = new Date(article.timeslot[i].start_time);
-							if(d.getTime() >= now) break;
-						}
+						d = new Date(article.date)
 
 						var today = new Date(86400e3*Math.floor(now/86400e3)),
 							thatday = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
 						var dday = Math.floor((thatday.getTime() - today.getTime())/86400e3);
 						var $dday_elem = $("<div class='dday'/>");
 
-						if(dday > 0){
+						if(dday == 0) {
+							$dday_elem.addClass('dday_today');
+							$dday_elem.text("NOW");
+						}
+						else if(dday > 0){
 							$dday_elem.text("D-"+dday);
 							if(dday <= 7) $dday_elem.addClass('dday_near');
-							if(dday == 0) $dday_elem.addClass('dday_today');
 						}else{
 							$dday_elem.text("D+"+(-dday));
 							$dday_elem.addClass('dday_past');

@@ -99,3 +99,8 @@ ol
     -moz-border-radius: 50px;
     background-color: #f0795b
 }
+
+.d_day.now
+{
+    background-color: #f15050 !important;
+}

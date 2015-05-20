@@ -121,7 +121,9 @@ li
 {}
 
 #main_list .elem .dday_today
-{}
+{
+    background-color: #f15050 !important;
+}
 
 #main_list .elem .dday_past
 {}

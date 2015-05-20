@@ -7,14 +7,16 @@ $(document).ready(function(){
 
 		var one = 24*60*60*1000;
 		var diff = Math.abs((today.getTime() - that_day.getTime())/(one));
+		var d_day = $(this).find('.d_day');
 
 		if(diff < 1) {
 			diff = "NOW";
+			d_day.addClass('now');
 		}
 		else {
 			diff = "D-" + diff;
 		}
 
-		$(this).find('.d_day').text(diff);
+		d_day.text(diff);
 	});
 });

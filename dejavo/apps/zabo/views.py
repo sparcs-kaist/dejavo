@@ -551,7 +551,9 @@ def get_category(request, category):
         article_set = article_set.filter(category = category)
 
     for a in article_set:
-        article_list.append(a.as_json())
+        article_j = a.as_json()
+        article_j['date'] = get_day(a)
+        article_list.append(article_j)
     
     return JsonResponse(
             status = 200,
