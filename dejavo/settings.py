@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
 
     'social.apps.django_app.default',
+    'sorl.thumbnail',
 
     'dejavo.apps.account',
     'dejavo.apps.manage',
@@ -157,6 +158,12 @@ REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
 EMAIL_HOST = 'localhost'
 DEFAULT_FROM_EMAIL = 'webmaster@localhost'
 
+
+# Thumbnail
+THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
+THUMBNAIL_REDIS_DB = 1
+THUMBNAIL_FORMAT = 'PNG'
+THUMBNAIL_UPSCALE = False
 
 try:
     from local_settings import *

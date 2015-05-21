@@ -4,6 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
+from sorl.thumbnail import ImageField, get_thumbnail
 
 import os
 import datetime
@@ -109,6 +110,25 @@ class Article(models.Model):
                 'filename' : os.path.basename(attach.filepath.file.name),
                 })
 
+        poster = {'origin' : None, 'main_thumb' : None, 'category_thumb': None }
+        if (bool(self.image)):
+            poster['origin'] = self.image.url
+            poster['main_thumb'] = get_thumbnail(self.image, '600').url
+
+            is_portrait = self.image.width < self.image.height
+            to_scale = [222, 321] if is_portrait else [468, 321]
+            geometry = None
+            scale = 1
+            if self.image.width > to_scale[0] or self.image.height > to_scale[1]:
+                if self.image.height < to_scale[1]:
+                    scale = self.image.height / to_scale[1]
+                if self.image.width < to_scale[0]:
+                    scale = self.image.width / to_scale[0]
+
+                geometry = str(self.image.width * scale) + 'x' + str(self.image.height * scale)
+
+            poster['category_thumb'] = get_thumbnail(self.image, geometry).url
+
         return {
                 'id' : self.id,
                 'title' : self.title,
@@ -122,7 +142,7 @@ class Article(models.Model):
                 'content' : self.content,
                 'contact' : contact_list,
                 'timeslot' : timeslot_list,
-                'poster' : None if not bool(self.image) else self.image.url,
+                'poster' : poster,
                 'host' : {
                     'name' : self.host_name,
                     'image' : None if not bool(self.host_image) else self.host_image.url,
