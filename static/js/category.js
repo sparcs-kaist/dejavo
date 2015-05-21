@@ -27,6 +27,7 @@ $(document).ready(function(){
 				today.setHours(0);
 				today.setMinutes(0);
 				today.setSeconds(0);
+				today.setMilliseconds(0);
 
 				if(data && data.articles){
 					elems = data.articles.map(function(article){
