@@ -25,7 +25,7 @@ $(document).ready(function(){
 				var $main_elem = $("<div class='elem'/>");
 				var $poster_div = $("<div class='poster'></div>").addClass('vhmiddle').addClass('vhmiddle-portrait');
 				var $anchor = $("<a/>").attr({'href':"/article/"+article.id});
-				var $img = $("<img/>").attr({'src':article.poster, 'alt':article.title});
+				var $img = $("<img/>").attr({'src':article.poster.category_thumb, 'alt':article.title});
 				$anchor.append($img);
 				$poster_div.append($anchor);
 				$main_elem.append($poster_div);

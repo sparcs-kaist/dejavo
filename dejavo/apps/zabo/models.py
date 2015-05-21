@@ -119,13 +119,21 @@ class Article(models.Model):
             to_scale = [222, 321] if is_portrait else [468, 321]
             geometry = None
             scale = 1
-            if self.image.width > to_scale[0] or self.image.height > to_scale[1]:
-                if self.image.height < to_scale[1]:
-                    scale = self.image.height / to_scale[1]
-                if self.image.width < to_scale[0]:
-                    scale = self.image.width / to_scale[0]
 
-                geometry = str(self.image.width * scale) + 'x' + str(self.image.height * scale)
+            height = self.image.height
+            width = self.image.width
+
+            if width > to_scale[0] or height > to_scale[1]:
+                if height > to_scale[1]:
+                    scale = height / to_scale[1]
+                    height /= scale
+                    width /= scale
+                if width > to_scale[0]:
+                    scale = width / to_scale[0]
+                    height /= scale
+                    width /= scale
+
+                geometry = str(width) + 'x' + str(height)
 
             poster['category_thumb'] = get_thumbnail(self.image, geometry).url
 
