@@ -49,7 +49,6 @@ $(document).ready(function(){
 
 						d = new Date(article.date);
 						var thatday = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
-						console.log(today, thatday);
 
 						var dday = Math.floor((thatday.getTime() - today.getTime())/86400e3);
 						var $dday_elem = $("<div class='dday'/>");
