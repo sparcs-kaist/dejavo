@@ -556,6 +556,8 @@ def get_category(request, category):
         article_j = a.as_json()
         article_j['date'] = get_day(a)
         article_list.append(article_j)
+
+    article_list = sorted(article_list, key=lambda y: y['date'], reverse=False)
     
     return JsonResponse(
             status = 200,
