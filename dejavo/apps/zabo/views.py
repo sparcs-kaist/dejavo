@@ -28,7 +28,8 @@ def main(request):
     for article in articles_set:
         article_j = article.as_json()
         article_j['date'] = get_day(article)
-        article_list.append(article_j)
+        if article_j['date'] is not None:   #None if main timeslot passed
+            article_list.append(article_j)
 
     return render(request, 'zabo/main.html', {'articles': article_list})
 
@@ -555,7 +556,8 @@ def get_category(request, category):
     for a in article_set:
         article_j = a.as_json()
         article_j['date'] = get_day(a)
-        article_list.append(article_j)
+        if article_j['date'] is not None:   #None if main timeslot passed
+            article_list.append(article_j)
 
     article_list = sorted(article_list, key=lambda y: y['date'], reverse=False)
     
