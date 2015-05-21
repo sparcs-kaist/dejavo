@@ -556,7 +556,7 @@ $(document).ready(function(){
 			};
 		},
 		'setData' : function (data) {
-			this.element.html(data.content);
+			//this.element.html(data.content);
 		},
 	}).data('datawrapper');
 
