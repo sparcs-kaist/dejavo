@@ -554,7 +554,7 @@ def get_category(request, category):
         article_set = article_set.filter(category = category)
 
     for a in article_set:
-        article_j = a.as_json()
+        article_j = a.as_json(['subtitle', 'owner', 'location', 'announcement', 'created_date', 'updated_date', 'content', 'contact', 'timeslot', 'host', 'attachment'])
         article_j['date'] = get_day(a)
         if article_j['date'] is not None:   #None if main timeslot passed
             article_list.append(article_j)

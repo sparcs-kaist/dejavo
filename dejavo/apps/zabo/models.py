@@ -79,7 +79,7 @@ class Article(models.Model):
             if len(unsatisfied_field) > 0:
                 raise ValidationError(unsatisfied_field)
 
-    def as_json(self):
+    def as_json(self, ex = []):
 
         owner_list = []
         for owner in list(self.owner.all()):
@@ -109,7 +109,7 @@ class Article(models.Model):
                 'filename' : os.path.basename(attach.filepath.file.name),
                 })
 
-        return {
+        ctx = {
                 'id' : self.id,
                 'title' : self.title,
                 'subtitle' : self.subtitle,
@@ -130,6 +130,11 @@ class Article(models.Model):
                     },
                 'attachment' : attach_list,
                 }
+
+        for elem in ex:
+            ctx.pop(elem)
+
+        return ctx
 
     def __unicode__(self):
         return unicode(self.title) + ' ::' + str(self.id)
