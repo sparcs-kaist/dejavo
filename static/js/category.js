@@ -23,7 +23,11 @@ $(document).ready(function(){
 			'success' : function(data){
 				$main_list.empty();
 				var elems = [],
-					now = Date.now();
+					today = new Date();
+				today.setHours(0);
+				today.setMinutes(0);
+				today.setSeconds(0);
+
 				if(data && data.articles){
 					elems = data.articles.map(function(article){
 						var i, d=null,
@@ -43,10 +47,10 @@ $(document).ready(function(){
 
 						$main_elem.append($poster_div);
 
-						d = new Date(article.date)
+						d = new Date(article.date);
+						var thatday = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
+						console.log(today, thatday);
 
-						var today = new Date(86400e3*Math.floor(now/86400e3)),
-							thatday = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
 						var dday = Math.floor((thatday.getTime() - today.getTime())/86400e3);
 						var $dday_elem = $("<div class='dday'/>");
 
