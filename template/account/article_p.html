@@ -1,0 +1,9 @@
+{% extends "account/layout.html" %}
+
+{% block account-css %}
+        <link rel="stylesheet" href="/static/css/account-article.css">
+{% endblock %}
+
+{% block aftercontent %}
+<script src="{{ STATIC_URL }}js/account-articles_p.js"></script>
+{% endblock %}
