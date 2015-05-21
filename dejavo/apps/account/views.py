@@ -618,3 +618,28 @@ def my_articles(request):
                 status = 200,
                 data = {'articles' : article_list}
                 )
+
+@require_accept_formats(['text/html', 'application/json'])
+@require_http_methods(['GET'])
+@auth_required
+def my_p_articles(request):
+    if request.ACCEPT_FORMAT == 'html':
+        return render(request, "account/article_p.html", {})
+
+    elif request.ACCEPT_FORMAT == 'json':
+        article_list = []
+        article_set = Article.objects.filter(participation__user = request.user)
+
+        for a in article_set:
+            article_list.append(a.as_json())
+
+        return JsonResponse(
+                status = 200,
+                data = {'articles' : article_list}
+                )
+
+@require_accept_formats(['text/html'])
+@require_http_methods(['GET'])
+@auth_required
+def my_profile(request):
+    return render(request, "account/profile.html", {})
