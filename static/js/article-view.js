@@ -240,12 +240,12 @@ $(document).ready(function(){
 		return answer_write;
 	};
 
-	$('.answer-popup-image').click(function(e){
+	$('.answer-popup-button').click(function(e){
 		var button = $(this);
 		$('.answer-write').remove();
-		var question_id = button.parent().parent().parent().attr('question-id');
+		var question_id = button.parent().parent().parent().parent().attr('question-id');
 		var answer_write = createAnswerPopup(question_id);
-		button.parent().after(answer_write);
+		button.parent().parent().after(answer_write);
 		answer_write.find('textarea').focus();
 	});
 

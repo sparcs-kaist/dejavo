@@ -291,7 +291,7 @@ $(document).ready(function(){
 		removeTD.append($('<div></div>').addClass('timeslot-remove-icon'));
 		var dateTD = $('<td>' + (stime.getMonth() + 1) + '월 ' +
 							stime.getDate() + '일 ' + stime.getHours() + '시 ' +
-							stime.getMinutes() + '분</td>')
+							(stime.getMinutes()<10?'0':'') + stime.getMinutes() + '분</td>')
 					.addClass('timeslot-time')
 					.attr({
 						'time-year' : stime.getFullYear(),
@@ -413,12 +413,14 @@ $(document).ready(function(){
 				} else {
 					var label = tr.find('.timeslot-label').text();
 					var timeTD = tr.find('.timeslot-time');
-					var time = timeTD.attr('time-year') + '-' + timeTD.attr('time-month') +
-							'-' + timeTD.attr('time-date') + 'T' + timeTD.attr('time-hour') +
-							':' + timeTD.attr('time-minute') + 'Z';
+					var date = new Date(timeTD.attr('time-year'),
+						timeTD.attr('time-month') - 1,
+						timeTD.attr('time-date'),
+						timeTD.attr('time-hour'),
+						timeTD.attr('time-minute'))
 
 					timeslot['label'] =  label;
-					timeslot['start_time'] = time;
+					timeslot['start_time'] = date.toISOString();
 					timeslot['type'] = 'point';
 					timeslot['is_main'] = is_main;
 				}
@@ -554,7 +556,7 @@ $(document).ready(function(){
 			};
 		},
 		'setData' : function (data) {
-			this.element.html(data.content);
+			//this.element.html(data.content);
 		},
 	}).data('datawrapper');
 

@@ -67,18 +67,20 @@
 										<span class="question-delete"></span>
 										{% endif %}
 									</div>
-									<div class="question-content">
-										{% if q.is_deleted %}
-										<span class="deleted">-- deleted --</span>
-										{% else %}
-										{{ q.content }}
+									<div class="question-content-wrapper">
+										<div class="question-content">
+											{% if q.is_deleted %}
+											<span class="deleted">-- deleted --</span>
+											{% else %}
+											{{ q.content }}
+											{% endif %}
+										</div>
+										{% if user.is_authenticated %}
+										<div class="answer-popup">
+											<button class="answer-popup-button">댓글달기</button>
+										</div>
 										{% endif %}
 									</div>
-									{% if user.is_authenticated %}
-									<div class="answer-popup">
-										<img src="/media/answer.png" class="answer-popup-image"/>
-									</div>
-									{% endif %}
 									{% for a in q.answer_set.all %}
 									<div class="answer" answer-id="{{ a.id }}">
 										<div class="answer-profile-image-container vhmiddle">

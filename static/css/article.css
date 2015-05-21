@@ -231,8 +231,16 @@ button#add_question_button
     content : url('images/remove_icon.png');
 }
 
+.question-content-wrapper
+{
+    position: relative;
+    display: inline-block;
+}
+
 .question-content
 {
+    float: left;
+    width: 430px;
     font-family: 'Nanum Gothic';
     font-size: 15px;
     color: #696060;
@@ -246,14 +254,21 @@ button#add_question_button
 
 .answer-popup
 {
+    position: absolute;
     padding-bottom: 10px;
+    height: 30px;
+    right: -21%;
+    bottom: 0%;
 }
 
-.answer-popup img
+.answer-popup-button
 {
+    float: right;
+    padding: 0;
+    width: 80px;
+    height: 30px;
+    font-size: 12px;
     cursor: pointer;
-    width: 16px;
-    height: 16px;
 }
 
 .answer-profile-image-container

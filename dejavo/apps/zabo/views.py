@@ -12,19 +12,23 @@ from django.db.models import Count, Q
 from accept_checker.decorators import require_accept_formats, auth_required
 from dejavo.apps.zabo.models import Article, Timeslot, Question, Answer
 from dejavo.apps.account.models import Participation
+from dejavo.settings import TIME_ZONE
 
+from datetime import datetime, date
 import json
-import datetime
+import pytz
 
 
 @require_accept_formats(['text/html'])
 @require_http_methods(['GET'])
 def main(request):
     article_list = []
-    articles_set = Article.objects.filter(timeslot__start_time__gte=datetime.datetime.now(),
+    articles_set = Article.objects.filter(timeslot__start_time__gte=datetime.now(),
             is_published=True, is_deleted=False, is_blocked=False).distinct()
-    for aq in articles_set:
-        article_list.append(aq.as_json())
+    for article in articles_set:
+        article_j = article.as_json()
+        article_j['date'] = get_day(article)
+        article_list.append(article_j)
 
     return render(request, 'zabo/main.html', {'articles': article_list})
 
@@ -543,13 +547,17 @@ def view_category(request):
 def get_category(request, category):
     article_list = []
 
-    article_set = Article.objects.filter(timeslot__start_time__gte=datetime.datetime.now(),
+    article_set = Article.objects.filter(timeslot__start_time__gte=datetime.now(),
             is_published=True, is_deleted=False, is_blocked=False).distinct()
     if category != "all":
         article_set = article_set.filter(category = category)
 
     for a in article_set:
-        article_list.append(a.as_json())
+        article_j = a.as_json()
+        article_j['date'] = get_day(a)
+        article_list.append(article_j)
+
+    article_list = sorted(article_list, key=lambda y: y['date'], reverse=False)
     
     return JsonResponse(
             status = 200,
@@ -557,3 +565,14 @@ def get_category(request, category):
                 'articles' : article_list
                 }
             )
+
+def get_day(article):
+    times = Timeslot.objects.filter(article = article, is_main = True).order_by('start_time')
+    if not times:
+        #no main timeslot
+        times = Timeslot.objects.filter(article = article).order_by('start_time')
+    for t in times:
+        if t.start_time > pytz.timezone(TIME_ZONE).localize(datetime.now()):
+            return t.start_time
+
+    return None
