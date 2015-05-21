@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% load thumbnail %}
 
 {% block meta %}
         <meta name="twitter:card" content="photo" />
@@ -30,7 +31,9 @@
 		<div id="article_body_container">
 			<div id="article_main">
 				<div id="article_image">
-					<img src={{ article.image.url }}></img>
+					{% thumbnail article.image "600" as im %}
+					<img src={{ im.url }}></img>
+					{% endthumbnail %}
 				</div>
 				<div id="article_content">
 					{{ article.content|safe }}
