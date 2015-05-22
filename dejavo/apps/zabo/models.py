@@ -29,7 +29,8 @@ class Article(models.Model):
     location = models.CharField(max_length = 200, blank = True)
     content = models.TextField()
     announcement = models.TextField(blank = True)
-    image = models.ImageField(upload_to = 'poster')
+    image = models.ImageField(upload_to = 'poster', width_field='image_width')
+    image_width = models.IntegerField()
     category = models.CharField(max_length = 20, choices = CATEGORY_TYPE)
     # Article host group
     host_name = models.CharField(max_length = 50)
@@ -224,7 +225,7 @@ class Question(models.Model):
 
     def clean(self):
         if self.content.strip() == '':
-            raise ValidationError({'content': 
+            raise ValidationError({'content':
                 'Content should not be empty string'})
 
     def as_json(self):
@@ -270,7 +271,7 @@ class Answer(models.Model):
 
     def clean(self):
         if self.content.strip() == '':
-            raise ValidationError({'content': 
+            raise ValidationError({'content':
                 'Content should not be empty string'})
 
     def as_json(self):
