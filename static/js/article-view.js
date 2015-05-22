@@ -102,9 +102,9 @@ $(document).ready(function(){
 	};
 
 	$('div#article_image').click(function(e){
-		var image = $('img#article_image_large_img');
-		var imageurl = $(this).find('img').attr('src');
 		var article_image_large = $('div#article_image_large');
+		var image = article_image_large.find('#article_image_large_img');
+		image.attr('src', image.attr('data-large-url'));
 
 		var modal = article_image_large.modal({
 			overlayCss : {

@@ -209,9 +209,11 @@
 				</div>
 			</div>
 		</div>
-        <div id="fb-root"></div>
-		<div id="article_image_large" style="display:none; width:inherit; margin: 50px 0px 50px 0px; overflow:hidden;">
-			<img id="article_image_large_img" style="width:inherit" src="{{ article.image.url }}"></img>
+		<div id="fb-root"></div>
+		<div id="article_image_large" style="display:none; margin: 50px 0px 50px 0px; overflow:hidden;">
+			{% thumbnail article.image "600" as im %}
+			<img id="article_image_large_img" style="width:{{ article.image_width }}px; max-width:100%;" src="{{ im.url }}" data-large-url="{{ article.image.url }}"></img>
+			{% endthumbnail %}
 		</div>
 {% endblock %}
 
