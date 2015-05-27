@@ -160,6 +160,7 @@ DEFAULT_FROM_EMAIL = 'webmaster@localhost'
 
 
 # Thumbnail
+THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.wand_engine.Engine'
 THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
 THUMBNAIL_REDIS_DB = 1
 THUMBNAIL_FORMAT = 'PNG'

@@ -113,7 +113,7 @@ class Article(models.Model):
         poster = {'origin' : None, 'main_thumb' : None, 'category_thumb': None }
         if (bool(self.image)):
             poster['origin'] = self.image.url
-            poster['main_thumb'] = get_thumbnail(self.image, '600').url
+            poster['main_thumb'] = get_thumbnail(self.image, '600', quality=85).url
 
             is_portrait = self.image.width < self.image.height
             to_scale = [222, 321] if is_portrait else [468, 321]
@@ -135,7 +135,7 @@ class Article(models.Model):
 
                 geometry = str(width) + 'x' + str(height)
 
-            poster['category_thumb'] = get_thumbnail(self.image, geometry).url
+            poster['category_thumb'] = get_thumbnail(self.image, geometry, quality=85).url
 
         ctx = {
                 'id' : self.id,
@@ -224,7 +224,7 @@ class Question(models.Model):
 
     def clean(self):
         if self.content.strip() == '':
-            raise ValidationError({'content': 
+            raise ValidationError({'content':
                 'Content should not be empty string'})
 
     def as_json(self):
@@ -270,7 +270,7 @@ class Answer(models.Model):
 
     def clean(self):
         if self.content.strip() == '':
-            raise ValidationError({'content': 
+            raise ValidationError({'content':
                 'Content should not be empty string'})
 
     def as_json(self):
