@@ -1,5 +1,5 @@
-@import url(//cdn.jsdelivr.net/font-nanum/1.0/nanumgothic/nanumgothic.css);
-@import url(//cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css);
+@import url('nanumbarungothic.css');
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
 
 body
 {
