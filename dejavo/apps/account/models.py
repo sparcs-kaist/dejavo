@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone, six
 from django.template import RequestContext, TemplateDoesNotExist
 from django.template.loader import render_to_string
+from PIL import Image
 
 from dejavo.apps.zabo.models import Article
 
@@ -115,6 +116,33 @@ class ZaboProfile(models.Model):
     profile_image = models.ImageField(upload_to = 'profile', default='default/default_profile.png')
     phone = models.CharField(max_length = 50, blank = True)
     bio = models.TextField(blank = True)
+
+    def save(self, *args, **kwargs):
+        super(ZaboProfile, self).save(*args, **kwargs)
+
+        if self.profile_image:
+            pw = self.profile_image.width
+            ph = self.profile_image.height
+            mw = 320
+            mh = 320
+
+            if (pw > mw) or (ph > mh):
+                # we require a resize
+                # load the image
+                imageObj = Image.open(self.profile_image.path)
+                ratio = 1
+
+                if (pw > mw):
+                    ratio = mw / float(pw)
+                    pw = mw
+                    ph = int(float(ph) * ratio)
+
+                if (ph > mh):
+                    ratio = ratio * (mh / float(ph))
+                    ph = mh
+                    pw = int(float(ph) * ratio)
+                imageObj = imageObj.resize((pw, ph), Image.ANTIALIAS)
+                imageObj.save(self.profile_image.path)
 
 ZaboUser.profile = property(lambda u: ZaboProfile.objects.get(user = u))
 

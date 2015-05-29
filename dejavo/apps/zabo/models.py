@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from sorl.thumbnail import ImageField, get_thumbnail
+from PIL import Image
 
 import os
 import datetime
@@ -41,6 +42,34 @@ class Article(models.Model):
     # Article creation timestamp
     created_date = models.DateTimeField(auto_now_add = True)
     updated_date = models.DateTimeField(auto_now = True, auto_now_add = True)
+
+    def save(self, *args, **kwargs):
+        super(Article, self).save(*args, **kwargs)
+
+        if self.host_image:
+            pw = self.host_image.width
+            ph = self.host_image.height
+            mw = 320
+            mh = 320
+
+            if (pw > mw) or (ph > mh):
+                # we require a resize
+                # load the image
+                imageObj = Image.open(self.host_image.path)
+                ratio = 1
+
+                if (pw > mw):
+                    ratio = mw / float(pw)
+                    pw = mw
+                    ph = int(float(ph) * ratio)
+
+                if (ph > mh):
+                    ratio = ratio * (mh / float(ph))
+                    ph = mh
+                    pw = int(float(ph) * ratio)
+                imageObj = imageObj.resize((pw, ph), Image.ANTIALIAS)
+                imageObj.save(self.host_image.path)
+
 
     def set_fields(self, fields, posts, files):
         for field_name in fields:
