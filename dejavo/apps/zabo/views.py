@@ -15,8 +15,10 @@ from dejavo.apps.account.models import Participation
 from dejavo.settings import TIME_ZONE
 
 from datetime import datetime, date
+
 import json
 import pytz
+import random
 
 
 @require_accept_formats(['text/html'])
@@ -561,6 +563,31 @@ def get_category(request, category):
 
     article_list = sorted(article_list, key=lambda y: y['date'], reverse=False)
     
+    return JsonResponse(
+            status = 200,
+            data = {
+                'articles' : article_list
+                }
+            )
+
+@require_accept_formats(['text/html', 'application/json'])
+@require_http_methods(['GET'])
+def get_articles(request):
+    return get_n_articles(request, 5)
+
+@require_accept_formats(['text/html', 'application/json'])
+@require_http_methods(['GET'])
+def get_n_articles(request, n):
+    article_list = []
+    article_set = Article.objects.filter(timeslot__start_time__gte=datetime.now())
+    
+    for a in article_set:
+        if not article_list or not article_list[-1].get("id") == a.id:
+            article_list.append(a.as_json())
+            
+    if len(article_list) > int(n):
+        article_list = random.sample(article_list, int(n))
+        
     return JsonResponse(
             status = 200,
             data = {
