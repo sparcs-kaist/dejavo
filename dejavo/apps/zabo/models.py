@@ -28,14 +28,14 @@ class Article(models.Model):
     title = models.CharField(max_length = 150)
     subtitle = models.CharField(max_length = 150, blank = True)
     location = models.CharField(max_length = 200, blank = True)
-    content = models.TextField()
+    content = models.TextField(blank = True)
     announcement = models.TextField(blank = True)
     image = models.ImageField(upload_to = 'poster')
     category = models.CharField(max_length = 20, choices = CATEGORY_TYPE)
     # Article host group
     host_name = models.CharField(max_length = 50)
     host_image = models.ImageField(upload_to = 'host', default='default/default_host.png')
-    host_description = models.CharField(max_length = 150)
+    host_description = models.CharField(max_length = 150, blank = True)
     is_blocked = models.BooleanField(default = False)
     is_deleted = models.BooleanField(default = False)
     is_published = models.BooleanField(default = False)
@@ -73,7 +73,7 @@ class Article(models.Model):
 
     def set_fields(self, fields, posts, files):
         for field_name in fields:
-            if field_name == 'created_date' or field_name == 'updated_date':
+            if field_name == 'created_date' or field_name == 'updated_date' or field_name == 'subtitle' or field_name == 'location' or field_name == 'content' or field_name == 'host_description' or field_name == 'announcement':
                 continue
 
             field = Article._meta.get_field(field_name)
@@ -101,8 +101,6 @@ class Article(models.Model):
             unsatisfied_field = {}
             if self.title.strip() == '':
                 unsatisfied_field['title'] = 'Unfilled field'
-            if self.content.strip() == '':
-                unsatisfied_field['content'] = 'Unfilled field'
             if not self.category:
                 unsatisfied_field['category'] = 'Value not set'
 
@@ -129,6 +127,9 @@ class Article(models.Model):
                 'timeslot_type' : timeslot.timeslot_type,
                 'start_time' : timeslot.start_time,
                 'end_time' : timeslot.end_time,
+                'exist_end' : timeslot.exist_end,
+                'is_am_start' : timeslot.is_am_start,
+                'is_am_end' : timeslot.is_am_end,
                 'label' : timeslot.label,
                 })
 
@@ -226,6 +227,9 @@ class Timeslot(models.Model):
     end_time = models.DateTimeField(blank = True, null = True)
     is_main = models.BooleanField(default = False)
     label = models.CharField(max_length = 50, blank = True)
+    exist_end = models.BooleanField(default = False)
+    is_am_start = models.BooleanField(default = True)
+    is_am_end= models.BooleanField(default = True)
 
     def as_json(self):
         return {
@@ -233,6 +237,9 @@ class Timeslot(models.Model):
                 'type' : self.timeslot_type,
                 'start_time' : self.start_time,
                 'end_time' : self.end_time,
+                'exist_end' : self.exist_end,
+                'is_am_start' : self.is_am_start,
+                'is_am_end' : self.is_am_end,
                 'label' : self.label,
             }
 

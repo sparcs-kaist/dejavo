@@ -414,6 +414,10 @@ div#article_action_container
     top: -2px;
 }
 
+.squaredTwoAdd {
+    background: #fff;
+}
+
 .squaredTwo input[type=checkbox] {
     visibility: hidden;
 }

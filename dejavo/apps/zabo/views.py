@@ -203,7 +203,10 @@ def edit_article(request, article_id):
                 for ts in new_timeslot:
                     try:
                         new_ts = Timeslot(article = article, timeslot_type = ts['type'],
-                                start_time = ts['start_time'], end_time = None,
+                                # editedit
+                                start_time = ts['start_time'], end_time = ts['end_time'],
+                                exist_end = ts['exist_end'],
+                                is_am_start = ts['is_am_start'], is_am_end = ts['is_am_end'],
                                 is_main = ts['is_main'], label = ts['label'])
                         new_ts.full_clean()
                         new_ts_list.append(new_ts)
@@ -299,6 +302,9 @@ def create_timeslot(request, article_id):
                 timeslot_type = request.POST.get('type', ''),
                 start_time = request.POST.get('start_time', None),
                 end_time = request.POST.get('end_time', None),
+                exist_end = request.POST.get('exist_end', False),
+                is_am_start = request.POST.get('is_am_start', False),
+                is_am_end = request.POST.get('is_am_end', False),
                 label = request.POST.get('label', '')
                 )
         timeslot.full_clean()
