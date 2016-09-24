@@ -13,3 +13,4 @@ requests-oauthlib==0.4.2
 six==1.9.0
 sorl-thumbnail==12.2
 wsgiref==0.1.2
+bs4
