@@ -145,14 +145,20 @@ class Article(models.Model):
             poster['origin'] = self.image.url
             poster['main_thumb'] = get_thumbnail(self.image, '600', quality=85).url
 
-            is_portrait = self.image.width < self.image.height
+            is_portrait = True 
+            try:
+                is_portrait = self.image.width < self.image.height
+                height = self.image.height
+                width = self.image.width
+            except:
+                height = 1000
+                width = 1000
+
             to_scale = [222, 321] if is_portrait else [468, 321]
             geometry = None
             scale = 1
 
-            height = self.image.height
-            width = self.image.width
-
+            
             if width > to_scale[0] or height > to_scale[1]:
                 if height > to_scale[1]:
                     scale = height / to_scale[1]
