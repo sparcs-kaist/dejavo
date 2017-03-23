@@ -122,19 +122,36 @@
 								<tbody>
 								{% for t in article.timeslot.all %}
 									<tr>
-										<td>
-											{{ t.start_time|date:"n월 j일 G시 i분" }}
-										</td>
-										{% ifequal t.label '' %}
-											<td><span class="timeslot-label"></span></td>
-										{% else %}
-											{% if t.is_main %}
-											<td><button class="timeslot-label is-main">{{ t.label }}</button></td>
-											{% else %}
-											<td><button class="timeslot-label">{{ t.label }}</button></td>
-											{% endif %}
-										{% endifequal %}
-										</tr>
+                                                                            {% if t.is_am_start %}
+                                                                            <td class="timeslot-time" style="padding-right: 5px">{{ t.start_time|date:"n월 j일"}} 오전{{ t.start_time|date:" G시 i분" }}</td>
+                                                                            {% else %}
+                                                                            <td class="timeslot-time" style="padding-right: 5px">{{ t.start_time|date:"n월 j일"}} 오후{{ t.start_time|date:" G시 i분" }}</td>
+                                                                            {% endif %}
+                                                                            <!---------------------------------------------------------------------------->
+                                                                            {% if t.exist_end %}
+                                                                            {% if t.is_am_end %}
+                                                                            <td class="timeslot-time" style="padding-right: 5px">~ {{ t.end_time|date:"n월 j일"}} 오전{{ t.end_time|date:" G시 i분" }}</td>
+                                                                            {% else %}
+                                                                            <td class="timeslot-time" style="padding-right: 5px">~ {{ t.end_time|date:"n월 j일"}} 오후{{ t.end_time|date:" G시 i분" }}</td>
+                                                                            {% endif %}
+                                                                            {% else %}
+                                                                            {% if t.is_am_end %}
+                                                                            <td class="timeslot-time" style="padding-right: 5px; visibility: hidden">~ {{ t.end_time|date:"n월 j일"}} 오전{{ t.end_time|date:" G시 i분" }}</td>
+                                                                            {% else %}
+                                                                            <td class="timeslot-time" style="padding-right: 5px; visibility: hidden">~ {{ t.end_time|date:"n월 j일"}} 오후{{ t.end_time|date:" G시 i분" }}</td>
+                                                                            {% endif %}
+                                                                            {% endif %}
+
+                                                                            {% ifequal t.label '' %}
+                                                                            <td><span class="timeslot-label"></span></td>
+                                                                            {% else %}
+                                                                            {% if t.is_main %}
+                                                                            <td><button class="timeslot-label is-main">{{ t.label }}</button></td>
+                                                                            {% else %}
+                                                                            <td><button class="timeslot-label">{{ t.label }}</button></td>
+                                                                            {% endif %}
+                                                                            {% endifequal %}
+                                                                        </tr>
 								{% endfor %}
 								</tbody>
 							</table>

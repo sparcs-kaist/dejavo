@@ -261,6 +261,7 @@ $(document).ready(function(){
 		ele.toggle();
 		var currDate = new Date();
 		ele.find('#ts_year').val(currDate.getFullYear());
+                ele.find('#te_year').val(currDate.getFullYear());
 		$('#ts_label').empty().focus();
 	});
 
@@ -280,19 +281,67 @@ $(document).ready(function(){
 		}
 	};
 
+    $('.timeslot_add_checkbox').click(function() {
+        var type = $(this).attr('data');
+
+        if($(this).children('input').prop('checked')) {
+            $(this).children('input').removeProp('checked');
+            if(type == 'period') {
+                $("#timeslot_add_end").css('display', 'none');
+            } else if(type == 'time') {
+                $(".timeslot_add_minutesecond").css('display', 'none');
+            } else if(type == 'represent') {
+            }
+        } else {
+            $(this).children('input').prop('checked', true);
+            if(type == 'period') {
+                $("#timeslot_add_end").css('display', 'block');
+            } else if(type == 'time') {
+                $(".timeslot_add_minutesecond").css('display', 'inline-block');
+            } else if(type == 'represent') {
+            }
+        }
+    });
+
+    $('.timeslot_add_ampm').click(function() {
+        var type = $(this).attr('data');
+
+        if(type == 'am') {
+            if($(this).children('input').prop('checked')) {
+            } else {
+                $(this).children('input').prop('checked', true);
+                $(this).next().children('input').removeProp('checked');
+            }
+        } else {
+            if($(this).children('input').prop('checked')) {
+            } else {
+                $(this).children('input').prop('checked', true);
+                $(this).prev().children('input').removeProp('checked');
+            }
+        }
+    });
+
+    // editedit
 	$('#timeslot_add_button').click(function(e){
 		e.preventDefault();
 		var data = getNewTimeSlot();
 		if (!data) return;
 		var stime = data.start_time;
+                var etime = data.end_time;
 
 		var tr = $('<tr></tr>').attr('mode', 'new');
 		var removeTD = $('<td></td>').addClass('timeslot-remove');
 		removeTD.append($('<div></div>').addClass('timeslot-remove-icon'));
-		var dateTD = $('<td>' + (stime.getMonth() + 1) + '월 ' +
-							stime.getDate() + '일 ' + stime.getHours() + '시 ' +
-							(stime.getMinutes()<10?'0':'') + stime.getMinutes() + '분</td>')
+
+                var tmpStr = (stime.getMonth() + 1) + '월 ' + stime.getDate() + '일 ';
+                if($("#timeslot_add_start").children('div').children('div:first').children('input').prop('checked')) tmpStr = tmpStr + '오전 ';
+                else tmpStr = tmpStr + '오후 ';
+                if(stime.getDate() == 0) ele.find('#ts_date').val(currDate.getDate());
+                if(stime.getHours() != 0 || stime.getMinutes() != 0) tmpStr = tmpStr + stime.getHours() + '시 '; 
+                if(stime.getMinutes() != 0) tmpStr = tmpStr + (stime.getMinutes()<10?'0':'') + stime.getMinutes() + '분';
+		var dateTD = $('<td>' + tmpStr + '</td>')
 					.addClass('timeslot-time')
+                                        .css('padding-right', '5px')
 					.attr({
 						'time-year' : stime.getFullYear(),
 						'time-month' : stime.getMonth() + 1,
@@ -300,11 +349,31 @@ $(document).ready(function(){
 						'time-hour' : stime.getHours(),
 						'time-minute' : stime.getMinutes(),
 					});
+
+                var tmpStr2 = (etime.getMonth() + 1) + '월 ' + etime.getDate() + '일 ';
+                if($("#timeslot_add_start").children('div').children('div:last').children('input').prop('checked')) tmpStr2 = tmpStr2 + '오전 ';
+                else tmpStr2 = tmpStr2 + '오후 ';
+                if(etime.getHours() != 0 || etime.getMinutes() != 0) tmpStr2 = tmpStr2 + etime.getHours() + '시 '; 
+                if(etime.getMinutes() != 0) tmpStr2 = tmpStr2 + (etime.getMinutes()<10?'0':'') + etime.getMinutes() + '분';
+                var dateTD2 = $('<td>' + '~' + tmpStr2 + '</td>')
+                    .addClass('timeslot-time')
+                    .attr({
+                        'time-year' : etime.getFullYear(),
+                        'time-month' : etime.getMonth() + 1,
+                        'time-date' : etime.getDate(),
+                        'time-hour' : etime.getHours(),
+                        'time-minute' : etime.getMinutes(),
+                    });
+
 		var labelTD = $('<td></td>');
 		if (data.label.trim() == '') {
 			labelTD.append('<span class="timeslot-label"></span>');
 		} else {
-			var button = $('<button class="timeslot-label"></button>');
+                if ($(this).prev().children('input').prop('checked')) {
+                    var button = $('<button class="timeslot-label is-main"></button>');
+                } else {
+                    var button = $('<button class="timeslot-label"></button>');
+                }
 			button.text(data.label);
 			labelTD.append(button);
 		}
@@ -312,8 +381,11 @@ $(document).ready(function(){
 		var ranID = Math.random().toString(36).substring(7);
 		var isMainTD = $('<td></td>').addClass('timeslot-is-main');
 		var mainDiv = $(document.createElement('div')).addClass('squaredTwo');
-		var mainInput = $(document.createElement('input')).attr('type', 'checkbox').
-			attr('id', ranID);
+                if ($(this).prev().children('input').prop('checked')) {
+                    var mainInput = $(document.createElement('input')).attr('type', 'checkbox').attr('id', ranID).prop('checked', true);
+                } else {
+                    var mainInput = $(document.createElement('input')).attr('type', 'checkbox').attr('id', ranID);
+                }
 		var mainLabel = $(document.createElement('label')).attr('for', ranID);
 		isMainTD.append(mainDiv.append(mainInput).append(mainLabel));
 
@@ -326,7 +398,12 @@ $(document).ready(function(){
 		});
 
 		var table = $('#timeslot_table tbody');
-		tr.append(removeTD).append(dateTD).append(labelTD).append(isMainTD);
+                // 기간으로 표시가 checked일 경우
+                if ($(this).parent().children('div:first').children('input').prop('checked')) {
+                } else {
+                    dateTD2.css('visibility', 'hidden');
+                }
+                tr.append(removeTD).append(dateTD).append(dateTD2).append(labelTD).append(isMainTD);
 		table.append(tr);
 		updateTable();
 
@@ -359,6 +436,7 @@ $(document).ready(function(){
 		$('#owner_query').val('').focus();
 	});
 
+    // editedit
 	var getNewTimeSlot = function() {
 		// TODO validation
 		var newDate = new Date(
@@ -367,6 +445,12 @@ $(document).ready(function(){
 				$('#ts_date').val(),
 				$('#ts_hour').val(),
 				$('#ts_minute').val());
+		var newDateEnd = new Date(
+				$('#te_year').val(),
+				$('#te_month').val() - 1,
+				$('#te_date').val(),
+				$('#te_hour').val(),
+				$('#te_minute').val());
 
 		if (isNaN(newDate)) {
 			$('#error_msg').html('일시 형식이 잘못되었습니다.');
@@ -383,9 +467,27 @@ $(document).ready(function(){
 				return false;
 			}
 		}
+ 
+		if (isNaN(newDateEnd)) {
+			$('#error_msg').html('일시 형식이 잘못되었습니다.');
+			$('#error_msg').animate( { backgroundColor: "#f15050" }, 1 )
+				.animate( { backgroundColor: "#ffffff" }, 1000 );
+			return false;
+		} else {
+			var maxDateEnd = new Date();
+			maxDateEnd.setDate(maxDateEnd.getDate() + 400);
+			if (newDateEnd > maxDateEnd) {
+				$('#error_msg').html('작성된 일시가 너무 멉니다.');
+				$('#error_msg').animate( { backgroundColor: "#f15050" }, 1 )
+					.animate( { backgroundColor: "#ffffff" }, 1000 );
+				return false;
+			}
+		}
+
 		return {
 			'label' : $('#ts_label').val(),
 			'start_time' : newDate,
+            'end_time' : newDateEnd,
 			'type' : 'point',
 		};
 	};
@@ -400,6 +502,7 @@ $(document).ready(function(){
 		},
 	}).data('datawrapper');
 
+    // editedit
 	var timeslotTable = $('#timeslot_table').datawrapper({
 		'trigger' : ['DOMSubtreeModified'],
 		'getData': function() {
@@ -412,17 +515,32 @@ $(document).ready(function(){
 					timeslot['id'] = tr.attr('timeslot-id');
 				} else {
 					var label = tr.find('.timeslot-label').text();
-					var timeTD = tr.find('.timeslot-time');
+					var timeTD = tr.find('.timeslot-time:first');
 					var date = new Date(timeTD.attr('time-year'),
 						timeTD.attr('time-month') - 1,
 						timeTD.attr('time-date'),
 						timeTD.attr('time-hour'),
 						timeTD.attr('time-minute'))
 
+					var timeTD2 = tr.find('.timeslot-time:last');
+					var dateEnd = new Date(timeTD2.attr('time-year'),
+						timeTD2.attr('time-month') - 1,
+						timeTD2.attr('time-date'),
+						timeTD2.attr('time-hour'),
+						timeTD2.attr('time-minute'))
+
 					timeslot['label'] =  label;
 					timeslot['start_time'] = date.toISOString();
+                                        timeslot['end_time'] = dateEnd.toISOString();
 					timeslot['type'] = 'point';
 					timeslot['is_main'] = is_main;
+
+                                        if(timeTD2.css('visibility') == 'hidden') timeslot['exist_end'] = false;
+                                        else timeslot['exist_end'] = true;
+                                        if(tr.find('.timeslot-time:first:contains("오전")')) timeslot['is_am_start'] = true;
+                                        else timeslot['is_am_start'] = false;
+                                        if(tr.find('.timeslot-time:last:contains("오전")')) timeslot['is_am_end'] = true;
+                                        else timeslot['is_am_end'] = false;
 				}
 				var is_main = tr.find('.timeslot-is-main input[type=checkbox]').prop('checked');
 				timeslot['is_main'] = is_main;
@@ -713,10 +831,6 @@ $(document).ready(function(){
 				res.msg && res.msg && $.each(res.msg, function(key, val) {
 					if (key == 'category'){
 						fields.push('카테고리');
-					} else if (key == 'content') {
-						fields.push('내용');
-					} else if (key == 'host_description') {
-						fields.push('주체 단체 설명');
 					} else if (key == 'host_image') {
 						fields.push('주체 단체 이미지');
 					} else if (key == 'host_name') {
