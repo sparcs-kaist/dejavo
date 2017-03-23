@@ -1,5 +1,5 @@
-@import url(//cdn.jsdelivr.net/font-nanum/1.0/nanumgothic/nanumgothic.css);
-@import url(//cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css);
+@import url('nanumbarungothic.css');
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
 
 body
 {
@@ -412,6 +412,10 @@ div#article_action_container
     border-radius: 5px;
     position: relative;
     top: -2px;
+}
+
+.squaredTwoAdd {
+    background: #fff;
 }
 
 .squaredTwo input[type=checkbox] {

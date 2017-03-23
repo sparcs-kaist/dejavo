@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% load thumbnail %}
 
 {% block meta %}
         <meta name="twitter:card" content="photo" />
@@ -30,7 +31,9 @@
 		<div id="article_body_container">
 			<div id="article_main">
 				<div id="article_image">
-					<img src={{ article.image.url }}></img>
+					{% thumbnail article.image "600" as im %}
+					<img src={{ im.url }}></img>
+					{% endthumbnail %}
 				</div>
 				<div id="article_content">
 					{{ article.content|safe }}
@@ -119,19 +122,36 @@
 								<tbody>
 								{% for t in article.timeslot.all %}
 									<tr>
-										<td>
-											{{ t.start_time|date:"n월 j일 G시 i분" }}
-										</td>
-										{% ifequal t.label '' %}
-											<td><span class="timeslot-label"></span></td>
-										{% else %}
-											{% if t.is_main %}
-											<td><button class="timeslot-label is-main">{{ t.label }}</button></td>
-											{% else %}
-											<td><button class="timeslot-label">{{ t.label }}</button></td>
-											{% endif %}
-										{% endifequal %}
-										</tr>
+                                                                            {% if t.is_am_start %}
+                                                                            <td class="timeslot-time" style="padding-right: 5px">{{ t.start_time|date:"n월 j일"}} 오전{{ t.start_time|date:" G시 i분" }}</td>
+                                                                            {% else %}
+                                                                            <td class="timeslot-time" style="padding-right: 5px">{{ t.start_time|date:"n월 j일"}} 오후{{ t.start_time|date:" G시 i분" }}</td>
+                                                                            {% endif %}
+                                                                            <!---------------------------------------------------------------------------->
+                                                                            {% if t.exist_end %}
+                                                                            {% if t.is_am_end %}
+                                                                            <td class="timeslot-time" style="padding-right: 5px">~ {{ t.end_time|date:"n월 j일"}} 오전{{ t.end_time|date:" G시 i분" }}</td>
+                                                                            {% else %}
+                                                                            <td class="timeslot-time" style="padding-right: 5px">~ {{ t.end_time|date:"n월 j일"}} 오후{{ t.end_time|date:" G시 i분" }}</td>
+                                                                            {% endif %}
+                                                                            {% else %}
+                                                                            {% if t.is_am_end %}
+                                                                            <td class="timeslot-time" style="padding-right: 5px; visibility: hidden">~ {{ t.end_time|date:"n월 j일"}} 오전{{ t.end_time|date:" G시 i분" }}</td>
+                                                                            {% else %}
+                                                                            <td class="timeslot-time" style="padding-right: 5px; visibility: hidden">~ {{ t.end_time|date:"n월 j일"}} 오후{{ t.end_time|date:" G시 i분" }}</td>
+                                                                            {% endif %}
+                                                                            {% endif %}
+
+                                                                            {% ifequal t.label '' %}
+                                                                            <td><span class="timeslot-label"></span></td>
+                                                                            {% else %}
+                                                                            {% if t.is_main %}
+                                                                            <td><button class="timeslot-label is-main">{{ t.label }}</button></td>
+                                                                            {% else %}
+                                                                            <td><button class="timeslot-label">{{ t.label }}</button></td>
+                                                                            {% endif %}
+                                                                            {% endifequal %}
+                                                                        </tr>
 								{% endfor %}
 								</tbody>
 							</table>
@@ -208,7 +228,9 @@
 		</div>
         <div id="fb-root"></div>
 		<div id="article_image_large" style="display:none; width:inherit; margin: 50px 0px 50px 0px; overflow:hidden;">
-			<img id="article_image_large_img" style="width:inherit" src="{{ article.image.url }}"></img>
+			{% thumbnail article.image "600" as im %}
+			<img id="article_image_large_img" style="width:inherit" src="{{ im.url }}" data-large-url="{{ article.image.url }}"></img>
+			{% endthumbnail %}
 		</div>
 {% endblock %}
 

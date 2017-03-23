@@ -35,7 +35,8 @@ $(document).ready(function(){
 							$main_elem = $("<div class='elem'/>"),
 							$poster_div = $("<div class='poster'></div>").addClass('vhmiddle'),
 							$anchor = $("<a/>").attr({'href':"/article/"+article.id}),
-							$img = $("<img/>").attr({'src':article.poster, 'alt':article.title}).load(function(){;
+							$img = $("<img/>").attr({'src':article.poster.category_thumb, 'alt':article.title}).
+								load(function(){;
 								var scaled_width = this.width * 317/this.height;
 								var cell_size = Math.round(scaled_width/223);
 								if(cell_size >= 2) {

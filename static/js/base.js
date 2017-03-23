@@ -379,11 +379,11 @@ $(document).ready(function(){
 
 	window.fbAsyncInit = function() {
 		FB.init({
-			appId   : '274526142597066',
+			appId   : '974575612566516',
 			xfbml   : true,
 			status  : true,
 			cookie  : true,
-			version : 'v2.2'
+			version : 'v2.3'
 		});
 	};
 });

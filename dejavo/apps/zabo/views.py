@@ -15,8 +15,10 @@ from dejavo.apps.account.models import Participation
 from dejavo.settings import TIME_ZONE
 
 from datetime import datetime, date
+
 import json
 import pytz
+import random
 
 
 @require_accept_formats(['text/html'])
@@ -28,7 +30,8 @@ def main(request):
     for article in articles_set:
         article_j = article.as_json()
         article_j['date'] = get_day(article)
-        article_list.append(article_j)
+        if article_j['date'] is not None:   #None if main timeslot passed
+            article_list.append(article_j)
 
     return render(request, 'zabo/main.html', {'articles': article_list})
 
@@ -200,7 +203,10 @@ def edit_article(request, article_id):
                 for ts in new_timeslot:
                     try:
                         new_ts = Timeslot(article = article, timeslot_type = ts['type'],
-                                start_time = ts['start_time'], end_time = None,
+                                # editedit
+                                start_time = ts['start_time'], end_time = ts['end_time'],
+                                exist_end = ts['exist_end'],
+                                is_am_start = ts['is_am_start'], is_am_end = ts['is_am_end'],
                                 is_main = ts['is_main'], label = ts['label'])
                         new_ts.full_clean()
                         new_ts_list.append(new_ts)
@@ -296,6 +302,9 @@ def create_timeslot(request, article_id):
                 timeslot_type = request.POST.get('type', ''),
                 start_time = request.POST.get('start_time', None),
                 end_time = request.POST.get('end_time', None),
+                exist_end = request.POST.get('exist_end', False),
+                is_am_start = request.POST.get('is_am_start', False),
+                is_am_end = request.POST.get('is_am_end', False),
                 label = request.POST.get('label', '')
                 )
         timeslot.full_clean()
@@ -553,12 +562,38 @@ def get_category(request, category):
         article_set = article_set.filter(category = category)
 
     for a in article_set:
-        article_j = a.as_json()
+        article_j = a.as_json(['subtitle', 'owner', 'location', 'announcement', 'created_date', 'updated_date', 'content', 'contact', 'timeslot', 'host', 'attachment'])
         article_j['date'] = get_day(a)
-        article_list.append(article_j)
+        if article_j['date'] is not None:   #None if main timeslot passed
+            article_list.append(article_j)
 
     article_list = sorted(article_list, key=lambda y: y['date'], reverse=False)
     
+    return JsonResponse(
+            status = 200,
+            data = {
+                'articles' : article_list
+                }
+            )
+
+@require_accept_formats(['text/html', 'application/json'])
+@require_http_methods(['GET'])
+def get_articles(request):
+    return get_n_articles(request, 5)
+
+@require_accept_formats(['text/html', 'application/json'])
+@require_http_methods(['GET'])
+def get_n_articles(request, n):
+    article_list = []
+    article_set = Article.objects.filter(timeslot__start_time__gte=datetime.now())
+    
+    for a in article_set:
+        if not article_list or not article_list[-1].get("id") == a.id:
+            article_list.append(a.as_json())
+            
+    if len(article_list) > int(n):
+        article_list = random.sample(article_list, int(n))
+        
     return JsonResponse(
             status = 200,
             data = {

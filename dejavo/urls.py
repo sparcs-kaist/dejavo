@@ -31,4 +31,7 @@ urlpatterns = patterns('',
 
     url(r'^favicon\.ico$', RedirectView.as_view(url='static/images/favicon.png')),
 
+    url(r'^api/get_articles/$', 'dejavo.apps.zabo.views.get_articles'),
+    url(r'^api/get_articles/(?P<n>\d+)/$', 'dejavo.apps.zabo.views.get_n_articles'),
+
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

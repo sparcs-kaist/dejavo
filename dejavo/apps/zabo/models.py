@@ -4,6 +4,8 @@ from django.db import models
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
+from sorl.thumbnail import ImageField, get_thumbnail
+from PIL import Image
 
 import os
 import datetime
@@ -26,14 +28,14 @@ class Article(models.Model):
     title = models.CharField(max_length = 150)
     subtitle = models.CharField(max_length = 150, blank = True)
     location = models.CharField(max_length = 200, blank = True)
-    content = models.TextField()
+    content = models.TextField(blank = True)
     announcement = models.TextField(blank = True)
     image = models.ImageField(upload_to = 'poster')
     category = models.CharField(max_length = 20, choices = CATEGORY_TYPE)
     # Article host group
     host_name = models.CharField(max_length = 50)
     host_image = models.ImageField(upload_to = 'host', default='default/default_host.png')
-    host_description = models.CharField(max_length = 150)
+    host_description = models.CharField(max_length = 150, blank = True)
     is_blocked = models.BooleanField(default = False)
     is_deleted = models.BooleanField(default = False)
     is_published = models.BooleanField(default = False)
@@ -41,9 +43,37 @@ class Article(models.Model):
     created_date = models.DateTimeField(auto_now_add = True)
     updated_date = models.DateTimeField(auto_now = True, auto_now_add = True)
 
+    def save(self, *args, **kwargs):
+        super(Article, self).save(*args, **kwargs)
+
+        if self.host_image:
+            pw = self.host_image.width
+            ph = self.host_image.height
+            mw = 320
+            mh = 320
+
+            if (pw > mw) or (ph > mh):
+                # we require a resize
+                # load the image
+                imageObj = Image.open(self.host_image.path)
+                ratio = 1
+
+                if (pw > mw):
+                    ratio = mw / float(pw)
+                    pw = mw
+                    ph = int(float(ph) * ratio)
+
+                if (ph > mh):
+                    ratio = ratio * (mh / float(ph))
+                    ph = mh
+                    pw = int(float(ph) * ratio)
+                imageObj = imageObj.resize((pw, ph), Image.ANTIALIAS)
+                imageObj.save(self.host_image.path)
+
+
     def set_fields(self, fields, posts, files):
         for field_name in fields:
-            if field_name == 'created_date' or field_name == 'updated_date':
+            if field_name == 'created_date' or field_name == 'updated_date' or field_name == 'subtitle' or field_name == 'location' or field_name == 'content' or field_name == 'host_description' or field_name == 'announcement':
                 continue
 
             field = Article._meta.get_field(field_name)
@@ -71,15 +101,13 @@ class Article(models.Model):
             unsatisfied_field = {}
             if self.title.strip() == '':
                 unsatisfied_field['title'] = 'Unfilled field'
-            if self.content.strip() == '':
-                unsatisfied_field['content'] = 'Unfilled field'
             if not self.category:
                 unsatisfied_field['category'] = 'Value not set'
 
             if len(unsatisfied_field) > 0:
                 raise ValidationError(unsatisfied_field)
 
-    def as_json(self):
+    def as_json(self, ex = []):
 
         owner_list = []
         for owner in list(self.owner.all()):
@@ -99,6 +127,9 @@ class Article(models.Model):
                 'timeslot_type' : timeslot.timeslot_type,
                 'start_time' : timeslot.start_time,
                 'end_time' : timeslot.end_time,
+                'exist_end' : timeslot.exist_end,
+                'is_am_start' : timeslot.is_am_start,
+                'is_am_end' : timeslot.is_am_end,
                 'label' : timeslot.label,
                 })
 
@@ -109,7 +140,40 @@ class Article(models.Model):
                 'filename' : os.path.basename(attach.filepath.file.name),
                 })
 
-        return {
+        poster = {'origin' : None, 'main_thumb' : None, 'category_thumb': None }
+        if (bool(self.image)):
+            poster['origin'] = self.image.url
+            poster['main_thumb'] = get_thumbnail(self.image, '600', quality=85).url
+
+            is_portrait = True 
+            try:
+                is_portrait = self.image.width < self.image.height
+                height = self.image.height
+                width = self.image.width
+            except:
+                height = 1000
+                width = 1000
+
+            to_scale = [222, 321] if is_portrait else [468, 321]
+            geometry = None
+            scale = 1
+
+            
+            if width > to_scale[0] or height > to_scale[1]:
+                if height > to_scale[1]:
+                    scale = height / to_scale[1]
+                    height /= scale
+                    width /= scale
+                if width > to_scale[0]:
+                    scale = width / to_scale[0]
+                    height /= scale
+                    width /= scale
+
+                geometry = str(width) + 'x' + str(height)
+
+            poster['category_thumb'] = get_thumbnail(self.image, geometry, quality=85).url
+
+        ctx = {
                 'id' : self.id,
                 'title' : self.title,
                 'subtitle' : self.subtitle,
@@ -122,7 +186,7 @@ class Article(models.Model):
                 'content' : self.content,
                 'contact' : contact_list,
                 'timeslot' : timeslot_list,
-                'poster' : None if not bool(self.image) else self.image.url,
+                'poster' : poster,
                 'host' : {
                     'name' : self.host_name,
                     'image' : None if not bool(self.host_image) else self.host_image.url,
@@ -130,6 +194,11 @@ class Article(models.Model):
                     },
                 'attachment' : attach_list,
                 }
+
+        for elem in ex:
+            ctx.pop(elem)
+
+        return ctx
 
     def __unicode__(self):
         return unicode(self.title) + ' ::' + str(self.id)
@@ -164,6 +233,9 @@ class Timeslot(models.Model):
     end_time = models.DateTimeField(blank = True, null = True)
     is_main = models.BooleanField(default = False)
     label = models.CharField(max_length = 50, blank = True)
+    exist_end = models.BooleanField(default = False)
+    is_am_start = models.BooleanField(default = True)
+    is_am_end= models.BooleanField(default = True)
 
     def as_json(self):
         return {
@@ -171,6 +243,9 @@ class Timeslot(models.Model):
                 'type' : self.timeslot_type,
                 'start_time' : self.start_time,
                 'end_time' : self.end_time,
+                'exist_end' : self.exist_end,
+                'is_am_start' : self.is_am_start,
+                'is_am_end' : self.is_am_end,
                 'label' : self.label,
             }
 
@@ -191,7 +266,7 @@ class Question(models.Model):
 
     def clean(self):
         if self.content.strip() == '':
-            raise ValidationError({'content': 
+            raise ValidationError({'content':
                 'Content should not be empty string'})
 
     def as_json(self):
@@ -237,7 +312,7 @@ class Answer(models.Model):
 
     def clean(self):
         if self.content.strip() == '':
-            raise ValidationError({'content': 
+            raise ValidationError({'content':
                 'Content should not be empty string'})
 
     def as_json(self):

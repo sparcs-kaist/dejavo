@@ -3,6 +3,7 @@ from django.template.defaultfilters import escape
 from django.core.urlresolvers import reverse
 from dejavo.apps.zabo.models import Article, Question, Answer, Attachment, \
         Timeslot, Contact
+from sorl.thumbnail import get_thumbnail
 
 import os
 
@@ -28,8 +29,9 @@ class ArticleAdmin(admin.ModelAdmin):
 
     def get_poster(self, article):
         if bool(article.image):
+            image_url = get_thumbnail(article.image, '600', quality=85).url
             return '<img style="height:auto; width:auto; ' + \
-                    'max-width:45px; max-height:60px;" src="%s"/>' % article.image.url
+                    'max-width:45px; max-height:60px;" src="%s"/>' % image_url
         return None
     get_poster.allow_tags = True
     get_poster.short_description = 'Poster'

@@ -627,3 +627,7 @@ button.timeslot-label.is-main
     line-height: 48px;
     color: #696060;
 }
+
+.timeslot-time {
+    font-size: 20px;
+}

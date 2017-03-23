@@ -130,7 +130,24 @@
 											<td class="timeslot-remove">
 												<div class="timeslot-remove-icon"></div>
 											</td>
-											<td class="timeslot-time">{{ t.start_time|date:"n월 j일 G시 i분" }}</td>
+                                            {% if t.is_am_start %}
+                                            <td class="timeslot-time" style="padding-right: 5px">{{ t.start_time|date:"n월 j일"}} 오전{{ t.start_time|date:" G시 i분" }}</td>
+                                            {% else %}
+                                            <td class="timeslot-time" style="padding-right: 5px">{{ t.start_time|date:"n월 j일"}} 오후{{ t.start_time|date:" G시 i분" }}</td>
+                                            {% endif %}
+                                            {% if t.exist_end %}
+                                                {% if t.is_am_end %}
+                                                    <td class="timeslot-time" style="padding-right: 5px">~ {{ t.end_time|date:"n월 j일"}} 오전{{ t.end_time|date:" G시 i분" }}</td>
+                                                {% else %}
+                                                    <td class="timeslot-time" style="padding-right: 5px">~ {{ t.end_time|date:"n월 j일"}} 오후{{ t.end_time|date:" G시 i분" }}</td>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if t.is_am_end %}
+                                                    <td class="timeslot-time" style="padding-right: 5px; visibility: hidden">~ {{ t.end_time|date:"n월 j일"}} 오전{{ t.end_time|date:" G시 i분" }}</td>
+                                                {% else %}
+                                                    <td class="timeslot-time" style="padding-right: 5px; visibility: hidden">~ {{ t.end_time|date:"n월 j일"}} 오후{{ t.end_time|date:" G시 i분" }}</td>
+                                                {% endif %}
+                                            {% endif %}
 											{% ifequal t.label '' %}
 												<td><span class="timeslot-label"></span></td>
 											{% else %}
@@ -171,22 +188,75 @@
 							<div id="timeslot_add_form" style="display: none;
 								background-color: #f4e5e2; position: absolute; border-radius: 5px;
 								font-family: 'Nanum Gothic'; font-size: 15px; color: #5d5454;
-								padding: 10px 10px 10px 20px; width: 680px;">
-								<span>태그 :</span>
-								<input id="ts_label" type="text" style="width: 108px;" placeholder="ex) 지원마감"></input>
-								&nbsp;&nbsp;&nbsp;|
-								<input id="ts_year" type="text" style="width: 81px;"></input>
-								<span>년</span>
-								<input id="ts_month" type="text" style="width: 43px;"></input>
-								<span>월</span>
-								<input id="ts_date" type="text" style="width: 43px;"></input>
-								<span>일</span>
-								<input id="ts_hour" type="text" style="width: 43px;"></input>
-								<span>시</span>
-								<input id="ts_minute" type="text" style="width: 43px;"></input>
-								<span>분</span>
-								<button id="timeslot_add_button" class="stress"
-									style="padding: 5px 6px; border-radius: 5px; margin-left: 20px;">추가</button>
+								padding: 10px 10px 10px 20px; width: 620px;">
+                                                                <div id="timeslot_add_checkbox_container" style="padding-bottom: 10px">
+                                                                    <span>태그 :</span>
+                                                                    <input id="ts_label" type="text" style="width: 108px;" placeholder="ex) 지원마감"></input>
+                                                                    <span>&nbsp;&nbsp;&nbsp;기간으로 표시 :</span>
+                                                                    <div class="squaredTwo squaredTwoAdd timeslot_add_checkbox" style="display: inline-block; top: 5px;" data="period">
+                                                                        <input type="checkbox" checked></input>
+                                                                        <label></label>
+                                                                    </div>
+                                                                    <span>&nbsp;&nbsp;시/분 표시:</span>
+                                                                    <div class="squaredTwo squaredTwoAdd timeslot_add_checkbox" style="display: inline-block; top: 5px" data="time">
+                                                                        <input type="checkbox" checked></input>
+                                                                        <label></label>
+                                                                    </div>
+                                                                    <span>&nbsp;&nbsp;대표 일정 :</span>
+                                                                    <div class="squaredTwo squaredTwoAdd timeslot_add_checkbox" style="display: inline-block; top: 5px" data="represent">
+                                                                        <input type="checkbox" checked></input>
+                                                                        <label></label>
+                                                                    </div>
+                                                                    <button id="timeslot_add_button" class="stress"
+                                                                            style="padding: 5px 6px; border-radius: 5px; margin-left: 15px;
+                                                                            width: 50px; position: relative;  top:-2px;">추가</button>
+                                                                </div>
+                                                                <div id="timeslot_add_start" style="padding-bottom: 10px">
+                                                                    <span>시작 :</span>
+                                                                    <input id="ts_year" type="text" style="width: 81px;"></input>
+                                                                    <span>&nbsp;년</span>
+                                                                    <input id="ts_month" type="text" style="width: 43px;"></input>
+                                                                    <span>&nbsp;월</span>
+                                                                    <input id="ts_date" type="text" style="width: 43px;"></input>
+                                                                    <span>&nbsp;일</span>
+                                                                    <div class="timeslot_add_minutesecond">
+                                                                        <div class="timeslot_add_ampm am_container" data="am">
+                                                                            <input type="checkbox" checked></input>
+                                                                            <label></label>
+                                                                        </div>
+                                                                        <div class="timeslot_add_ampm pm_container" data="pm">
+                                                                            <input type="checkbox"></input>
+                                                                            <label></label>
+                                                                        </div>
+                                                                        <input id="ts_hour" type="text" style="width: 43px; margin-left: 15px;"></input>
+                                                                        <span>&nbsp;시</span>
+                                                                        <input id="ts_minute" type="text" style="width: 43px; margin-left: 15px;"></input>
+                                                                        <span>&nbsp;분</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="timeslot_add_end">
+                                                                    <span>종료 :</span>
+                                                                    <input id="te_year" type="text" style="width: 81px;"></input>
+                                                                    <span>&nbsp;년</span>
+                                                                    <input id="te_month" type="text" style="width: 43px;"></input>
+                                                                    <span>&nbsp;월</span>
+                                                                    <input id="te_date" type="text" style="width: 43px;"></input>
+                                                                    <span>&nbsp;일</span>
+                                                                    <div class="timeslot_add_minutesecond">
+                                                                        <div class="timeslot_add_ampm am_container" data="am">
+                                                                            <input type="checkbox" checked></input>
+                                                                            <label></label>
+                                                                        </div>
+                                                                        <div class="timeslot_add_ampm pm_container" data="pm">
+                                                                            <input type="checkbox"></input>
+                                                                            <label></label>
+                                                                        </div>
+                                                                        <input id="te_hour" type="text" style="width: 43px; margin-left: 15px;"></input>
+                                                                        <span>&nbsp;시</span>
+                                                                        <input id="te_minute" type="text" style="width: 43px; margin-left: 15px;"></input>
+                                                                        <span>&nbsp;분</span>
+                                                                    </div>
+                                                                </div>
 							</div>
 						</div>
 					</div>

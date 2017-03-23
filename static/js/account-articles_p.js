@@ -11,11 +11,11 @@ $(document).ready(function(){
 		return s;
 	};
 
-	$('#content_left').children().children().eq(1).attr('id', 'current');
+	$('#content_left').children().children().eq(0).attr('id', 'current');
 
 	$.ajax({
 		'type' : 'GET',
-		'url' : '/account/articles/',
+		'url' : '/account/participation/',
 		'dataType' : 'json',
 		'success' : function(data) {
 			var elems = [];

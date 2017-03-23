@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% load thumbnail %}
 
 {% block meta %}
 {% endblock %}
@@ -20,7 +21,7 @@
 					<div class="event_container" article-id="{{ article.id }}" data-date="{{ article.date|date:"Y/n/j" }}">
 						<div class="poster vhmiddle">
 							<a href="/article/{{ article.id }}">
-								<img src="{{ article.poster }}" />
+								<img src="{{ article.poster.main_thumb }}" />
 							</a>
 						</div>
 						<div class="event_info">
